@@ -1,10 +1,11 @@
+#' @importFrom stats approxfun
 #' @rdname mosaic-internal
 #' @keywords internal
 #' @param x a list
 #' @return a list with two slots: names and functions
 
 fetchDynamics <- function(x) {
-  inputs <- x 
+  inputs <- x
   formInds <- which( sapply( inputs, function(x) inherits(x, 'formula') ) )
 
   dnames <- c()
@@ -23,7 +24,7 @@ fetchDynamics <- function(x) {
 
 
 #' construct a function representing the dynamics
-#' 
+#'
 #' parameters are stored as extra arguments
 #' the order of the dynamical variables (and "t") is important and will be used
 #' later
@@ -33,7 +34,7 @@ fetchDynamics <- function(x) {
 #' @param DE representation of DE, the result of fetchDynamics
 #' @param additionalAssignments, a list
 #' return a function
-#' 
+#'
 dynamicsFunction <- function( DE, additionalAssignments=list() ) {
   dynfun = function(){}
   body(dynfun) = parse(text=paste("c(",paste(DE$names,DE$functions,collapse=",",sep="="),")",sep=""))
@@ -65,12 +66,12 @@ rkFunction <- function(DE, additionalArguments=list() ) {
   return(result)
 }
 
-#' Integrate ordinary differential equations 
+#' Integrate ordinary differential equations
 #'
 #' A formula interface to integration of an ODE with respect to "t"
 #'
 #' @param dyn a formula specifying the dynamics, e.g. \code{dx ~ -a*x} for $dx/dt = -ax$.
-#' @param \ldots arguments giving additional formulas for dynamics in other variables, 
+#' @param \ldots arguments giving additional formulas for dynamics in other variables,
 #' assignments of parameters, and assignments of initial conditions
 #' @param tdur the duration of integration.  Or, a list of the form
 #' \code{list(from=5,to=10,dt=.001)}
@@ -83,7 +84,7 @@ rkFunction <- function(DE, additionalArguments=list() ) {
 #' argument list.  All dynamical variables must be assigned initial conditions in the
 #' argument list.  The returned value will be a list with one component named after each
 #' dynamical variable.  The component will be a spline-generated function of \code{t}.
-#' 
+#'
 #'
 #' @return a list with splined function of time for each dynamical variable
 #'
@@ -122,7 +123,7 @@ integrateODE = function(dyn,...,tdur) {
 			rkFunction(DE, additionalAssignments),
 			initstate,tstart=tdur$from,tend=tdur$to,dt=tdur$dt
 			)
-  
+
   # Return an object with functions for each of the dynamical variables,
   # defined as NA outside the range of tdur$from to tdur$to.
   # return interpolating functions
@@ -170,4 +171,4 @@ rkintegrate <- function(fun,x0,tstart=0,tend=1,dt=NULL) {
       xout[k,] <- x0;
   }
   return( list(x=xout,t=tout) );
-} 
+}

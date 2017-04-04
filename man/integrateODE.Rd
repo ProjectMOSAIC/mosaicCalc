@@ -12,7 +12,7 @@ integrateODE(dyn, ..., tdur)
 \item{tdur}{the duration of integration.  Or, a list of the form
 \code{list(from=5,to=10,dt=.001)}}
 
-\item{\ldots}{arguments giving additional formulas for dynamics in other variables, 
+\item{\ldots}{arguments giving additional formulas for dynamics in other variables,
 assignments of parameters, and assignments of initial conditions}
 }
 \value{

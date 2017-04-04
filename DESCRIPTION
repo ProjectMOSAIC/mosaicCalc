@@ -1,11 +1,15 @@
 Package: mosaicCalc
 Type: Package
-Title: Project MOSAIC Statistics and Mathematics Teaching Utilities
+Title: Calculus in R
+Description: This package is part of the Project MOSAIC suite and provides utility functions for doing calculus in R.
 Version: 0.14.6
 Date: 2017-04-03
 Depends:
     R (>= 3.0.0),
     mosaic
+Imports:
+    methods,
+    stats
 Suggests: 
     testthat,
     knitr,
@@ -13,7 +17,6 @@ Suggests:
 VignetteBuilder: knitr
 Author: Daniel T. Kaplan <kaplan@macalester.edu>, Randall Pruim <rpruim@calvin.edu>, Nicholas J. Horton <nhorton@amherst.edu>
 Maintainer: Randall Pruim <rpruim@calvin.edu>
-Description: Calculus in R
 License: GPL (>=2)
 LazyLoad: yes
 LazyData: yes

@@ -1,4 +1,4 @@
-#'Find the symbolic integral of a formula
+#' Find the symbolic integral of a formula
 #'
 #' @param form an object of type formula to be integrated.
 #' Rhs of formula indicates which variable to
@@ -6,66 +6,67 @@
 #' @param \ldots extra parameters
 #'
 #' @details This symbolic integrator recognizes simple polynomials and functions such as
-#'\code{sin}, \code{cos}, \code{tan}, \code{sinh}, \code{cosh}, \code{tanh}, \code{sqrt}, and \code{exp}.
+#' \code{sin}, \code{cos}, \code{tan}, \code{sinh}, \code{cosh}, \code{tanh}, \code{sqrt}, and \code{exp}.
 #'
-#'It will not perform more complicated substitutions
-#'or integration by parts.
+#' It will not perform more complicated substitutions
+#' or integration by parts.
 #'
 #' @return symbolicInt returns a function whose body is the symbolic antiderivative of
-#'the formula.  If this method does not recognize the formula, it will return an error.
+#' the formula.  If this method does not recognize the formula, it will return an error.
 #'
+#' @importFrom methods getGroup
 #' @export
 
 symbolicInt<- function(form, ...){
   dots = list(...)
   #First check if it's a polynomial.  If it is, simplify it.
   params <- setdiff(all.vars(form), all.vars(rhs(form)))
-  if(length(params)==0) 
+  if(length(params)==0)
     params <- ""
 #   res <- try(.polyExp(lhs(form), all.vars(rhs(form)), params), silent=TRUE)
 #   if(!inherits(res, "try-error")){
 #     form <- .makePoly(form, res)
 #   }
   antiDeriv <- symbolicAntiD(form, ...)
-  
+
   #determine which letter the constant will be
   intc = LETTERS[!LETTERS[-(1:2)]%in%all.vars(form)][-(1:2)][1]
-  
+
   antiDeriv <- .makeNice(antiDeriv)
   #add the constant into the expression
   antiDeriv[[2]] <- parse(text = paste(deparse(lhs(antiDeriv), width.cutoff=500), "+", intc, sep=""))[[1]]
-  
+
   #make the integral formula into a function
   intfun = eval(parse(text=paste("do.call(makeFun, list(antiDeriv, ..., ",intc, "=0))", sep=""))[[1]])
   return(intfun)
 }
 
-#'Use recursion to find a symbolic antiderivative
+#' Use recursion to find a symbolic antiderivative
 #'
 #' @rdname symbolicInt
 #'
 #' @return a formula implementing giving symbolic anti-derivative.  If the formula
-#' isn't found by the algorithm, an error is thrown.  
-#' 
+#' isn't found by the algorithm, an error is thrown.
+#'
 #' @export
 
 symbolicAntiD <- function(form, ...){
   rhsVar = all.vars(rhs(form))
   if(length(rhsVar)!=1) stop("Can only integrate with respect to one variable.")
   constants = setdiff(all.vars(form), rhsVar)
-  
+
   #check if it's just constants
   if(length(grep(rhsVar, deparse(lhs(form), width.cutoff=500)))==0){
     form[[2]]<- parse(text = paste(deparse(lhs(form), width.cutoff=500), "*", rhsVar, sep=""))[[1]]
     return(form)
   }
-  
+
   #check to see if surrounded by parentheses
   if(class(lhs(form))=="("){
     form[[2]]=lhs(form)[[2]]
     return(symbolicAntiD(form, ...))
   }
-  
+
   #Check to see if it is nested
   if(class(lhs(form))=="call"&&is.primitive(eval(lhs(form)[[1]])))
     group = getGroup(toString(lhs(form)[[1]]))[[1]] #determine typ of highest-level expr.
@@ -74,17 +75,17 @@ symbolicAntiD <- function(form, ...){
     return(.intArith(form, ...))
   if(group =="Math")
     return(.intMath(form, ...))
-  
+
   #check if it's just x
   if((lhs(form))==rhsVar){
     form[[2]]<- parse(text=paste("1/(2)*", rhsVar, "^2", sep=""))[[1]]
     return(form)
   }
-  
+
   stop("Error: symbolic algorithm gave up")
 }
 
-#'Attempts symbolic integration of some mathematical/arithmetical forms
+#' Attempts symbolic integration of some mathematical/arithmetical forms
 #'
 #' @rdname symbolicInt
 #'
@@ -92,34 +93,34 @@ symbolicAntiD <- function(form, ...){
 #'
 .intArith <- function(form, ...){
   dots = list(...)
-  
+
   rhsVar = all.vars(rhs(form))
   constants = setdiff(all.vars(form), rhsVar)
-  
+
   op = lhs(form)[[1]]
-  
+
   if(length(lhs(form))==2){#binary operation
     if(op=='-'){
       form[[2]] = parse(text=paste("(-1)*",deparse(lhs(form)[[2]], width.cutoff=500),sep=""))[[1]]
       return(symbolicAntiD(form,...))
     }
   }
-  
-  if(op =='+'||op =="-"){ 
+
+  if(op =='+'||op =="-"){
     lform = form
     rform = form
     lform[[2]] = lhs(form)[[2]]
     rform[[2]] = lhs(form)[[3]]
     lform = symbolicAntiD(lform, ...)
     rform = symbolicAntiD(rform, ...)
-    
+
     newform = parse(text=paste(deparse(lhs(lform), width.cutoff=500),
                                deparse(lhs(form)[[1]], width.cutoff=500),
                                deparse(lhs(rform), width.cutoff=500), sep=""))[[1]]
     form[[2]] <- newform
     return(form)
   }
-  
+
   if(op == '*'){
     lform = form
     rform = form
@@ -130,7 +131,7 @@ symbolicAntiD <- function(form, ...){
       stop("Error: symbolic algorithm gave up")
     if(regexpr(rhsVar, deparse(lform[[2]], width.cutoff=500))==1){
       lform = symbolicAntiD(lform, ...)
-      
+
       newform = parse(text=paste(deparse(lhs(lform), width.cutoff=500),
                                  deparse(lhs(form)[[1]], width.cutoff=500),
                                  deparse(lhs(rform), width.cutoff=500), sep=""))[[1]]
@@ -139,7 +140,7 @@ symbolicAntiD <- function(form, ...){
     }
     else{
       rform = symbolicAntiD(rform, ...)
-      
+
       newform = parse(text=paste(deparse(lhs(lform), width.cutoff=500),
                                  deparse(lhs(form)[[1]], width.cutoff=500),
                                  deparse(lhs(rform), width.cutoff=500), sep=""))[[1]]
@@ -147,17 +148,17 @@ symbolicAntiD <- function(form, ...){
       return(form)
     }
   }
-  
+
   if(op=='/'){#let denominator have negative exponent if there is an x.
     num = lhs(form)[[2]]
     den = lhs(form)[[3]]
-    
+
     #first see if it is a trigonometric substitution problem
     check <- try(.intTrig(form, num, den, rhsVar), silent=TRUE)
     if(!inherits(check, "try-error"))
       return(check)
-    
-    
+
+
     if(length(grep(rhsVar, den))>0){
       form[[2]] = parse(text = paste(deparse(num, width.cutoff=500), "*(",
                                      deparse(den, width.cutoff=500), ")^-1",sep="" ))[[1]]
@@ -169,9 +170,9 @@ symbolicAntiD <- function(form, ...){
       return(symbolicAntiD(form,...))
     }
   }
-  
+
   if(op == '^'){
-    
+
     affexp = .affine.exp(lhs(form)[[2]], rhsVar)
     if(length(affexp)>0 && length(grep(rhsVar, deparse(lhs(form)[[3]], width.cutoff=500)))==0){
       exp = try(eval(form[[2]][[3]], envir=list(pi=3.1415932653589793, form=form),
@@ -179,9 +180,9 @@ symbolicAntiD <- function(form, ...){
       if(inherits(exp, "try-error"))
         exp = parse(text = paste(deparse(lhs(form)[[3]], width.cutoff=500), "+1"))[[1]]
       else(exp = eval(exp)+1) #change from call to numeric...
-      
+
       if(exp == 0){
-        
+
         if(affexp$a==1)
           form[[2]] = parse(text=paste("log(", deparse(lhs(form)[[2]], width.cutoff=500),
                                        ")", sep=""))[[1]]
@@ -201,27 +202,27 @@ symbolicAntiD <- function(form, ...){
       return(form)
     }
   }
-  
+
   stop("Error: symbolic algorithm gave up")
 }
 
 #--------------------------
-#'Attempts symbolic integration of some mathematical forms
+#' Attempts symbolic integration of some mathematical forms
 #'
 #' @rdname symbolicInt
-#' 
+#'
 #' @return An expression with the integral, or throws an error if unsuccessful.
 #'
 .intMath <- function(form, ...){
-  
+
   op = lhs(form)[[1]]
-  
+
   dots = list(...)
-  
+
   rhsVar = all.vars(rhs(form))
   constants = setdiff(all.vars(form), rhsVar)
-  
-  if(op =="sin"){#trig expression    
+
+  if(op =="sin"){#trig expression
     #check to see if we can integrate it
     affexp = .affine.exp(lhs(form)[[2]], rhsVar)
     if(length(affexp)>0){
@@ -235,8 +236,8 @@ symbolicAntiD <- function(form, ...){
     }
     else stop("Error: symbolic algorithm gave up")
   }
-  
-  if(op == "cos"){    
+
+  if(op == "cos"){
     #check to see if we can integrate it
     affexp = .affine.exp(lhs(form)[[2]], rhsVar)
     if(length(affexp)>0){
@@ -249,8 +250,8 @@ symbolicAntiD <- function(form, ...){
     }
     else stop("Error: symbolic algorithm gave up")
   }
-  
-  if(op == "exp"){    
+
+  if(op == "exp"){
     #Check to see if we can integrate it
     affexp = .affine.exp(lhs(form)[[2]], rhsVar)
     if(length(affexp)>0){
@@ -264,7 +265,7 @@ symbolicAntiD <- function(form, ...){
     }
     else stop("Error: symbolic algorithm gave up")
   }
-  
+
   if(op == "tan"){
     #check to see if we can integrate it
     affexp = .affine.exp(lhs(form)[[2]], rhsVar)
@@ -279,7 +280,7 @@ symbolicAntiD <- function(form, ...){
     }
     else stop("Error: symbolic algorithm gave up")
   }
-  
+
   if(op == "sinh"){
     #check to see if we can integrate it
     affexp = .affine.exp(lhs(form)[[2]], rhsVar)
@@ -294,7 +295,7 @@ symbolicAntiD <- function(form, ...){
     }
     else stop("Error: symbolic algorithm gave up")
   }
-  
+
   if(op == "cosh"){
     #check to see if we can integrate it
     affexp = .affine.exp(lhs(form)[[2]], rhsVar)
@@ -309,7 +310,7 @@ symbolicAntiD <- function(form, ...){
     }
     else stop("Error: symbolic algorithm gave up")
   }
-  
+
   if(op == "sinh"){
     #check to see if we can integrate it
     affexp = .affine.exp(lhs(form)[[2]], rhsVar)
@@ -324,7 +325,7 @@ symbolicAntiD <- function(form, ...){
     }
     else stop("Error: symbolic algorithm gave up")
   }
-  
+
   if(op == "sqrt"){
     #check to see if we can integrate it
     affexp = .affine.exp(lhs(form)[[2]], rhsVar)
@@ -339,47 +340,47 @@ symbolicAntiD <- function(form, ...){
     }
     else stop("Error: symbolic algorithm gave up")
   }
-  
+
   stop("Error: symbolic algorithm gave up")
 }
 
 #-------------------------
 
-#'Attempts symbolic integration of some mathematical forms using trigonometric substitution
+#' Attempts symbolic integration of some mathematical forms using trigonometric substitution
 #'
 #' @rdname symbolicInt
 #'
-#' @param num numerator 
+#' @param num numerator
 #' @param den denominator
 #' @param .x. the variable name
 
 #'
-#'@return An expression with the integral, or throws an error if unsuccessful.
+#' @return An expression with the integral, or throws an error if unsuccessful.
 #'
 .intTrig <- function(form, num, den, .x.){
   params <- all.vars(num)
   if(length(params) == 0)
     params <- ""
   numco <- .polyExp(num, .x., params)
-  
+
   if(numco$pow != 0) stop("Not valid trig sub")
-  
+
   if(den[[1]] == 'sqrt'){
     #Could be arcsin or arccos
     params <- setdiff(all.vars(den), .x.)
     if(length(params)==0)
       params <-""
-    
+
     denco <- .polyExp(den[[2]], .x., params)
     if(denco$pow != 2) stop("Not valid trig sub")
-    
+
     a <- denco$coeffs[[1]]
     b <- denco$coeffs[[2]]
     c <- denco$coeffs[[3]]
-    
+
     if(sign(a)==-1){
       #arcsec?
-      
+
     }
     #complete the square to go from form 1/ax^2+bx+c to 1/a(x-h)^2+k
     if(b==0){
@@ -394,7 +395,7 @@ symbolicAntiD <- function(form, ...){
       h <- eval(h)
       k <- eval(k)
     }
-    
+
     #Check what the sign on a and k are.
     if(!is.numeric(a))
       asign=1
@@ -404,7 +405,7 @@ symbolicAntiD <- function(form, ...){
       ksign=1
     else
       ksign=sign(k)
-    
+
     if(asign==-1&&ksign==1){
       #Arcsin
       if(a!=-1){
@@ -413,7 +414,7 @@ symbolicAntiD <- function(form, ...){
       }
       k <- parse(text = paste("sqrt(", deparse(k), ")", sep=""))[[1]]
       #Now need to integrate it
-      
+
       if(a==-1)
         expr <- parse(text = paste(deparse(num), "*asin((", .x., "-", deparse(h), ")/", deparse(k), ")", sep=""))[[1]]
       else
@@ -421,9 +422,9 @@ symbolicAntiD <- function(form, ...){
                                    deparse(k), ")", sep=""))[[1]]
       form[[2]] <- expr
       return(form)
-      
+
     }
-    
+
     if(asign==1&&ksign==1){
       #Arcsinh
       if(a!=1){
@@ -432,7 +433,7 @@ symbolicAntiD <- function(form, ...){
       }
       k <- parse(text = paste("sqrt(", deparse(k), ")", sep=""))[[1]]
       #Now need to integrate it
-      
+
       if(a==1)
         expr <- parse(text = paste(deparse(num), "*asinh((", .x., "-", deparse(h), ")/", deparse(k), ")", sep=""))[[1]]
       else
@@ -441,7 +442,7 @@ symbolicAntiD <- function(form, ...){
       form[[2]] <- expr
       return(form)
     }
-    
+
     if(asign==1&&ksign==-1){
       #natural log problem
       #        if(a!=1){
@@ -455,10 +456,10 @@ symbolicAntiD <- function(form, ...){
       #         else
       #           k <- parse(text=paste("-1*(", deparse(k), ")", sep=""))[[1]]
       #       }
-      #         
+      #
       #        k <- parse(text = paste("(", deparse(k), ")", sep=""))[[1]]
       # #       #Now need to integrate it
-      # #       
+      # #
       #        if(a==1){
       #          expr <- parse(text = paste(deparse(num), "*log(", .x., "-", deparse(h), "+
       #                sqrt((", .x., "-", deparse(h), ")^2-", deparse(k), "))", sep=""))[[1]]
@@ -470,7 +471,7 @@ symbolicAntiD <- function(form, ...){
       #        form[[2]] <- expr
       #        return(form)
     }
-    
+
   }
   else{
     params <- setdiff(all.vars(den), .x.)
@@ -479,11 +480,11 @@ symbolicAntiD <- function(form, ...){
     }
     denco <- .polyExp(den[[2]], .x., params)
     if(denco$pow != 2) stop("Not valid trig sub")
-    
+
     a <- denco$coeffs[[1]]
     b <- denco$coeffs[[2]]
     c <- denco$coeffs[[3]]
-    
+
     #complete the square to go from form 1/ax^2+bx+c to 1/a(x-h)^2+k
     if(b==0){
       h <- 0
@@ -497,7 +498,7 @@ symbolicAntiD <- function(form, ...){
       h <- eval(h)
       k <- eval(k)
     }
-    
+
     if(!is.numeric(a))
       asign=1
     else
@@ -506,20 +507,20 @@ symbolicAntiD <- function(form, ...){
       ksign=1
     else
       ksign=sign(k)
-    
+
     if(asign==ksign){
       #arctan
       if(a!=1){
         num <- parse(text = paste("(", deparse(num), ")/(", deparse(a), ")", sep=""))[[1]]
       }
-      
+
       if(sign(a)==-1){
         num <- parse(text=paste("-1*(", deparse(num), ")", sep=""))[[1]]
         a <- parse(text = paste("-(", deparse(a), ")", sep=""))[[1]]
         k <- parse(text = paste("-(", deparse(k), ")", sep=""))[[1]]
-        
+
       }
-      
+
       if(a==1){
         expr <- parse(text = paste(deparse(num), "*sqrt(1/(", deparse(k), "))*atan((", .x., "-", deparse(h),
                                    ")/sqrt(", deparse(k), "))" , sep=""))[[1]]
@@ -528,18 +529,18 @@ symbolicAntiD <- function(form, ...){
         expr <- parse(text = paste(deparse(num), "*sqrt((", deparse(a), ")/(", deparse(k), "))*atan(sqrt(", deparse(a),
                                    ")*(", .x., "-", deparse(h), ")/sqrt(", deparse(k), "))" , sep=""))[[1]]
       }
-      
+
       form[[2]] <- expr
       return(form)
     }
-    
-  }  
-  
+
+  }
+
   stop("Not valid trig sub")
 }
 
 
-#'Takes a call and returns its affine coefficients.
+#' Takes a call and returns its affine coefficients.
 #'
 #' @rdname symbolicInt
 #'
@@ -554,66 +555,66 @@ symbolicAntiD <- function(form, ...){
     b=0
     return(list(a=a,b=b))
   }
-  
+
   #if there is no variable in the expression
   if(length(grep(toString(.x.), deparse(tree), fixed=TRUE))==0){
     a=0
     b=tree
     return(list(a=a,b=b))
   }
-  
+
   #if the expression is more complex
   if(tree[[1]]=='('){
     return(Recall(tree[[2]], .x.))
   }
-  
+
   if(tree[[1]]=='+'){
     lexp=Recall(tree[[2]], .x.)
     rexp=Recall(tree[[3]], .x.)
-    
+
     if(length(lexp)==0||length(rexp)==0)
       return(list())
-    
+
     if(lexp$a==0 && length(rexp)!=0){
       a = rexp$a
       b = parse(text=paste(deparse(lexp$b), "+", deparse(rexp$b),sep=""))[[1]]
       return(list(a=a,b=b))
     }
-    
+
     if(rexp$a==0 && length(lexp)!=0){
       a = lexp$a
       b = parse(text=paste(deparse(lexp$b), "+", deparse(rexp$b),sep=""))[[1]]
       return(list(a=a,b=b))
     }
   }
-  
+
   if(tree[[1]]=='-'){
     lexp=Recall(tree[[2]], .x.)
     rexp=Recall(tree[[3]], .x.)
-    
+
     if(length(lexp)==0||length(rexp)==0)
       return(list())
-    
+
     if(lexp$a==0 && length(rexp)!=0){
       a = parse(text=paste("-1*(",deparse(lexp$a), ")",sep=""))[[1]]
       b = parse(text=paste(deparse(lexp$b), "-(", deparse(rexp$b),")",sep=""))[[1]]
       return(list(a=a,b=b))
     }
-    
+
     if(rexp$a==0 && length(lexp)!=0){
       a = lexp$a
       b = parse(text=paste(deparse(lexp$b), "-(", deparse(rexp$b),")",sep=""))[[1]]
       return(list(a=a,b=b))
     }
   }
-  
+
   if(tree[[1]]=='*'){
     lexp=Recall(tree[[2]], .x.)
     rexp=Recall(tree[[3]], .x.)
-    
+
     if(length(lexp)==0||length(rexp)==0)
       return(list())
-    
+
     if(lexp$a==0 && length(rexp)!=0){
       a = parse(text=paste("(",deparse(lexp$b), ")*(", deparse(rexp$a),")",sep=""))[[1]]
       b = parse(text=paste("(",deparse(lexp$b), ")*(", deparse(rexp$b),")",sep=""))[[1]]
@@ -639,11 +640,11 @@ symbolicAntiD <- function(form, ...){
       }
       return(list(a=a,b=b))
     }
-    
+
     if(rexp$a==0 && length(lexp)!=0){
       a = parse(text=paste("(",deparse(lexp$a), ")*(", deparse(rexp$b),")",sep=""))[[1]]
       b = parse(text=paste("(",deparse(lexp$b), ")*(", deparse(rexp$b),")",sep=""))[[1]]
-      
+
       if(rexp$b==0){
         a = 0
         b = 0
@@ -667,23 +668,23 @@ symbolicAntiD <- function(form, ...){
       return(list(a=a,b=b))
     }
   }
-  
+
   if(tree[[1]]=='/'){
     lexp=Recall(tree[[2]], .x.)
     rexp=Recall(tree[[3]], .x.)
-    
+
     if(length(lexp)==0||length(rexp)==0)
       return(list())
-    
+
     if(rexp$a==0 && length(lexp)!=0){
       a = parse(text=paste(deparse(lexp$a), "/(", deparse(rexp$b),")",sep=""))[[1]]
       b = parse(text=paste(deparse(lexp$b), "/(", deparse(rexp$b),")",sep=""))[[1]]
-      
+
       if(rexp$b==1){
         a = lexp$a
         b = lexp$b
       }
-      
+
       return(list(a = a, b = b))
     }
   }
@@ -694,14 +695,14 @@ symbolicAntiD <- function(form, ...){
 #' Written by Aaron Mayerson, May 2013
 #' @rdname mosaic-internal
 .makeNice <- function(form,params=all.vars(form)){
-  # See if the MASS package fraction simplifier is installed, if not 
+  # See if the MASS package fraction simplifier is installed, if not
   # leave fractions in decimal form
   # Belay that order.  We now require MASS, so it will be there.
   # So next line is now commented out.
   # # if (!require(MASS,quietly=TRUE)) fractions <- I
 
   # Functions where the contents are preserved, e.g. sqrt(2)
-  forbidden = c("exp","sin","cos","tan","acos", "asin", 
+  forbidden = c("exp","sin","cos","tan","acos", "asin",
                 "atan","log","sqrt","log10","tanh","atanh",
                 "cosh","acosh","sinh","asinh")
   # Can we get a number from it?

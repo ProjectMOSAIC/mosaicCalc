@@ -5,6 +5,7 @@
 #'
 #' @import mosaic
 #' @rdname Calculus
+#' @importFrom stats runif
 #'
 #' @param formula A formula. The right side of a formula specifies
 #'   the variable(s) with which to
