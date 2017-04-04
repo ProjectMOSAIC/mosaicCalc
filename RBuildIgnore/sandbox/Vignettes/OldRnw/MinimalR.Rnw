@@ -1,8 +1,0 @@
-%\VignetteIndexEntry{Minimal R for Intro Stats}
-%\VignettePackage{mosaic}
-%\VignetteKeywords{mosaic, teaching}
-
-\documentclass{article}
-\begin{document}
-This page intentionally left blank.
-\end{document}

@@ -1,9 +1,0 @@
-%\VignetteIndexEntry{A Compendium of R Commands to Teach Statistics}
-%\VignettePackage{mosaic}
-%\VignetteKeywords{mosaic, teaching, starting}
-
-\documentclass{article}
-\begin{document}
-\usepackage[pdfpages]
-\includepdf{Commands-src.pdf}
-\end{document}

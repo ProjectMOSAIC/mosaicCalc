@@ -1,9 +1,0 @@
-%\VignetteIndexEntry{Other Resources}
-%\VignettePackage{mosaic}
-%\VignetteKeywords{mosaic, resources}
-
-\documentclass{article}
-\usepackage{pdfpages}
-\begin{document}
-\includepdf{Links-src.pdf}
-\end{document}

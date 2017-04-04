@@ -1,57 +1,22 @@
-Package: mosaic
+Package: mosaicCalc
 Type: Package
 Title: Project MOSAIC Statistics and Mathematics Teaching Utilities
-Version: 0.14.4
-Date: 2016-07-29
+Version: 0.14.6
+Date: 2017-04-03
 Depends:
     R (>= 3.0.0),
-    dplyr,
-    lattice (>= 0.20-21),
-    ggplot2,
-    mosaicData,
-    Matrix
-Imports:
-    lazyeval (>= 0.2.0),
-    MASS,
-    grid,
-    tidyr,
-    readr,
-    methods,
-    utils,
-    splines,
-    latticeExtra,
-    ggdendro,
-    gridExtra
+    mosaic
 Suggests: 
-    lubridate,
-    fastR,
-    magrittr,
-    NHANES,
-    RCurl,
-    sp,
-    maptools,
-    vcd,
     testthat,
     knitr,
-    tools,
-    parallel,
-    mapproj,
-    rgl,
     rmarkdown
-Enhances: manipulate
 VignetteBuilder: knitr
-Author: Randall Pruim <rpruim@calvin.edu>, Daniel T. Kaplan
-    <kaplan@macalester.edu>, Nicholas J. Horton <nhorton@amherst.edu>
+Author: Daniel T. Kaplan <kaplan@macalester.edu>, Randall Pruim <rpruim@calvin.edu>, Nicholas J. Horton <nhorton@amherst.edu>
 Maintainer: Randall Pruim <rpruim@calvin.edu>
-Description: Data sets and utilities from Project MOSAIC (http://mosaic-web.org) used
-    to teach mathematics, statistics, computation and modeling.  Funded by the
-    NSF, Project MOSAIC is a community of educators working to tie together
-    aspects of quantitative work that students in science, technology,
-    engineering and mathematics will need in their professional lives, but
-    which are usually taught in isolation, if at all.
+Description: Calculus in R
 License: GPL (>=2)
 LazyLoad: yes
 LazyData: yes
-URL: https://github.com/ProjectMOSAIC/mosaic
-BugReports: https://github.com/ProjectMOSAIC/mosaic/issues
+URL: https://github.com/ProjectMOSAIC/mosaicCalc
+BugReports: https://github.com/ProjectMOSAIC/mosaicCalc/issues
 RoxygenNote: 6.0.1

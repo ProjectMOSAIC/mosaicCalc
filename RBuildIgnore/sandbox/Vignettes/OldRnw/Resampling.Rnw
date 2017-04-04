@@ -1,8 +1,0 @@
-%\VignetteIndexEntry{Resampling-based inference}
-%\VignettePackage{mosaic}
-%\VignetteKeywords{mosaic, resampling, bootstrapping, permutation}
-
-\documentclass{article}
-\begin{document}
-This page intentionally left blank.
-\end{document}

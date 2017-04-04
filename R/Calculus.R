@@ -1,41 +1,41 @@
-
 #' Derivative and Anti-derivative operators
-#' 
-#' Operators for computing derivatives and anti-derivatives as 
+#'
+#' Operators for computing derivatives and anti-derivatives as
 #' functions.
 #'
+#' @import mosaic
 #' @rdname Calculus
 #'
-#' @param formula A formula. The right side of a formula specifies 
-#'   the variable(s) with which to 
-#'   carry out the integration or differentiation.  On the left side should be 
-#'   an expression or a function that returns a numerical vector 
-#'   of the same length as its argument.  
+#' @param formula A formula. The right side of a formula specifies
+#'   the variable(s) with which to
+#'   carry out the integration or differentiation.  On the left side should be
+#'   an expression or a function that returns a numerical vector
+#'   of the same length as its argument.
 #'   The expression can contain unbound variables.  Functions
 #'   will be differentiated as if the formula {f(x) ~ x} were specified
 #'   but with \code{x} replaced by the first argument of \code{f}.
-#'   
 #'
-#' @param \dots Default values to be given to unbound variables in the expression \code{expr}.  
-#' See examples.#'  Note that in creating anti-derivative functions, 
+#'
+#' @param \dots Default values to be given to unbound variables in the expression \code{expr}.
+#' See examples.#'  Note that in creating anti-derivative functions,
 #' default values of "from" and "to" can be assigned.  They are to be written with
 #' the name of the variable as a prefix, e.g. \code{y.from}.
 #'
 #' @param .hstep  horizontal distance between points used for secant slope
-#'   calculation in numerical derivatives. 
-#'   
+#'   calculation in numerical derivatives.
+#'
 #' @param add.h.control logical indicating whether the returned derivative function
 #'   should have an additional parameter for setting .hstep.  Meaningful only for numerical
 #'   derivatives.
-#'   
+#'
 #' @return For derivatives, the return value is a function of the variable(s)
 #' of differentiation, as well as any other symbols used in the expression.  Thus,
 #' \code{D(A*x^2 + B*y ~ x + y)} will compute the mixed partial with respect to x
 #' then y (that is, \eqn{\frac{d^2 f}{dy\;dx}}{d2f/dydx}).  The returned value will be a function of x and y,
 #' as well as A and B.  In evaluating the returned function, it's best to use the
 #' named form of arguments, to ensure the order is correct.
-#' 
-#' @details 
+#'
+#' @details
 #' \code{D} attempts to find a symbolic derivative for simple expressions, but
 #' will provide a function that is a numerical derivative if the attempt at
 #' symbolic differentiation is unsuccessful.  The symbolic derivative can be of
@@ -44,12 +44,12 @@
 #' (including mixed partials).
 #' \code{antiD} will attempt simple symbolic integration but if it fails
 #' it will return a numerically-based anti-derivative.
-#' 
-#' \code{antiD} returns a function with the same arguments as the 
-#' expression passed to it.  The returned function is the anti-derivative 
-#' of the expression, e.g., antiD(f(x)~x) -> F(x).  
-#' To calculate the integral of f(x), use F(to) - F(from). 
-#' 
+#'
+#' \code{antiD} returns a function with the same arguments as the
+#' expression passed to it.  The returned function is the anti-derivative
+#' of the expression, e.g., antiD(f(x)~x) -> F(x).
+#' To calculate the integral of f(x), use F(to) - F(from).
+#'
 #' @examples
 #' D(sin(t) ~ t)
 #' D(A*sin(t) ~ t )
@@ -58,7 +58,7 @@
 #' f(x=2)
 #' f(x=2,A=10) # override default value of parameter A
 #' g <- D(f(x=t, A=1)^2 ~ t)  # note: it's a function of t
-#' g(t=1) 
+#' g(t=1)
 #' gg <- D(f(x=t, A=B)^2 ~ t, B=10)  # note: it's a function of t and B
 #' gg(t=1)
 #' gg(t=1, B=100)
@@ -73,12 +73,12 @@ D <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
 #' @rdname Calculus
 #' @export
 D.default <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
-  tryCatch( return( stats::D(formula, ...) ), error=function(e) {}  ) 
+  tryCatch( return( stats::D(formula, ...) ), error=function(e) {}  )
   stop( paste("First argument should be a formula that explicitly identifies the",
               "variable with respect to which the derivative is to be taken. ",
               "Example:  D(sin(x) ~ x).", sep ="\n  " ) )
 }
-  
+
 #' @rdname Calculus
 #' @export
 D.formula <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
@@ -87,7 +87,7 @@ D.formula <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
   formulaEnv = environment(formula) # where was the formula made?
   #Try to construct a symbolic derivative
   res = try(symbolicD(formula, ...), silent=TRUE)
-  #Failed?  Do it numerically  
+  #Failed?  Do it numerically
   if( inherits(res, "try-error") ){ # first symbolic attempt unsuccessful
     expandedForm <-try(expandFun(formula), silent=TRUE)
     if(!inherits(expandedForm, "try-error"))
@@ -107,12 +107,12 @@ D.formula <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
 #' @rdname Calculus
 #'
 #' @param lower.bound for numerical integration only, the lower bound used
-#' 
-#' @param force.numeric If \code{TRUE}, a numerical integral is performed even when a 
+#'
+#' @param force.numeric If \code{TRUE}, a numerical integral is performed even when a
 #' symbolic integral is available.
-#' 
-#' @return a function of the same arguments as the original expression with a 
-#' constant of integration set to zero by default, named "C", "D", ... depending on the first 
+#'
+#' @return a function of the same arguments as the original expression with a
+#' constant of integration set to zero by default, named "C", "D", ... depending on the first
 #' such letter not otherwise in the argument list.
 #' @examples
 #' antiD( a*x^2 ~ x, a = 3)
@@ -127,10 +127,10 @@ D.formula <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
 antiD <- function(formula, ..., lower.bound=0, force.numeric=FALSE){
   wrt <- all.vars(rhs(formula), unique=FALSE) # "with respect to" variable name
   if (length(wrt) != 1)  stop("Integration with respect to multiple variables not supported directly.")
-  
+
   if (!force.numeric){ # Try symbolic integral
     res = try(symbolicInt(formula, ...), silent=TRUE)
-    if (!inherits(res, "try-error") ) return(res) 
+    if (!inherits(res, "try-error") ) return(res)
   }
   # Do integral numerically
   f <- makeFun(formula, ..., strict.declaration=FALSE)
@@ -139,8 +139,8 @@ antiD <- function(formula, ..., lower.bound=0, force.numeric=FALSE){
 }
 # ===================
 # The function returned by antiD will take the same arguments as
-# f, but will split one of the variables into a "to" and "from" component. 
-# The "from" will have a default value of 0 or otherwise inherited from 
+# f, but will split one of the variables into a "to" and "from" component.
+# The "from" will have a default value of 0 or otherwise inherited from
 # the call to antiD
 # The variable of integration will be called "viName"
 #' @rdname Calculus
@@ -150,8 +150,8 @@ antiD <- function(formula, ..., lower.bound=0, force.numeric=FALSE){
 #' @param from default value for the lower bound of the integral region
 # I don't want this function to be exported.
 makeAntiDfun <- function(.function, .wrt, from, .tol=.Machine$double.eps^0.25) {
-  resargs <- formals(.function) 
-  
+  resargs <- formals(.function)
+
   intC <- LETTERS[-(1:2)][!LETTERS[-(1:2)]%in% names(resargs)][1]
   if (length(intC)==0) intC <- paste("ConstantOfIntegration",runif(1),sep="")
   resargs[intC] <- 0
@@ -164,9 +164,9 @@ makeAntiDfun <- function(.function, .wrt, from, .tol=.Machine$double.eps^0.25) {
   # Create the numerical integral
   res <- function(){
     numerical_integration(.newf,.wrt,as.list(match.call())[-1],formals(),
-                          from,ciName=intC, .tol) 
+                          from,ciName=intC, .tol)
   }
-  
+
   formals(res) <- c(resargs)
   ## Vectorize at the end
   # return(Vectorize(res))
@@ -182,7 +182,7 @@ makeAntiDfun <- function(.function, .wrt, from, .tol=.Machine$double.eps^0.25) {
 #' @param vi.from the the lower bound of the interval of integration
 #' @param ciName character string giving the name of the symbol for the constant of integration
 #' @param .tol Numerical tolerance.  See stats::integrate
-#' 
+#'
 #' @note \code{numerical_integration} is not intended for direct use.  It packages
 #' up the numerical anti-differentiation process so that the contents
 #' of functions produced by \code{antiD} look nicer to human readers.
@@ -196,7 +196,7 @@ numerical_integration <- function(f,wrt,av,args,vi.from, ciName="C",.tol) {
   av2 = c(av, args) # combine the actual arguments with the formals
   # to make sure that default values are included
   # Extract the limits from the argument list
-  vi.to <- inferArgs(wrt, av2, defaults=alist(val=NaN), 
+  vi.to <- inferArgs(wrt, av2, defaults=alist(val=NaN),
                      variants = c("","to",".to"))$val
   # If they are calls, turn them into values.  Redundant with loop above
   if( any(is.nan(vi.to)) | any(is.nan(vi.from))) stop("Integration bounds not given.")
@@ -211,7 +211,7 @@ numerical_integration <- function(f,wrt,av,args,vi.from, ciName="C",.tol) {
     f(vi,av) + 0*vi
   }
   # NEED TO ADD TOLERANCE
-  
+
   multiplier <- 1
   if( length(vi.from) > 1 & length(vi.to) == 1 ){
     temp <- to
