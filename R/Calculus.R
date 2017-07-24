@@ -3,9 +3,11 @@
 #' Operators for computing derivatives and anti-derivatives as
 #' functions.
 #'
-#' @import mosaic
 #' @rdname Calculus
 #' @importFrom stats runif
+#' @importFrom mosaicCore rhs lhs makeFun parse.formula
+#' @importFrom mosaic inferArgs expandFun
+#' @importFrom MASS fractions
 #'
 #' @param formula A formula. The right side of a formula specifies
 #'   the variable(s) with which to

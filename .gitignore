@@ -41,3 +41,4 @@ vignettes/*.R
 vignettes/*.html
 vignettes/*.md
 vignettes/*.out
+mosaicCalc.Rproj

@@ -6,10 +6,11 @@ Version: 0.14.6
 Date: 2017-04-03
 Depends:
     R (>= 3.0.0),
-    mosaic
+    mosaicCore
 Imports:
     methods,
-    stats
+    stats,
+    MASS, mosaic
 Suggests: 
     testthat,
     knitr,

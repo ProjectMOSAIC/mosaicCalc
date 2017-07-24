@@ -40,8 +40,8 @@
 #' h = numD( g(x=x,y=y,a=a) ~ y, a=1)
 #' h(x=2,y=10)
 #' f = numD( sin(x)~x, add.h.control=TRUE)
-#' plotFun( f(3,.hstep=h)~h, hlim=range(.00000001,.000001))
-#' ladd( panel.abline(cos(3),0))
+#' # plotFun( f(3,.hstep=h)~h, hlim=range(.00000001,.000001))
+#' # ladd( panel.abline(cos(3),0))
 #' @export
 
 # Strategy: 
