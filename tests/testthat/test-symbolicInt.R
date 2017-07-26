@@ -13,7 +13,7 @@ test_that('Simple polynomial expressions work',{
 test_that('Declared variables do not interfere with constants',{
   a <- 5
   suppressWarnings(ff <- symbolicInt((a+3)*x^7-a*4*x+a ~ x))
-  expect_warning( symbolicInt((a+3)*x^7-a*4*x+a ~ x), "taken from current environment") 
+  expect_warning( symbolicInt((a+3)*x^7-a*4*x+a ~ x)) #, "taken from current environment") 
   gg <- function(x,a){(a+3)*1/(8)*x^8-a*4*1/(2)*x^2+a*x}
   expect_that(ff(seq(1,10, len=26), a=2), equals(gg(seq(1,10, len=26), a=2), tol=0.00001))
 })

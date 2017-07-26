@@ -2,11 +2,11 @@ context('Calculus functions: D(), antiD(), etc.')
 
 test_that("stats::D still accessible", {
   expect_equivalent( 
-		mosaic::D( expression(sin(cos(x + y^2))), "x" ), 
+		mosaicCalc::D( expression(sin(cos(x + y^2))), "x" ), 
 		 stats::D( expression(sin(cos(x + y^2))), "x" )
 	) 
   expect_equivalent( 
-		mosaic::D( expression(sin(cos(x + y^2))), "x" ), 
+		mosaicCalc::D( expression(sin(cos(x + y^2))), "x" ), 
 		        D( expression(sin(cos(x + y^2))), "x" )
 	) 
 })
@@ -64,7 +64,7 @@ test_that("unmixed 2nd-order partials work",{
   g <- numD( a*x^2 * y^2 ~ x & x, a=10, y = 2)
   expect_that( g(x = 3, y = 5), equals(500, tol = 0.001)) 
   g <- numD( a*x^2 * y^2 ~ y & y, a=10)
-  expect_warning(g <- numD( a*x^2 * y^2 ~ y & y, a=10), "default values taken from current environment")
+  expect_warning(g <- numD( a*x^2 * y^2 ~ y & y, a=10))#, "Implicit variables without default values (dangerous!):  x")
 
   expect_that( g(x=3, y=5), equals(180,tol=0.001)) 
   g <- numD( a*x^2 * y^2 ~ a  & a, a = 10, y = 2, x = 2)
@@ -207,3 +207,4 @@ test_that("integration bug with -Inf as lower bound is worked around",{
   G <- antiD(g(x)~x)
   expect_that(G(-Inf), equals(0, tol=0.00001))
 })
+
