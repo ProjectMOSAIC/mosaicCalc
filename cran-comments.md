@@ -13,5 +13,8 @@ There were no ERRORs or WARNINGs locally or via Win Builder.
 
 ## Downstream dependencies
 
-The only packages that directly depend on this package are `statisticalModeling` and `fastR`.  These are
-begin updated simultaneously and will be submitted concurrently or a bit after.
+This package separates out some code from the `mosaic` package related to calculus.  Since this is 
+a first CRAN submission, nothing depends on this package yet, but two packages that depend on 
+`mosaic` will need to be updated to depend on `mosaicCalc` as well.  These are `statisticalModeling` 
+and `fastR`.  These are begin updated simultaneously and will be submitted concurrently or a bit after
+`mosaicCalc`.
