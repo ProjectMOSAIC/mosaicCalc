@@ -9,12 +9,16 @@
 
 ## R CMD check results
 
-There were no ERRORs or WARNINGs locally or via Win Builder.
+There were no ERRORs or WARNINGs
+
+Sorry for missing the NOTE the last time arround, I saw there was one NOTE and figured it
+was the "new submission" NOTE and didn't realize it was a multi-part NOTE.  Trying to move 
+too quickly, I guess.
 
 ## Downstream dependencies
 
 This package separates out some code from the `mosaic` package related to calculus.  Since this is 
 a first CRAN submission, nothing depends on this package yet, but two packages that depend on 
 `mosaic` will need to be updated to depend on `mosaicCalc` as well.  These are `statisticalModeling` 
-and `fastR`.  These are begin updated simultaneously and will be submitted concurrently or a bit after
-`mosaicCalc`.
+and `fastR`.  These are begin updated simultaneously and will be submitted ASAP after this is on
+CRAN.

@@ -1,7 +1,9 @@
 Package: mosaicCalc
 Type: Package
 Title: Calculus in R
-Description: This package is part of the Project MOSAIC suite and provides utility functions for doing calculus in R.
+Description:  Part of the Project MOSAIC (<http://mosaic-web.org/>)
+    suite that provides utility functions for doing calculus 
+    (differentiation and integration) in R.
 Version: 0.5.0
 Date: 2017-07-26
 Depends:
@@ -16,7 +18,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
-VignetteBuilder: knitr
 Author: Daniel T. Kaplan <kaplan@macalester.edu>, Randall Pruim <rpruim@calvin.edu>, Nicholas J. Horton <nhorton@amherst.edu>
 Maintainer: Randall Pruim <rpruim@calvin.edu>
 License: GPL (>=2)
