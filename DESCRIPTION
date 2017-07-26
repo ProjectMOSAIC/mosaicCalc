@@ -2,15 +2,16 @@ Package: mosaicCalc
 Type: Package
 Title: Calculus in R
 Description: This package is part of the Project MOSAIC suite and provides utility functions for doing calculus in R.
-Version: 0.2.0
-Date: 2017-07-26
+Version: 0.14.6.9000
+Date: 2017-07-24
 Depends:
     R (>= 3.0.0),
     mosaicCore
 Imports:
     methods,
     stats,
-    MASS, mosaic
+    MASS, 
+    mosaic
 Suggests: 
     testthat,
     knitr,
