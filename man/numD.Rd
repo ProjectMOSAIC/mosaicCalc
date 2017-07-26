@@ -37,7 +37,7 @@ numerical.mixed.partial(f, var1, var2, h, av)
 
 \item{.hstep}{numerical finite-difference step (default is 1e-6 or 1e-4 for first and second-order derivatives, respectively)}
 
-\item{add.h.control}{arranges the returned function to have a \code{.hstep} argument that cann be used to demonstrate convergence and error}
+\item{add.h.control}{arranges the returned function to have a \code{.hstep} argument that can be used to demonstrate convergence and error}
 
 \item{C}{list of arguments for evaluating the function at the "center" point}
 
@@ -78,13 +78,13 @@ Constructs the numerical derivatives of mathematical expressions
 \details{
 Uses a simple finite-difference scheme to evaluate the derivative.  The function created
 will not contain a formula for the derivative.  Instead, the original function is stored
-at the time the derivative is constructed and that original function is re-evaluated at the 
+at the time the derivative is constructed and that original function is re-evaluated at the
 finitely-spaced points of an interval.  If you redefine the original function, that won't affect
 any derivatives that were already defined from it.
 Numerical derivatives, particularly high-order ones, are unstable.  The finite-difference parameter
 \code{.hstep} is set, by default, to give reasonable results for first- and second-order derivatives.
 It's tweaked a bit so that taking a second derivative by differentiating a first derivative
-will give reasonably accurate results.  But, 
+will give reasonably accurate results.  But,
 if taking a second derivative, much better to do it in one step to preserve numerical accuracy.
 }
 \note{
@@ -109,9 +109,9 @@ differentiation process to make functions returned by \code{numD} and
 \code{D} easier to read.
 }
 \section{Numerical partials}{
- These functions are not indended 
+ These functions are not intended
 for direct use. They just package up the numerical
-differentiation process to make functions 
+differentiation process to make functions
 returned by \code{numD} and
 \code{D} easier to read.
 }

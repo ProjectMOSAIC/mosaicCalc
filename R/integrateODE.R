@@ -134,7 +134,7 @@ integrateODE = function(dyn,...,tdur) {
 }
 
 
-#' A simple Runge-Kutte integrator
+#' A simple Runge-Kutta integrator
 #'
 #' Integrates ordinary differential equations using a Runge-Kutta method
 #'

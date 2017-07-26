@@ -178,13 +178,13 @@ makeAntiDfun <- function(.function, .wrt, from, .tol=.Machine$double.eps^0.25) {
 # =============
 #' @rdname Calculus
 #'
-#' @param f a function
-#' @param wrt character string naming a variable: the var. of integration
-#' @param av a list of the arguments passed to the function calling this
-#' @param args default values (if any) for parameterss
-#' @param vi.from the the lower bound of the interval of integration
-#' @param ciName character string giving the name of the symbol for the constant of integration
-#' @param .tol Numerical tolerance.  See stats::integrate
+#' @param f A function.
+#' @param wrt Character string naming a variable: the var. of integration.
+#' @param av A list of the arguments passed to the function calling this.
+#' @param args Default values (if any) for parameters.
+#' @param vi.from The the lower bound of the interval of integration.
+#' @param ciName Character string giving the name of the symbol for the constant of integration.
+#' @param .tol Numerical tolerance.  See \code{\link[stats]{integrate}()}.
 #'
 #' @note \code{numerical_integration} is not intended for direct use.  It packages
 #' up the numerical anti-differentiation process so that the contents

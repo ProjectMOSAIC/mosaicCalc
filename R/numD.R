@@ -10,22 +10,22 @@
 #' @param formula a mathematical expression (see examples and \code{\link{plotFun}})
 #' @param ... additional parameters, typically default values for mathematical parameters
 #' @param .hstep numerical finite-difference step (default is 1e-6 or 1e-4 for first and second-order derivatives, respectively)
-#' @param add.h.control arranges the returned function to have a \code{.hstep} argument that cann be used to demonstrate convergence and error
+#' @param add.h.control arranges the returned function to have a \code{.hstep} argument that can be used to demonstrate convergence and error
 #'
 #' @return a function implementing the derivative as a finite-difference approximation
 #'
 #' @details
 #' Uses a simple finite-difference scheme to evaluate the derivative.  The function created
 #' will not contain a formula for the derivative.  Instead, the original function is stored
-#' at the time the derivative is constructed and that original function is re-evaluated at the 
+#' at the time the derivative is constructed and that original function is re-evaluated at the
 #' finitely-spaced points of an interval.  If you redefine the original function, that won't affect
 #' any derivatives that were already defined from it.
 #' Numerical derivatives, particularly high-order ones, are unstable.  The finite-difference parameter
 #' \code{.hstep} is set, by default, to give reasonable results for first- and second-order derivatives.
 #' It's tweaked a bit so that taking a second derivative by differentiating a first derivative
-#' will give reasonably accurate results.  But, 
+#' will give reasonably accurate results.  But,
 #' if taking a second derivative, much better to do it in one step to preserve numerical accuracy.
-#' 
+#'
 #' @note WARNING: In the expressions, do not use variable names beginning with a dot, particularly \code{.f} or \code{.h}
 #'
 #' @seealso \code{\link{D}}, \code{\link{symbolicD}}, \code{\link{makeFun}}, \code{\link{antiD}}, \code{\link{plotFun}}
@@ -44,7 +44,7 @@
 #' # ladd( panel.abline(cos(3),0))
 #' @export
 
-# Strategy: 
+# Strategy:
 # The various dfdx, d2fdx2, d2fdxdy functions create a new function.
 # The new function grabs the function f constructed from the formula
 # and grabs the arguments, adding and subtracting the finite-difference step h
@@ -56,12 +56,12 @@ numD <- function(formula, ..., .hstep=NULL, add.h.control=FALSE) {
   f <- makeFun(formula, ...)
   environment(f) <- formulaEnv  # was parent.frame()
   # find the variables with respect to which the derivative is to be taken
-  # keeping repeated names so that 2nd derivs can be spotted.
-  dvars <- all.vars(rhs(formula), unique=FALSE) 
+  # keeping repeated names so that 2nd derivatives can be spotted.
+  dvars <- all.vars(rhs(formula), unique=FALSE)
   # What sort of derivative?
-  if (length(dvars)==1)  #Simple first derivative 
+  if (length(dvars)==1)  #Simple first derivative
     res = dfdx( f, dvars[1], .hstep=ifelse(is.null(.hstep), 0.000001, .hstep))
-  else if (length(dvars==2) & dvars[1]==dvars[2]) # Second unmixed partial 
+  else if (length(dvars==2) & dvars[1]==dvars[2]) # Second unmixed partial
     res = d2fdx2( f, dvars[1], .hstep=ifelse(is.null(.hstep), 0.0001, .hstep))
   else if (length(dvars)==2) # mixed partial
     res = d2fdxdy(f, dvars[1], dvars[2], .hstep=ifelse(is.null(.hstep), 0.0001, .hstep))
@@ -69,7 +69,7 @@ numD <- function(formula, ..., .hstep=NULL, add.h.control=FALSE) {
   if (length(dvars)>2){
     stop("Order greater than 2 not yet implemented.")
   }
-  
+
   if( add.h.control )
     formals(res) = c(formals(res),list(.hstep=0.00001))
   return(res)
@@ -89,8 +89,8 @@ setInterval <- function(C, wrt, h) {
   for( nm in names(C) ) C[[nm]] <- eval.parent( C[[nm]], n=3)
   if( ".hstep" %in% names(C)) C$.hstep=NULL #.hstep doesn't go to the function
   C[[wrt]] <- eval.parent( C[[wrt]], n=3)
-  L <- C; 
-  R <- C; 
+  L <- C;
+  R <- C;
   if( wrt %in% names(C)) { # Change the appropriate variable
     L[[wrt]] <- L[[wrt]] - h # left side of interval
     R[[wrt]] <- R[[wrt]] + h # right side of interval
@@ -133,10 +133,10 @@ setCorners <- function(C, var1, var2, h) {
 #' @param .wrt character string naming the variable with respect to which
 #' differentiation is to be done
 #' @param .step the finite-difference step size
-#' @note Helper function for \code{numD} for first-order derivs. 
+#' @note Helper function for \code{numD} for first-order derivs.
 dfdx <- function(.function, .wrt, .hstep) { # first order partial
   res <- function() numerical.first.partial(.function, .wrt, .hstep, match.call())
-  formals(res) <- formals(.function) 
+  formals(res) <- formals(.function)
   return(res)
 }
 # ==============
@@ -154,7 +154,7 @@ d2fdxdy <- function(.function, .var1, .var2, .hstep) { # second order mixed part
   res <- function() numerical.mixed.partial(.function, .var1, .var2, .hstep, match.call())
     #H <- setCorners(as.list(match.call()), var1, var2, h)
     #(do.call(f, H$RU) + do.call(f, H$LB) - (do.call(f, H$RB) + do.call(f, H$LU)))/(4*h^2)
-  formals(res) <- formals(.function) 
+  formals(res) <- formals(.function)
   return(res)
 }
 # =============
@@ -166,7 +166,7 @@ d2fdx2 <- function(.function, .wrt, .hstep) { # second order unmixed partial
   res <- function() numerical.second.partial(.function,.wrt,.hstep,match.call())
   #H <- setInterval(as.list(match.call()), wrt, h)
   #(do.call( f, H$R ) + do.call(f, H$L) - 2*do.call(f, H$C))/(h^2)
-  formals(res) <- formals(.function) 
+  formals(res) <- formals(.function)
   return(res)
 }
 # =============
@@ -176,9 +176,9 @@ d2fdx2 <- function(.function, .wrt, .hstep) { # second order unmixed partial
 # @param wrt character string naming the variable of differentiation
 # @param h size of the finite-difference step
 #' @param av arguments to the function calling this
-#' @section Numerical partials: These functions are not indended 
+#' @section Numerical partials: These functions are not intended
 #' for direct use. They just package up the numerical
-#' differentiation process to make functions 
+#' differentiation process to make functions
 #' returned by \code{numD} and
 #' \code{D} easier to read.
 numerical.first.partial = function(f,wrt,h,av) {
