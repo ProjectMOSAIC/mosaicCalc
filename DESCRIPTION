@@ -2,7 +2,7 @@ Package: mosaicCalc
 Type: Package
 Title: Calculus in R
 Description: This package is part of the Project MOSAIC suite and provides utility functions for doing calculus in R.
-Version: 0.5
+Version: 0.5.0
 Date: 2017-07-26
 Depends:
     R (>= 3.0.0),
