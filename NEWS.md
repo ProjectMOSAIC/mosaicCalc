@@ -1,6 +1,7 @@
 # mosaicCalc package NEWS
 
-## mosaic 0.2.0
+## mosaicCalc 0.5.0
 
-* Reconfigured mosaicCalc as a separate package that works with the mosaicCore 0.2.0 ecosystem.
+ * Calculus materials separated from the `mosaic` package and housed here.
+ * Reconfigured `mosaicCalc` as a separate package that works with the `mosaicCore` ecosystem.
 
