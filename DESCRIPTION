@@ -1,9 +1,12 @@
 Package: mosaicCalc
 Type: Package
-Title: Calculus in R
+Title: Function-Based Numerical and Symbolic Differentiation and Antidifferentiation
 Description:  Part of the Project MOSAIC (<http://mosaic-web.org/>)
     suite that provides utility functions for doing calculus 
-    (differentiation and integration) in R.
+    (differentiation and integration) in R. The main differentiation and 
+    antidifferentiation operators are described using formulas and return functions 
+    rather than numerical values. Numerical values can be obtained by evaluating
+    these functions.
 Version: 0.5.0
 Date: 2017-07-26
 Depends:

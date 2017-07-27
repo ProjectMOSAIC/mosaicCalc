@@ -11,9 +11,12 @@
 
 There were no ERRORs or WARNINGs
 
-Sorry for missing the NOTE the last time arround, I saw there was one NOTE and figured it
-was the "new submission" NOTE and didn't realize it was a multi-part NOTE.  Trying to move 
-too quickly, I guess.
+I believe these to be correctly spelled:
+
+  Possibly mis-spelled words in DESCRIPTION:
+    Antidifferentiation (4:9)
+    antidifferentiation (8:5)
+
 
 ## Downstream dependencies
 
@@ -22,3 +25,7 @@ a first CRAN submission, nothing depends on this package yet, but two packages t
 `mosaic` will need to be updated to depend on `mosaicCalc` as well.  These are `statisticalModeling` 
 and `fastR`.  These are begin updated simultaneously and will be submitted ASAP after this is on
 CRAN.
+
+## Other notes
+
+The title and description have been expanded as per your request.
