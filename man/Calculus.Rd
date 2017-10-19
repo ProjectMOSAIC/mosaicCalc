@@ -54,19 +54,19 @@ symbolic integral is available.}
 
 \item{from}{default value for the lower bound of the integral region}
 
-\item{.tol}{Numerical tolerance.  See stats::integrate}
+\item{.tol}{Numerical tolerance.  See \code{\link[stats]{integrate}()}.}
 
-\item{f}{a function}
+\item{f}{A function.}
 
-\item{wrt}{character string naming a variable: the var. of integration}
+\item{wrt}{Character string naming a variable: the var. of integration.}
 
-\item{av}{a list of the arguments passed to the function calling this}
+\item{av}{A list of the arguments passed to the function calling this.}
 
-\item{args}{default values (if any) for parameterss}
+\item{args}{Default values (if any) for parameters.}
 
-\item{vi.from}{the the lower bound of the interval of integration}
+\item{vi.from}{The the lower bound of the interval of integration.}
 
-\item{ciName}{character string giving the name of the symbol for the constant of integration}
+\item{ciName}{Character string giving the name of the symbol for the constant of integration.}
 }
 \value{
 For derivatives, the return value is a function of the variable(s)

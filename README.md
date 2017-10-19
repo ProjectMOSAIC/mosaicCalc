@@ -1,12 +1,12 @@
 ---
 ---
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mosaic)](http://cran.r-project.org/package=mosaic)
-[![Travis-CI Build Status](https://travis-ci.org/ProjectMOSAIC/mosaic.svg?branch=master)](https://travis-ci.org/ProjectMOSAIC/mosaic/)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mosaicCalc)](https://cran.r-project.org/package=mosaicCalc)
+[![Travis-CI Build Status](https://travis-ci.org/ProjectMOSAIC/mosaicCalc.svg?branch=master)](https://travis-ci.org/ProjectMOSAIC/mosaicCalc/)
 
 ## Purpose and design
 
-The mosaic package is designed to facilitate the use of R in statistics and calculus
+The `mosaicCalc` package is designed to facilitate the use of R in statistics and calculus
 instruction by providing a number of functions that (a) make many common tasks fit
 into a common template, and (b) simplify some tasks that would otherwise be too
 complicated for beginners.
@@ -16,34 +16,23 @@ complicated for beginners.
 You install from CRAN using 
 
 ```r
-install.packages("mosaic")
+install.packages("mosaicCalc")
 ```
 or from github with
 
 ```r
-devtools::install_github("ProjectMOSAIC/mosaic")
+devtools::install_github("ProjectMOSAIC/mosaicCalc")
 ```
 If you want to try out our developmental code (the beta branch), use
 
 ```r
-devtools::install_github("ProjectMOSAIC/mosaic", ref="beta")
+devtools::install_github("ProjectMOSAIC/mosaicCalc", ref="beta")
 ```
 Updates to the master github repository are more frequent than CRAN updates.
 Our beta branch is where we implement bug fixes most quickly and develop new features.
 We try to keep it pretty stable, but there may be a few rough edges, missing documentation, etc. while things are in progress.  
 
 If you discover a problem with any version of the package, be sure to let us know so that we can address it.  Post an issue on github or send email to `Rpkgs@mosaic-web.org`.
-
-## Getting Started with mosaic
-
-The package includes several vignettes to help you get started.  One of these 
-vignettes 
-([*Resources Related to the mosaic package*](vignettes/mosaic-resources.Rmd)) includes a list of many resources, both within the
-package and external to it.  That's a good place to start.
-
-## Getting Help
-
-Need help?  Try posting a question on Stack Overflow using the tag [r-mosaic](http://stackoverflow.com/questions/tagged/r-mosaic).
 
 
 ## Project MOSAIC

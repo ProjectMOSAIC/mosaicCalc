@@ -1,9 +1,14 @@
 Package: mosaicCalc
 Type: Package
-Title: Calculus in R
-Description: This package is part of the Project MOSAIC suite and provides utility functions for doing calculus in R.
-Version: 0.14.6.9000
-Date: 2017-07-24
+Title: Function-Based Numerical and Symbolic Differentiation and Antidifferentiation
+Description:  Part of the Project MOSAIC (<http://mosaic-web.org/>)
+    suite that provides utility functions for doing calculus 
+    (differentiation and integration) in R. The main differentiation and 
+    antidifferentiation operators are described using formulas and return functions 
+    rather than numerical values. Numerical values can be obtained by evaluating
+    these functions.
+Version: 0.5.0
+Date: 2017-07-26
 Depends:
     R (>= 3.0.0),
     mosaicCore
@@ -17,7 +22,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
-VignetteBuilder: knitr
 Author: Daniel T. Kaplan <kaplan@macalester.edu>, Randall Pruim <rpruim@calvin.edu>, Nicholas J. Horton <nhorton@amherst.edu>
 Maintainer: Randall Pruim <rpruim@calvin.edu>
 License: GPL (>=2)
@@ -25,4 +29,4 @@ LazyLoad: yes
 LazyData: yes
 URL: https://github.com/ProjectMOSAIC/mosaicCalc
 BugReports: https://github.com/ProjectMOSAIC/mosaicCalc/issues
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000

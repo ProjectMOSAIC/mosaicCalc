@@ -2,7 +2,7 @@
 % Please edit documentation in R/integrateODE.R
 \name{rkintegrate}
 \alias{rkintegrate}
-\title{A simple Runge-Kutte integrator}
+\title{A simple Runge-Kutta integrator}
 \usage{
 rkintegrate(fun, x0, tstart = 0, tend = 1, dt = NULL)
 }

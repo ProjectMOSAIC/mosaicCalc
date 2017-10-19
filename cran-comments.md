@@ -9,23 +9,23 @@
 
 ## R CMD check results
 
-There were no ERRORs or WARNINGs locally or via Win Builder.
+There were no ERRORs or WARNINGs
+
+I believe these to be correctly spelled:
+
+  Possibly mis-spelled words in DESCRIPTION:
+    Antidifferentiation (4:9)
+    antidifferentiation (8:5)
+
 
 ## Downstream dependencies
 
-FDRreg doesn't install in revdep_check() and hasn't been updated on CRAN since 2014-03-05, but my
-locally installed version appears to work.  (The package only has two functions and the 
-examples for each run with the new version of this package installed.)
+This package separates out some code from the `mosaic` package related to calculus.  Since this is 
+a first CRAN submission, nothing depends on this package yet, but two packages that depend on 
+`mosaic` will need to be updated to depend on `mosaicCalc` as well.  These are `statisticalModeling` 
+and `fastR`.  These are begin updated simultaneously and will be submitted ASAP after this is on
+CRAN.
 
-Checking packages ------------------------------------------
-Checked abd                : 0 errors | 0 warnings | 0 notes
-Checked fastR              : 0 errors | 0 warnings | 0 notes
-Checked FDRreg             : 1 error  | 0 warnings | 0 notes
-Checked Lock5withR         : 0 errors | 0 warnings | 0 notes
-Checked mosaicData         : 0 errors | 0 warnings | 0 notes
-Checked NHANES             : 0 errors | 0 warnings | 0 notes
-Checked Sleuth2            : 0 errors | 0 warnings | 0 notes
-Checked Sleuth3            : 0 errors | 0 warnings | 0 notes
-Checked tigerstats         : 0 errors | 0 warnings | 0 notes
-Checked userfriendlyscience: 0 errors | 0 warnings | 0 notes
+## Other notes
 
+The title and description have been expanded as per your request.
