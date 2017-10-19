@@ -11,7 +11,8 @@ Imports:
     methods,
     stats,
     MASS, 
-    mosaic
+    mosaic,
+    rlang
 Suggests: 
     testthat,
     knitr,
