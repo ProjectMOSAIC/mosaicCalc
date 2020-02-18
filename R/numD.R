@@ -132,7 +132,7 @@ setCorners <- function(C, var1, var2, h) {
 #' @param .function function to be differentiated
 #' @param .wrt character string naming the variable with respect to which
 #' differentiation is to be done
-#' @param .step the finite-difference step size
+#' @param .hstep the finite-difference step size
 #' @note Helper function for \code{numD} for first-order derivs.
 dfdx <- function(.function, .wrt, .hstep) { # first order partial
   res <- function() numerical.first.partial(.function, .wrt, .hstep, match.call())

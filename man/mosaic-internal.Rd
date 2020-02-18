@@ -22,11 +22,6 @@ rkFunction(DE, additionalArguments = list())
 
 \item{additionalAssignments, }{a list
 return a function}
-
-\item{DE}{representation of DE, the result of fetchDynamics}
-
-\item{additionalAssignments, }{a list
-return a function}
 }
 \value{
 a list with two slots: names and functions
@@ -35,10 +30,5 @@ a list with two slots: names and functions
 parameters are stored as extra arguments
 the order of the dynamical variables (and "t") is important and will be used
 later
-
-Create a functions with a vector argument of state, for use in rk()
-
-Simplifying expressions, e.g. pure numbers go to numbers
-Written by Aaron Mayerson, May 2013
 }
 \keyword{internal}

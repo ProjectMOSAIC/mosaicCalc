@@ -35,7 +35,7 @@ numerical.mixed.partial(f, var1, var2, h, av)
 
 \item{...}{additional parameters, typically default values for mathematical parameters}
 
-\item{.hstep}{numerical finite-difference step (default is 1e-6 or 1e-4 for first and second-order derivatives, respectively)}
+\item{.hstep}{the finite-difference step size}
 
 \item{add.h.control}{arranges the returned function to have a \code{.hstep} argument that can be used to demonstrate convergence and error}
 
@@ -66,8 +66,6 @@ differentiation is to be done}
 \item{f}{function to differentiate}
 
 \item{av}{arguments to the function calling this}
-
-\item{.step}{the finite-difference step size}
 }
 \value{
 a function implementing the derivative as a finite-difference approximation

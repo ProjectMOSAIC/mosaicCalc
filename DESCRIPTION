@@ -1,13 +1,13 @@
 Package: mosaicCalc
 Type: Package
 Title: Function-Based Numerical and Symbolic Differentiation and Antidifferentiation
-Description:  Part of the Project MOSAIC (<http://mosaic-web.org/>)
+Description: Part of the Project MOSAIC (<http://mosaic-web.org/>)
     suite that provides utility functions for doing calculus 
     (differentiation and integration) in R. The main differentiation and 
     antidifferentiation operators are described using formulas and return functions 
     rather than numerical values. Numerical values can be obtained by evaluating
     these functions.
-Version: 0.5.0
+Version: 0.5.1
 Date: 2017-07-26
 Depends:
     R (>= 3.0.0),
@@ -28,4 +28,4 @@ LazyLoad: yes
 LazyData: yes
 URL: https://github.com/ProjectMOSAIC/mosaicCalc
 BugReports: https://github.com/ProjectMOSAIC/mosaicCalc/issues
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 7.0.2
