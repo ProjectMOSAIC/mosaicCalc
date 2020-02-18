@@ -1,0 +1,66 @@
+---
+title: "Calculus with R"
+author: "Daniel Kaplan"
+date: "October 17, 2017"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Calculus_with_R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r include = FALSE}
+library(mosaic)
+library(mosaicData)
+library(mosaicCalc)
+library(ggformula)
+```
+
+
+The `mosaicCalc` package provides basic functions for computing derivatives and anti-derivatives, as well as for integrating ordinary differential equations. It was designed for teaching calculus. 
+
+`mosaicCalc` was designed along with the `mosaic` package. Graphics capabilities for displaying functions built with `mosaicCalc` are provided by `mosaic`, `ggformula`, and related packages.
+
+Install `mosaicCalc` CRAN using the usual method. The GitHub repository for the package is `ProjectMOSAIC/mosaicCalc` and the latest patch can be installed from there using `devtools::install_github()`.
+
+When using `mosaicCalc`, typically, you will also want to work with `mosaic`. So load both packages:
+
+```{r}
+library(mosaic)
+library(mosaicCalc)
+```
+
+## Creating functions
+
+Calculus operations such differentiation and integration take a function as input and produce a function as output. There are many ways to create functions. For simplicity, our initial examples will be functions $f(x)$ with a single input $x$.
+
+Many R users are familiar with the `function` keyword in R which enables functions to be defined, e.g. this simple quadratic function:
+
+```{r}
+f1 <- function(x) 1 - x^2
+```
+
+The `mosaicCalc` package provides a more concise way to define functions that uses the formula syntax in R.
+```{r}
+f2 <- makeFun(1 - x ^ 2 ~ x)
+```
+The formula tilde (`~`) is typographically small, but it plays an essential role in `mosaicCalc` functions. The function body goes to the left of tilde while the formal variables are to the right.
+
+You can include symbolic parameters in functions by using a symbolic entity in the body of the function, like this:
+
+```{r warning = FALSE}
+f3 <- makeFun(a - b * x ^ 2 ~ x)
+```
+
+The `makeFun()` function does not formally distinguish between arguments (e.g. $x$) and parameters (e.g. `a` and `b`). As a result, `f3` will have three arguments:
+
+```{r}
+f3
+```
+
+You can also include the parameters explicitly to the right of the tilde. And you can assign default numerical values to the parameters by adding additional named arguments. For example:
+```{r warning = FALSE}
+f4 <- makeFun(a - b * x ^2 ~ x & a & b, a = 1, b = 1)
+```
+
+Using `makeFun()` rather than `function()` is to be preferred

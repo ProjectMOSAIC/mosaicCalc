@@ -8,7 +8,6 @@ Description: Part of the Project MOSAIC (<http://mosaic-web.org/>)
     rather than numerical values. Numerical values can be obtained by evaluating
     these functions.
 Version: 0.5.1
-Date: 2017-07-26
 Depends:
     R (>= 3.0.0),
     mosaicCore
@@ -16,7 +15,8 @@ Imports:
     methods,
     stats,
     MASS, 
-    mosaic
+    mosaic,
+    rlang
 Suggests: 
     testthat,
     knitr,
