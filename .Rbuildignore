@@ -33,3 +33,4 @@ vignettes-source$
 ^revdep$
 ^_output\.yaml$
 ^cran-comments\.md$
+^CRAN-RELEASE$
