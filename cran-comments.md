@@ -1,9 +1,9 @@
 ## Test environments
 
   * local OS X install: 
-    * R version 3.3.1 Patched (2016-07-16 r70928)
-    * Platform: x86_64-apple-darwin13.4.0 (64-bit)
-    * Running under: OS X El Capitan (10.11.6)
+    * R version 3.6.2 (2019-12-12)
+    * Platform: x86_64-apple-darwin15.6.0 (64-bit)
+    * Running under: macOS Catalina 10.15.3
   
   * win-builder via devtools
 
@@ -20,12 +20,9 @@ I believe these to be correctly spelled:
 
 ## Downstream dependencies
 
-This package separates out some code from the `mosaic` package related to calculus.  Since this is 
-a first CRAN submission, nothing depends on this package yet, but two packages that depend on 
-`mosaic` will need to be updated to depend on `mosaicCalc` as well.  These are `statisticalModeling` 
-and `fastR`.  These are begin updated simultaneously and will be submitted ASAP after this is on
-CRAN.
+No errrors or warnings detected by revedep_check()
+
 
 ## Other notes
 
-The title and description have been expanded as per your request.
+The only changes were light changes to documentation.
