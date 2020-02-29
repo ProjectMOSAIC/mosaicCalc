@@ -16,13 +16,16 @@ Imports:
     stats,
     MASS, 
     mosaic,
+    ggformula,
     rlang
 Suggests: 
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    mosaicData
 Author: Daniel T. Kaplan <kaplan@macalester.edu>, Randall Pruim <rpruim@calvin.edu>, Nicholas J. Horton <nhorton@amherst.edu>
 Maintainer: Randall Pruim <rpruim@calvin.edu>
+VignetteBuilder: knitr
 License: GPL (>=2)
 LazyLoad: yes
 LazyData: yes
