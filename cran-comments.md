@@ -11,16 +11,10 @@
 
 There were no ERRORs or WARNINGs
 
-I believe these to be correctly spelled:
-
-  Possibly mis-spelled words in DESCRIPTION:
-    Antidifferentiation (4:9)
-    antidifferentiation (8:5)
-
 
 ## Downstream dependencies
 
-No errrors or warnings detected by revedep_check()
+fastR2 is the only reverse dependency on CRAN. This has been checked.
 
 
 ## Other notes

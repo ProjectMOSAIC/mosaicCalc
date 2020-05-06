@@ -46,6 +46,7 @@
 # and grabs the arguments, adding and subtracting the finite-difference step h
 # as appropriate, then evaluating f at the new points to find the finite difference.
 
+#' @export
 numD <- function(formula, ..., .hstep=NULL, add.h.control=FALSE) {
   formulaEnv = environment(formula) # where did the formula come from?
   # translate the formula into a function

@@ -10,8 +10,8 @@ env:
 
 notifications:
   email:
-    on_success: rpruim@gmail.com
-    on_failure: rpruim@gmail.com
+    on_success: dtkaplan@gmail.com
+    on_failure: dtkaplan@gmail.com
 
 r_binary_packages:
   - XML

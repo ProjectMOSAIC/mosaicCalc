@@ -68,7 +68,7 @@ integrateODE = function(dyn,...,tdur) {
 
 
 
-# # #' @importFrom stats approxfun
+#' @importFrom stats approxfun
 # #' @param x a list
 # #' @return a list with two slots: names and functions
 
