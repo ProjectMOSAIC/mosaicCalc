@@ -1,19 +1,19 @@
-#'Takes a call and returns its polynomial coefficients
-#'
-#'
-#'@param tree A call that will be parsed and simplified recursively
-#'@param .x. the variable name with respect to which the polynomial should be most simplified
-#'@param params All names of free variables.  If there are no free variables, the value should be ""
-#'@param iterate The number of times the call is nested.  Default and proper value when called from the outside is 1
-#'
-#'@details Will work on any call as long as it can be reduced to a polynomial with respect the the variable
-#'and each of the parameters.  Operates recursively, reducing each of the coefficients with respect to the extra parameters
-#'in turn.  Calls .polyExp.num when all remaining coefficients are numeric to reduce the expression more fully.
-#'
-#'@return A list containing a list, \code{coeffs}, of coefficients ordered high to low (i.e. the list (2,3,4) would correspond to
-#'the polynomial 2*x^2+3*x+4 ) and value, \code{pow}, indicating the order of the polynomial.
-#'If the expression is not a polynomial, this method returns an empty list or an error.
-#'
+# # #'Takes a call and returns its polynomial coefficients
+# #'
+# #'
+# #'@param tree A call that will be parsed and simplified recursively
+# #'@param .x. the variable name with respect to which the polynomial should be most simplified
+# #'@param params All names of free variables.  If there are no free variables, the value should be ""
+# #'@param iterate The number of times the call is nested.  Default and proper value when called from the outside is 1
+# #'
+# #'@details Will work on any call as long as it can be reduced to a polynomial with respect the the variable
+# #'and each of the parameters.  Operates recursively, reducing each of the coefficients with respect to the extra parameters
+# #'in turn.  Calls .polyExp.num when all remaining coefficients are numeric to reduce the expression more fully.
+# #'
+# #'@return A list containing a list, \code{coeffs}, of coefficients ordered high to low (i.e. the list (2,3,4) would correspond to
+# #'the polynomial 2*x^2+3*x+4 ) and value, \code{pow}, indicating the order of the polynomial.
+# #'If the expression is not a polynomial, this method returns an empty list or an error.
+# #'
 .polyExp <- function(tree, .x., params, iterate=1){
   # Reduce purely numerical coefficients to a number
   # Aaron Mayerson May 29, 2013
@@ -341,14 +341,14 @@
 }
 
 
-#'Takes a call and returns its polynomial coefficients as numerics.
-#'
-#'
-#'@details works with the same structure as .polyExp() but will return only if all coefficients reduce to numeric values.
-#'
-#'@return A list containing a list, \code{coeffs}, of coefficients ordered high to low (i.e. the list (2,3,4) would correspond to
-#'the polynomial 2*x^2+3*x+4 ) and value, \code{pow}, indicating the order of the polynomial.
-#'If the expression is not a polynomial, this method returns an empty list or an error.
+# #'Takes a call and returns its polynomial coefficients as numerics.
+# #'
+# #'
+# #'@details works with the same structure as .polyExp() but will return only if all coefficients reduce to numeric values.
+# #'
+# #'@return A list containing a list, \code{coeffs}, of coefficients ordered high to low (i.e. the list (2,3,4) would correspond to
+# #'the polynomial 2*x^2+3*x+4 ) and value, \code{pow}, indicating the order of the polynomial.
+# #'If the expression is not a polynomial, this method returns an empty list or an error.
 
 .polyExp.num <- function(tree, .x.){
   #if it is a simple expression
@@ -484,13 +484,13 @@
   return(list())
 }
 
-#' Method for putting a polynomial together given the coefficients and power from .polyExp()
-#'
-#'
-#' @param poly output of .polyExp()
-#' @param form original formula - provides information on which variable the polynomial was reduced with respect to.
-#'
-#' @return A formula whose left hand side is a polynomial that fits the description given with the input poly.
+# #' Method for putting a polynomial together given the coefficients and power from .polyExp()
+# #'
+# #'
+# #' @param poly output of .polyExp()
+# #' @param form original formula - provides information on which variable the polynomial was reduced with respect to.
+# #'
+# #' @return A formula whose left hand side is a polynomial that fits the description given with the input poly.
 .makePoly <- function(form, poly){
 
   if(poly$pow>=2){

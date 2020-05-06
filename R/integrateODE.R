@@ -1,65 +1,3 @@
-#' @importFrom stats approxfun
-#' @param x a list
-#' @return a list with two slots: names and functions
-
-fetchDynamics <- function(x) {
-  inputs <- x
-  formInds <- which( sapply( inputs, function(x) inherits(x, 'formula') ) )
-
-  dnames <- c()
-  dfuns <- c()
-  for (k in 1:length(formInds) ) {
-    form = inputs[[formInds[k]]]
-    nm = form[[2]] # should be name type so double [[ ]]
-    if ( ! inherits(nm, "name") ) stop(paste("Invalid name on LHS of formula",nm))
-    nm = as.character(nm)
-    if (grep("^d",nm)!=1) stop("Dynamical variables must start with 'd'")
-    dnames[k] <- sub("^d","",nm) # character string with the name
-    dfuns[k] <- parse(text=form[3]) # an expression so single [ ]
-  }
-  return ( list(names = dnames, functions=dfuns) )
-}
-
-
-#' construct a function representing the dynamics
-#'
-#' parameters are stored as extra arguments
-#' the order of the dynamical variables (and "t") is important and will be used
-#' later
-#'
-#' @param DE representation of DE, the result of fetchDynamics
-#' @param additionalAssignments, a list
-#' return a function
-#'
-dynamicsFunction <- function( DE, additionalAssignments=list() ) {
-  dynfun = function(){}
-  body(dynfun) = parse(text=paste("c(",paste(DE$names,DE$functions,collapse=",",sep="="),")",sep=""))
-
-  # construct the dynamical variable argument list
-  tstring=ifelse(! "t"%in% DE$names,",t=","")
-  # create the dynamical variables as arguments to the function
-  dynArgs = eval(parse(
-           text=paste("alist(",  paste(DE$names,"=",collapse=",",sep=""), tstring,")")))
-  formals(dynfun) = c(dynArgs,additionalAssignments)
-  return(dynfun)
-}
-
-#' Create a functions with a vector argument of state, for use in rk()
-#'
-#' @param DE representation of DE, the result of fetchDynamics
-#' @param additionalAssignments, a list
-#' return a function
-
-rkFunction <- function(DE, additionalArguments=list() ) {
-  result <- function(state,t) {}
-  tstring <- ifelse(! "t"%in% DE$names,",t","")
-  dynfun <- dynamicsFunction(DE, additionalArguments)
-  bodyString <- paste("dynfun(",
-    paste("state[",1:length(DE$names),"]",sep="",collapse=","),tstring,")")
-  body(result) <- parse(text=bodyString)
-  return(result)
-}
-
 #' Integrate ordinary differential equations
 #'
 #' A formula interface to integration of an ODE with respect to "t"
@@ -114,9 +52,9 @@ integrateODE = function(dyn,...,tdur) {
   if (length(initstate) != length(DE$names) )
     stop(paste("Must specify an initial condition for every variable."))
   soln = rkintegrate(
-			rkFunction(DE, additionalAssignments),
-			initstate,tstart=tdur$from,tend=tdur$to,dt=tdur$dt
-			)
+    rkFunction(DE, additionalAssignments),
+    initstate,tstart=tdur$from,tend=tdur$to,dt=tdur$dt
+  )
 
   # Return an object with functions for each of the dynamical variables,
   # defined as NA outside the range of tdur$from to tdur$to.
@@ -128,23 +66,89 @@ integrateODE = function(dyn,...,tdur) {
 }
 
 
-#' A simple Runge-Kutta integrator
-#'
-#' Integrates ordinary differential equations using a Runge-Kutta method
-#'
-#' @param fun the dynamical function with arguments \code{state} (a vector) and \code{t}.
-#' @param x0 the initial condition, a vector with one element for each state variable
-#' @param tstart starting time
-#' @param tend ending time for integration
-#' @param dt step size for integration
-#'
-#' @return a list containing \code{x}, a matrix of the state with one row for each
-#' time step and a vector \code{t} containing the times of those steps.
-#'
-#' @author Daniel Kaplan (\email{kaplan@@macalester.edu})
-#'
-#' @details
-#' This is mainly for internal use by integrateODE.
+
+
+# # #' @importFrom stats approxfun
+# #' @param x a list
+# #' @return a list with two slots: names and functions
+
+fetchDynamics <- function(x) {
+  inputs <- x
+  formInds <- which( sapply( inputs, function(x) inherits(x, 'formula') ) )
+
+  dnames <- c()
+  dfuns <- c()
+  for (k in 1:length(formInds) ) {
+    form = inputs[[formInds[k]]]
+    nm = form[[2]] # should be name type so double [[ ]]
+    if ( ! inherits(nm, "name") ) stop(paste("Invalid name on LHS of formula",nm))
+    nm = as.character(nm)
+    if (grep("^d",nm)!=1) stop("Dynamical variables must start with 'd'")
+    dnames[k] <- sub("^d","",nm) # character string with the name
+    dfuns[k] <- parse(text=form[3]) # an expression so single [ ]
+  }
+  return ( list(names = dnames, functions=dfuns) )
+}
+
+
+# #' construct a function representing the dynamics
+# #'
+# #' parameters are stored as extra arguments
+# #' the order of the dynamical variables (and "t") is important and will be used
+# #' later
+# #'
+# #' @param DE representation of DE, the result of fetchDynamics
+# #' @param additionalAssignments, a list
+# #' return a function
+# #'
+dynamicsFunction <- function( DE, additionalAssignments=list() ) {
+  dynfun = function(){}
+  body(dynfun) = parse(text=paste("c(",paste(DE$names,DE$functions,collapse=",",sep="="),")",sep=""))
+
+  # construct the dynamical variable argument list
+  tstring=ifelse(! "t"%in% DE$names,",t=","")
+  # create the dynamical variables as arguments to the function
+  dynArgs = eval(parse(
+           text=paste("alist(",  paste(DE$names,"=",collapse=",",sep=""), tstring,")")))
+  formals(dynfun) = c(dynArgs,additionalAssignments)
+  return(dynfun)
+}
+
+# #' Create a functions with a vector argument of state, for use in rk()
+# #'
+# #' @param DE representation of DE, the result of fetchDynamics
+# #' @param additionalAssignments, a list
+# #' return a function
+
+rkFunction <- function(DE, additionalArguments=list() ) {
+  result <- function(state,t) {}
+  tstring <- ifelse(! "t"%in% DE$names,",t","")
+  dynfun <- dynamicsFunction(DE, additionalArguments)
+  bodyString <- paste("dynfun(",
+    paste("state[",1:length(DE$names),"]",sep="",collapse=","),tstring,")")
+  body(result) <- parse(text=bodyString)
+  return(result)
+}
+
+
+
+# #' A simple Runge-Kutta integrator
+# #'
+# #' Integrates ordinary differential equations using a Runge-Kutta method
+# #'
+# #' @param fun the dynamical function with arguments \code{state} (a vector) and \code{t}.
+# #' @param x0 the initial condition, a vector with one element for each state variable
+# #' @param tstart starting time
+# #' @param tend ending time for integration
+# #' @param dt step size for integration
+# #'
+# #' @return a list containing \code{x}, a matrix of the state with one row for each
+# #' time step and a vector \code{t} containing the times of those steps.
+# #'
+# #' @author Daniel Kaplan (\email{kaplan@@macalester.edu})
+# #'
+# #' @details
+# #' This is mainly for internal use by integrateODE.
 
 rkintegrate <- function(fun,x0,tstart=0,tend=1,dt=NULL) {
   if (is.null(dt)) {

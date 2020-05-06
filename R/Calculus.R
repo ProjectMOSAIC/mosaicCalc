@@ -74,7 +74,7 @@ D <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
 }
 
 #'
-#'
+#' @export
 D.default <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
   tryCatch( return( stats::D(formula, ...) ), error=function(e) {}  )
   stop( paste("First argument should be a formula that explicitly identifies the",
@@ -83,7 +83,7 @@ D.default <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
 }
 
 #'
-#'
+#' @export
 D.formula <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
   tryCatch( return( stats::D(formula, ...) ), error=function(e) {}  )
 

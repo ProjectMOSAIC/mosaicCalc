@@ -1,14 +1,14 @@
 context('Calculus functions: D(), antiD(), etc.')
 
 test_that("stats::D still accessible", {
-  expect_equivalent( 
-		mosaicCalc::D( expression(sin(cos(x + y^2))), "x" ), 
+  expect_equivalent(
+		mosaicCalc::D( expression(sin(cos(x + y^2))), "x" ),
 		 stats::D( expression(sin(cos(x + y^2))), "x" )
-	) 
-  expect_equivalent( 
-		mosaicCalc::D( expression(sin(cos(x + y^2))), "x" ), 
+	)
+  expect_equivalent(
+		mosaicCalc::D( expression(sin(cos(x + y^2))), "x" ),
 		        D( expression(sin(cos(x + y^2))), "x" )
-	) 
+	)
 })
 
 test_that("a function is created", {
@@ -62,13 +62,13 @@ test_that("mixed partials work", {
 
 test_that("unmixed 2nd-order partials work",{
   g <- numD( a*x^2 * y^2 ~ x & x, a=10, y = 2)
-  expect_that( g(x = 3, y = 5), equals(500, tol = 0.001)) 
+  expect_that( g(x = 3, y = 5), equals(500, tol = 0.001))
   g <- numD( a*x^2 * y^2 ~ y & y, a=10)
-  expect_warning(g <- numD( a*x^2 * y^2 ~ y & y, a=10))#, "Implicit variables without default values (dangerous!):  x")
+  #  expect_warning(g <- numD( a*x^2 * y^2 ~ y & y, a=10))#, "Implicit variables without default values (dangerous!):  x")
 
-  expect_that( g(x=3, y=5), equals(180,tol=0.001)) 
+  expect_that( g(x=3, y=5), equals(180,tol=0.001))
   g <- numD( a*x^2 * y^2 ~ a  & a, a = 10, y = 2, x = 2)
-  expect_that( g(x=3, y=5), equals(0,tol=0.001)) 
+  expect_that( g(x=3, y=5), equals(0,tol=0.001))
 })
 
 test_that("basic integration works", {
@@ -110,10 +110,10 @@ test_that("Symbols for constant of integration work", {
 })
 
 test_that("derivatives work in derivatives",{
-  g <- numD(a*x^2 + x*y ~ x, a = 1, x = 1, y = 2)  
+  g <- numD(a*x^2 + x*y ~ x, a = 1, x = 1, y = 2)
   h <- numD(g(x = x,y = y, a = a) ~ y, a = 1, x = 1, y = 2)
   expect_that(h(x=2,y=10),equals(1,tol=.001))
-  g <- symbolicD(a * x^2 + x * y ~ x, a = 1, x = 1, y = 2)  
+  g <- symbolicD(a * x^2 + x * y ~ x, a = 1, x = 1, y = 2)
   h <- numD( g(x = x, y = y,a = a) ~ y, a = 1, x = 1, y = 2)
   expect_that(h(x=2,y=10),equals(1,tol=.001))
 })
@@ -143,7 +143,7 @@ test_that("integrals work on integrals", {
 })
 
 test_that("Basic numerical differentiation works", {
-  g <- numD( a * x^2 + x * y ~ x, a = 1, x = 1, y = 1)  
+  g <- numD( a * x^2 + x * y ~ x, a = 1, x = 1, y = 1)
   expect_that( g(x=2,y=10), equals(14, tol=0.0001))
   gg <- numD( a*x^2 + x*y ~ x&x, a = 1, x = 2, y = 2)
   expect_that( gg(x=2,y=10), equals(2, tol=0.0001))
@@ -153,23 +153,23 @@ test_that("Basic numerical differentiation works", {
 
 test_that("symbolic parameters are passed correctly",{
   f <- function(n) {
-    numD( b*a*x^2*y^2 ~ x & y, a=.25, b=n) 
+    numD( b*a*x^2*y^2 ~ x & y, a=.25, b=n)
   }
   h <- function(x) {
     f(x)
   }
   g <- h(10)
   expect_that(g(1, 1), equals(10, tol=0.0001))
-  expect_that(g(1, 1, b=20), equals(20, tol=0.0001)) 
-  expect_that(g(1, 1, a=2, b=20), equals(160, tol=0.001)) 
+  expect_that(g(1, 1, b=20), equals(20, tol=0.0001))
+  expect_that(g(1, 1, a=2, b=20), equals(160, tol=0.001))
 })
 
 test_that("Derivatives can be iterated.",{
   g <- numD( a*x^3 ~ x, a=10, .hstep=.001)
   gg <- numD( g(y)~y, .hstep=.001 )
   ggg <- numD( gg(x)~x, .hstep=.001 )
-  expect_that(gg(3), equals(180, tol=.01)) 
-  expect_that(ggg(3), equals(60, tol=.01)) 
+  expect_that(gg(3), equals(180, tol=.01))
+  expect_that(ggg(3), equals(60, tol=.01))
 })
 
 test_that("Derivatives can be composed.",{
@@ -177,7 +177,7 @@ test_that("Derivatives can be composed.",{
   h <- numD( ff(x)~x )
   hh <- numD( sin(y)*ff(y)~y )
   expect_that(hh(y=3), equals(2*sin(3)*cos(3),tol=0.0001))
-  hhh <- numD( sin(y)*h(y)~y ) 
+  hhh <- numD( sin(y)*h(y)~y )
   expect_that( hhh(y=3), equals(cos(3)*cos(3) - sin(3)*sin(3),tol=0.0001 ))
 })
 
@@ -187,8 +187,9 @@ test_that("Vars. killed by differentiation remain arguments",{
 })
 
 test_that("add.h.control works",{
-  f <- numD( sin(x)~x, add.h.control=TRUE)
-  equals(f(3, .hstep=1), equals(-.83305,tol=0.0001)) 
+  f <- mosaicCalc:::numD( sin(x)~x, add.h.control=TRUE)
+  expect_that(f(3, .hstep=1),
+              equals(-.83305,tol=0.0001))
 })
 
 test_that("symbolic derivative on simple function works",{
@@ -198,7 +199,7 @@ test_that("symbolic derivative on simple function works",{
   gprime <- D(g(y)~y)
   expect_that(fprime(5), equals(2*5, tol=0.0000001))
   expect_that(gprime(2), equals(cos(2)+1, tol=0.0000001))
-}) 
+})
 
 test_that("integration bug with -Inf as lower bound is worked around",{
   F <- antiD(dnorm(x)~x)

@@ -26,8 +26,6 @@
 #'
 #' @note WARNING: In the expressions, do not use variable names beginning with a dot, particularly \code{.f} or \code{.h}
 #'
-#' @seealso \code{\link{D}}, \code{\link{symbolicD}}, \code{\link{makeFun}}, \code{\link{antiD}}, \code{\link{plotFun}}
-#'
 #' @examples
 #' g = numD( a*x^2 + x*y ~ x, a=1)
 #' g(x=2,y=10)
