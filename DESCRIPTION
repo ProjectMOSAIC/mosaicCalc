@@ -25,7 +25,7 @@ Suggests:
     rmarkdown,
     mosaicData
 Author: Daniel T. Kaplan <kaplan@macalester.edu>, Randall Pruim <rpruim@calvin.edu>, Nicholas J. Horton <nhorton@amherst.edu>
-Maintainer: Randall Pruim <rpruim@calvin.edu>
+Maintainer: Daniel Kaplan <kaplan@macalester.edu>
 VignetteBuilder: knitr
 License: GPL (>=2)
 LazyLoad: yes
