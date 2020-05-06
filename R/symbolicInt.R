@@ -15,7 +15,7 @@
 #' the formula.  If this method does not recognize the formula, it will return an error.
 #'
 #' @importFrom methods getGroup
-#' @export
+#'
 
 symbolicInt<- function(form, ...){
   dots = list(...)
@@ -43,12 +43,12 @@ symbolicInt<- function(form, ...){
 
 #' Use recursion to find a symbolic antiderivative
 #'
-#' @rdname symbolicInt
+#' #(at)rdname symbolicInt
 #'
 #' @return a formula implementing giving symbolic anti-derivative.  If the formula
 #' isn't found by the algorithm, an error is thrown.
 #'
-#' @export
+#' #(at)export
 
 symbolicAntiD <- function(form, ...){
   rhsVar = all.vars(rhs(form))
@@ -87,7 +87,6 @@ symbolicAntiD <- function(form, ...){
 
 #' Attempts symbolic integration of some mathematical/arithmetical forms
 #'
-#' @rdname symbolicInt
 #'
 #' @return An expression with the integral, or throws an error if unsuccessful.
 #'
@@ -209,7 +208,6 @@ symbolicAntiD <- function(form, ...){
 #--------------------------
 #' Attempts symbolic integration of some mathematical forms
 #'
-#' @rdname symbolicInt
 #'
 #' @return An expression with the integral, or throws an error if unsuccessful.
 #'
@@ -348,7 +346,6 @@ symbolicAntiD <- function(form, ...){
 
 #' Attempts symbolic integration of some mathematical forms using trigonometric substitution
 #'
-#' @rdname symbolicInt
 #'
 #' @param num numerator
 #' @param den denominator
@@ -542,7 +539,7 @@ symbolicAntiD <- function(form, ...){
 
 #' Takes a call and returns its affine coefficients.
 #'
-#' @rdname symbolicInt
+#' #(at)rdname symbolicInt
 #'
 #' @param tree the expression to be analyzed
 #' @return A list with values of a and b satisfying a*.x.+b  = tree.
@@ -693,7 +690,7 @@ symbolicAntiD <- function(form, ...){
 
 #' Simplifying expressions, e.g. pure numbers go to numbers
 #' Written by Aaron Mayerson, May 2013
-#' @rdname mosaic-internal
+#' #(at)rdname mosaic-internal
 .makeNice <- function(form,params=all.vars(form)){
   # See if the MASS package fraction simplifier is installed, if not
   # leave fractions in decimal form

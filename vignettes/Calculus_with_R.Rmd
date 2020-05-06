@@ -1,7 +1,7 @@
 ---
 title: "Calculus with R"
 author: "Daniel Kaplan"
-date: "October 17, 2017"
+date: "May 6, 2020"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Calculus_with_R}
@@ -17,11 +17,11 @@ library(ggformula)
 ```
 
 
-The `mosaicCalc` package provides basic functions for computing derivatives and anti-derivatives, as well as for integrating ordinary differential equations. It was designed for teaching calculus. 
+The `mosaicCalc` package provides basic functions for computing derivatives and anti-derivatives, as well as for integrating ordinary differential equations. It is designed for teaching calculus. 
 
-`mosaicCalc` was designed along with the `mosaic` package. Graphics capabilities for displaying functions built with `mosaicCalc` are provided by `mosaic`, `ggformula`, and related packages.
+`mosaicCalc` extends the `mosaic` package. Graphics capabilities for displaying functions built with `mosaicCalc` are provided by `mosaic`, `ggformula`, and related packages.
 
-Install `mosaicCalc` CRAN using the usual method. The GitHub repository for the package is `ProjectMOSAIC/mosaicCalc` and the latest patch can be installed from there using `devtools::install_github()`.
+Install `mosaicCalc` CRAN using the usual method. The GitHub repository for the package is `github.com/ProjectMOSAIC/mosaicCalc` and the latest patch can be installed from there using `remotes::install_github("ProjectMOSAIC/mosaicCalc)`.
 
 When using `mosaicCalc`, typically, you will also want to work with `mosaic`. So load both packages:
 
@@ -30,37 +30,87 @@ library(mosaic)
 library(mosaicCalc)
 ```
 
-## Creating functions
+## Calculus, computing, and notation
 
-Calculus operations such differentiation and integration take a function as input and produce a function as output. There are many ways to create functions. For simplicity, our initial examples will be functions $f(x)$ with a single input $x$.
+A dominant style of notation in teaching calculus is the analytic style, where functions are written in the form $f = 1 / x$, derivatives are referred to in any of several notations such as $f'$ or $\frac{d}{dx} f$. Integrals are denoted $\int f(x) dx$. In this notation, $dx$ is a formal device that serves to identify the variable with respect to which the operation of integration or differentiation is being performed.
 
-Many R users are familiar with the `function` keyword in R which enables functions to be defined, e.g. this simple quadratic function:
+This contrasts with mainstream computer languages where functions are identified by *names* and there is no  universal notation for "with respect to ....". The calculus operations in `mosaicCalc` exploit the tilde-formula notation in R, e.g.  `1 / x ~ x`. The symbol on the right-hand side of tilde identifies the variable with respect to which the operation is to be performed. To the left of tilde is a statement in standard computer notation of the transformation carried out by the function.
 
-```{r}
-f1 <- function(x) 1 - x^2
-```
+Traditionally, a typographic distinction is made between "variables" and "parameters." For instance, it's implicit that the straight-line function  $mx + b$ involves the variable $x$ and the parameters $m$ and $b$. Usually the *variables* are letters toward the end of the alphabet such  as $t$, $x$,  and $y$ whereas *parameters* are written using earlier letters in the alphabet (e.g., $a$, $b$, $c$, $k$) sometimes using upper-case letters,  Greek letters, and/or subscripts. 
 
-The `mosaicCalc` package provides a more concise way to define functions that uses the formula syntax in R.
-```{r}
-f2 <- makeFun(1 - x ^ 2 ~ x)
-```
-The formula tilde (`~`) is typographically small, but it plays an essential role in `mosaicCalc` functions. The function body goes to the left of tilde while the formal variables are to the right.
+In `mosaicCalc`, no formal distinction is made between variables and parameters except as provided by the "with respect to ..." component of a formula. In `mosaicCalc` you would write `m * x + b ~ x` as a formula for a straight-line function. 
 
-You can include symbolic parameters in functions by using a symbolic entity in the body of the function, like this:
+A formula like `m * x + b ~ x` stands for a function, but it is not an R function. Formulas in `mosaicCalc` are routinely turned into actual R functions. This happens automatically in operations such as differentiation and anti-differentiation, which return a function rather than a formula.
 
-```{r warning = FALSE}
-f3 <- makeFun(a - b * x ^ 2 ~ x)
-```
-
-The `makeFun()` function does not formally distinguish between arguments (e.g. $x$) and parameters (e.g. `a` and `b`). As a result, `f3` will have three arguments:
+The operation `makeFun()` in `mosaicCalc` performs this action. For instance, here is the definition of a function called `f`:
 
 ```{r}
-f3
+f <- makeFun(m * x + b ~ x)
+f
 ```
 
-You can also include the parameters explicitly to the right of the tilde. And you can assign default numerical values to the parameters by adding additional named arguments. For example:
-```{r warning = FALSE}
-f4 <- makeFun(a - b * x ^2 ~ x & a & b, a = 1, b = 1)
+Note that `f` is a function of *three* arguments. There's no formal distinction  being made between the "variable" and the "parameters." (`makeFun()` can also be used to turn linear and logistic regression reports into functions.)
+
+Contrast this with the way an R programmer might naturally define the straight-line function:
+
+```{r}
+# NOT the style in mosaicCalc
+straight_line <- function(x) m * x + b
 ```
 
-Using `makeFun()` rather than `function()` is to be preferred
+`straight_line` is a legitimate function in R, but the parameters $m$ and $b$ are not represented by arguments to the function. Instead, they are set by the scoping rules of the R language. In particular, given this definition  of `straight_line`, at the time that `straight_line()` is applied to an input, the values of `m` and `b` will be looked up in the R environment in which the function was defined.
+
+The `mosaicCalc` approach is to avoid as much as possible the need to understand the lexical scoping used by R. And so *every* quantity in a function made by the likes of `makeFun()` will become an argument. 
+
+In `makeFun()` the "with respect to ..." component of the formula is used only to determine the order of the arguments: symbols used on the right-hand side of the tilde are put first in the argument list.
+
+## Differentiation and anti-differentiation
+
+The `mosaicCalc` operations for differentiation and anti-differentiation are called `D()` and `antiD()` respectively. Like `makeFun()`, `D()` and `antiD()` take as a primary argument a *formula* where the right-hand side identifies the "with respect to ..." variable. And, all three of those operations are similar in that they return a *function* (not a formula) whose arguments include  every symbol used in the  body  of the function.
+
+```{r}
+D(a / x ~ x)
+```
+
+In all three operations, you  can declare a default value for the parameter, which enables you have the parameter symbolically identified while not having to assign a value  to the parameter every time it is evaluated. For instance,
+
+```{r}
+makeFun(a / x ~ x, a = 3)
+D( a / x ~ x, a = 3)
+```
+
+Famously, anti-differentiation introduces an additive quantity usually denoted C, so $\int 1/x\ dx \rightarrow \ln x + C$. This $C$ is treated as a parameter in the output of `mosaicCalc::antiD()`:
+
+```{r}
+antiD(a / x ~ x)
+```
+
+## Analytic or numeric
+
+The symbolic capabilities of `mosaicCalc` are weak. Only a few, simple forms of functions can be handled symbolically by `antiD()`.  The `D()` operation is similarly limited, although it handles composition and linear combinations  of functions well. For instance:
+
+```{r}
+D(a * x + b * x^2 + c * sin(x^2) ~ x)
+```
+
+while `antiD()` will generate a numeric-integration result:
+
+
+```{r}
+F <- antiD(a * x + b * x^2 + c * sin(x^2) ~ x)
+F
+```
+
+Note that even though the function `F()` involves applying numerical methods, it is still a function and can itself be differentiated or integrated using `D()` and `antiD()` in `mosaicCalc`.
+
+## Graphics
+
+The meaning of "with respect to ..." when making a graphic is to set the coordinate axes. For instance, the `mosaic` package includes a function `plotFun()`  
+
+```{r}
+mosaic::plotFun(1 / x ~ x, xlim=c(0,5))
+```
+
+`plotFun()` can be thought of as a legacy function. It uses the `lattice` graphics system.  (We plan soon to be adding  `ggplot2` compatible calculus graphics functions.)
+
+## 

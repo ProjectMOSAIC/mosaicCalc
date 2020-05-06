@@ -1,6 +1,5 @@
 #'Takes a call and returns its polynomial coefficients
 #'
-#'@rdname simplify
 #'
 #'@param tree A call that will be parsed and simplified recursively
 #'@param .x. the variable name with respect to which the polynomial should be most simplified
@@ -25,7 +24,7 @@
     }
     return(coeffs)
   }
-  
+
   #A function the calls .polyExp() on each of the resultant coefficients in turn to further simplify them with
   #respect to the additional parameters.
   .reduce_coeffs <- function(coeffs, params){
@@ -59,7 +58,7 @@
         }
         else{
           if(newco$coeffs[[index]]==1 && index!= length(newco$coeffs)){
-            
+
             newco$coeffs[index] <- ""
             multvec[index] <- ""
           }
@@ -71,47 +70,47 @@
           }
           index <- index + 1
         }
-        
+
       }
       if(length(newco$coeffs)==0)
         coeffs[[i]] <- 0
-      
+
       else
         coeffs[[i]] <- parse(text = paste(newco$coeffs, multvec , varvec,
-                                          expvec, powvec, collapse="+", sep=""))[[1]]      
+                                          expvec, powvec, collapse="+", sep=""))[[1]]
     }
     return(coeffs)
   }
-  
+
   #If there are no additional parameters, we can assume the coefficients will be numeric and call a faster,
   #more simplified version
   if(all(params =="") )
     return(.polyExp.num(tree, .x.))
-  
+
   #if it is a simple expression
   if(tree==.x.){
-    coeffs <- list(1, 0)    
+    coeffs <- list(1, 0)
     return(list(coeffs= coeffs, pow=1))
   }
-  
+
   #if it is a constant
   if(class(tree)=='numeric'||class(tree)=='name'){
     coeffs <- list(tree)
-    
+
     if(iterate==1){
       coeffs <- suppressWarnings(.reduce_coeffs(coeffs, params))
     }
     return(list(coeffs = coeffs, pow=0))
   }
-  
+
   if(tree[[1]]=='('){
     return(Recall(tree[[2]], .x., params, iterate=iterate+1))
   }
-  
+
   if(tree[[1]] == '+'){
     lside <- Recall(tree[[2]], .x., params, iterate = iterate+1)
     rside <- Recall(tree[[3]], .x., params, iterate = iterate+1)
-    
+
     if(rside$pow >= lside$pow){
       pow = rside$pow
       coeffs <- rside$coeffs
@@ -123,23 +122,23 @@
           if(lcoeffs[[i]]==0)
             coeffs[[i]] <- coeffs[[i]]
           else
-            coeffs[[i]] <- parse(text = paste(deparse(coeffs[[i]], width.cutoff=500), 
+            coeffs[[i]] <- parse(text = paste(deparse(coeffs[[i]], width.cutoff=500),
                                               "+", deparse(lcoeffs[[i]], width.cutoff=500), sep=""))[[1]]
         }
       }
-      
+
       if(iterate==1){
         coeffs <- suppressWarnings(.reduce_coeffs(coeffs, params))
       }
-      
+
       return(list(coeffs = coeffs, pow = pow))
     }
-    
+
     else{
       pow = lside$pow
       coeffs <- lside$coeffs
       rcoeffs <- append(rep(0, pow-rside$pow), rside$coeffs)
-      
+
       for(i in 1:length(coeffs)){
         if(coeffs[[i]]==0)
           coeffs[[i]] <- rcoeffs[[i]]
@@ -147,19 +146,19 @@
           if(rcoeffs[[i]] == 0)
             coeffs[[i]] <- coeffs[[i]]
           else
-            coeffs[[i]] <- parse(text = paste(deparse(coeffs[[i]], width.cutoff=500),  
+            coeffs[[i]] <- parse(text = paste(deparse(coeffs[[i]], width.cutoff=500),
                                               "+", deparse(rcoeffs[[i]], width.cutoff=500), sep=""))[[1]]
         }
       }
-      
+
       if(iterate==1){
         coeffs <- suppressWarnings(.reduce_coeffs(coeffs, params))
       }
-      
+
       return(list(coeffs = coeffs, pow = pow))
     }
   }
-  
+
   if(tree[[1]] == '-'){
     if(length(tree)==2){
       inside <- Recall(tree[[2]], .x., params, iterate = iterate+1)
@@ -171,17 +170,17 @@
         else
           coeffs[[i]] <- parse(text = paste("-", deparse(coeffs[[i]]), sep=""))[[1]]
       }
-      
+
       # reduce expressions that result in numerical coefficients to numbers, added
       coeffs <- .eval_coeffs(coeffs)
-      
+
       if(iterate==1){
         coeffs <- suppressWarnings(.reduce_coeffs(coeffs, params))
       }
-      
+
       return(list(coeffs = coeffs, pow=pow))
     }
-    
+
     else{
       lside <- Recall(tree[[2]], .x., params, iterate=iterate+1)
       rside <- Recall(tree[[3]], .x., params, iterate=iterate+1)
@@ -189,7 +188,7 @@
         pow = rside$pow
         coeffs <- rside$coeffs
         lcoeffs <- append(rep(0, pow-lside$pow), lside$coeffs)
-        
+
         for(i in 1:length(coeffs)){
           if(lcoeffs[[i]]==0)
             coeffs[[i]] <- parse(text = paste("-", deparse(coeffs[[i]], width.cutoff=500), sep = ""))[[1]]
@@ -197,26 +196,26 @@
             if(coeffs[[i]] == 0)
               coeffs[[i]] <- lcoeffs[[i]]
             else
-              coeffs[[i]] <- parse(text = paste(deparse(lcoeffs[[i]], width.cutoff=500), 
+              coeffs[[i]] <- parse(text = paste(deparse(lcoeffs[[i]], width.cutoff=500),
                                                 "-", deparse(coeffs[[i]], width.cutoff=500), sep = ""))[[1]]
           }
-          
+
         }
         # reduce expressions that result in numerical coefficients to numbers
         coeffs <- .eval_coeffs(coeffs)
-        
+
         if(iterate==1){
           coeffs <- suppressWarnings(.reduce_coeffs(coeffs, params))
         }
-        
+
         return(list(coeffs = coeffs, pow = pow))
       }
-      
+
       else{
         pow = lside$pow
         coeffs <- lside$coeffs
         rcoeffs <- append(rep(0, pow-rside$pow), rside$coeffs)
-        
+
         for(i in 1:length(coeffs)){
           if(coeffs[[i]] == 0)
             coeffs[[i]] <- parse(text = paste("-", deparse(rcoeffs[[i]], width.cutoff=500), sep = ""))[[1]]
@@ -224,30 +223,30 @@
             if(rcoeffs[[i]] == 0)
               coeffs[[i]] <- coeffs[[i]]
             else
-              coeffs[[i]] <- parse(text = paste(deparse(coeffs[[i]], width.cutoff=500), 
+              coeffs[[i]] <- parse(text = paste(deparse(coeffs[[i]], width.cutoff=500),
                                                 "-", deparse(rcoeffs[[i]], width.cutoff=500), sep = ""))[[1]]
           }
         }
-        
+
         if(iterate==1){
           coeffs <- suppressWarnings(.reduce_coeffs(coeffs, params))
         }
-        
+
         return(list(coeffs = coeffs, pow = pow))
       }
     }
   }
-  
+
   if(tree[[1]] == '*'){
-    
-    
+
+
     lside <- Recall(tree[[2]], .x., params, iterate=iterate+1)
     rside <- Recall(tree[[3]], .x., params, iterate=iterate+1)
-    
+
     pow <- lside$pow + rside$pow
     diff <- abs(lside$pow - rside$pow)
     dim = max(lside$pow, rside$pow)+1
-    
+
     cmatrix <- list()
     for(i in 1:length(lside$coeffs)){
       cmatrix[[i]]<- list()
@@ -261,7 +260,7 @@
             if(rside$coeffs[[j]]==1)
               cmatrix[[i]][[j]] <- lside$coeffs[[i]]
             else
-              cmatrix[[i]][[j]] <- parse(text = paste("(", deparse(lside$coeffs[[i]], width.cutoff=500), 
+              cmatrix[[i]][[j]] <- parse(text = paste("(", deparse(lside$coeffs[[i]], width.cutoff=500),
                                                       ")*(", deparse(rside$coeffs[[j]], width.cutoff=500), ")", sep=""))[[1]]
           }
         }
@@ -311,32 +310,32 @@
       }
       index = index+1
     }
-    
+
     if(iterate==1){
       coeffs <- suppressWarnings(.reduce_coeffs(coeffs, params))
     }
-    
+
     return(list(coeffs = coeffs, pow = pow))
   }
-  
-  if(tree[[1]] == '^'){   
+
+  if(tree[[1]] == '^'){
     #Recursively call as multiplication
     newTree <- tree
     tree[[3]] <- eval(tree[[3]]) - 1
-    
+
     if(eval(tree[[3]]) <0) stop("Can only handle positive exponents")
-    
+
     if(tree[[3]] == 1){
       tree <- tree[[2]]
     }
-    
+
     newTree <- parse(text= paste(deparse(newTree[[2]], width.cutoff=500),
                                  "*", deparse(tree, width.cutoff=500), sep=""))[[1]]
-    
+
     return(Recall(newTree, .x., params, iterate = iterate+1))
-    
+
   }
-  
+
   stop("Is not a polynomial")
   return(list())
 }
@@ -344,7 +343,6 @@
 
 #'Takes a call and returns its polynomial coefficients as numerics.
 #'
-#'@rdname simplify
 #'
 #'@details works with the same structure as .polyExp() but will return only if all coefficients reduce to numeric values.
 #'
@@ -363,55 +361,55 @@
     coeffs <- c(tree)
     return(list(coeffs = coeffs, pow=0))
   }
-  
+
   if(tree[[1]]=='('){
     return(Recall(tree[[2]], .x.))
   }
-  
+
   if(tree[[1]] == '+'){
     lside <- Recall(tree[[2]], .x.)
     rside <- Recall(tree[[3]], .x.)
-    
+
     if(rside$pow >= lside$pow){
       pow = rside$pow
       coeffs <- rside$coeffs
       lcoeffs <- append(rep(0, pow-lside$pow), lside$coeffs)
       for(i in 1:length(coeffs))
         coeffs <- tryCatch({coeffs[i] <- coeffs[i] + lcoeffs[i]
-                            coeffs}, 
+                            coeffs},
                            error = function(e){
                              coeffs <- as.list(coeffs)
                              coeffs[i] <- parse(text = paste(deparse(coeffs[[i]]), "+", deparse(lcoeffs[[i]]), sep=""))
                              coeffs}
         )
-      
-      
+
+
       return(list(coeffs = coeffs, pow = pow))
     }
-    
+
     else{
       pow = lside$pow
       coeffs <- lside$coeffs
       rcoeffs <- append(rep(0, pow-rside$pow), rside$coeffs)
       coeffs <- coeffs + rcoeffs
-      
+
       return(list(coeffs = coeffs, pow = pow))
     }
   }
-  
+
   if(tree[[1]] == '-'){
     if(length(tree)==2){
       inside = Recall(tree[[2]], .x.)
       coeffs = -inside$coeffs
       pow=inside$pow
-      
+
       return(list(coeffs = coeffs, pow=pow))
     }
-    
+
     else{
       lside <- Recall(tree[[2]], .x.)
       rside <- Recall(tree[[3]], .x.)
-      
+
       if(rside$pow >= lside$pow){
         pow = rside$pow
         coeffs <- rside$coeffs
@@ -419,30 +417,30 @@
         names <- names(coeffs)
         coeffs <- lcoeffs - coeffs
         names(coeffs) <- names
-        
+
         return(list(coeffs = coeffs, pow = pow))
       }
-      
+
       else{
         pow = lside$pow
         coeffs <- lside$coeffs
         rcoeffs <- append(rep(0, pow-rside$pow), rside$coeffs)
         coeffs <- coeffs - rcoeffs
-        
+
         return(list(coeffs = coeffs, pow = pow))
       }
     }
   }
-  
+
   if(tree[[1]] == '*'){
-    
+
     lside <- Recall(tree[[2]], .x.)
     rside <- Recall(tree[[3]], .x.)
-    
+
     pow <- lside$pow + rside$pow
     diff <- abs(lside$pow - rside$pow)
     dim = max(lside$pow, rside$pow)+1
-    
+
     cmatrix <- outer(lside$coeffs, rside$coeffs)
     #pad matrix to make it square
     if(nrow(cmatrix) > ncol(cmatrix)){
@@ -453,7 +451,7 @@
       for(i in (1:diff))
         cmatrix <- rbind(cmatrix, 0)
     }
-    
+
     coeffs <- rep(0, pow+1)
     for(i in (1:dim)){
       if(i != 0){
@@ -465,37 +463,36 @@
         coeffs[i] <- sum(cmatrix[cbind((dim:(1+i-dim)), ((1+i-dim):dim))])
       }
     }
-    
+
     return(list(coeffs = coeffs, pow = pow))
   }
-  
-  if(tree[[1]] == '^'){    
+
+  if(tree[[1]] == '^'){
     #Recursively call as multiplication
     newTree <- tree
-    
+
     tree[[3]] <- tree[[3]] - 1
     if(tree[[3]] == 1){
       tree <- tree[[2]]
     }
-    
+
     newTree <- parse(text= paste(deparse(newTree[[2]]), "*", deparse(tree), sep=""))[[1]]
     return(Recall(newTree, .x.))
-    
+
   }
   stop("Is not a polynomial")
   return(list())
 }
 
 #' Method for putting a polynomial together given the coefficients and power from .polyExp()
-#' 
-#' @rdname simplify
-#' 
+#'
+#'
 #' @param poly output of .polyExp()
 #' @param form original formula - provides information on which variable the polynomial was reduced with respect to.
-#' 
+#'
 #' @return A formula whose left hand side is a polynomial that fits the description given with the input poly.
 .makePoly <- function(form, poly){
-  
+
   if(poly$pow>=2){
     expvec <- c(rep("^", poly$pow-1), "", "")
     powvec <- c((poly$pow):2, "", "")
@@ -519,7 +516,7 @@
     }
     else{
       if(poly$coeffs[[index]]==1 && index!= length(poly$coeffs)){
-        
+
         poly$coeffs[index] <- ""
         multvec[index] <- ""
       }

@@ -1,6 +1,4 @@
 #' @importFrom stats approxfun
-#' @rdname mosaic-internal
-#' @keywords internal
 #' @param x a list
 #' @return a list with two slots: names and functions
 
@@ -29,8 +27,6 @@ fetchDynamics <- function(x) {
 #' the order of the dynamical variables (and "t") is important and will be used
 #' later
 #'
-#' @rdname mosaic-internal
-#' @keywords internal
 #' @param DE representation of DE, the result of fetchDynamics
 #' @param additionalAssignments, a list
 #' return a function
@@ -50,8 +46,6 @@ dynamicsFunction <- function( DE, additionalAssignments=list() ) {
 
 #' Create a functions with a vector argument of state, for use in rk()
 #'
-#' @rdname mosaic-internal
-#' @keywords internal
 #' @param DE representation of DE, the result of fetchDynamics
 #' @param additionalAssignments, a list
 #' return a function

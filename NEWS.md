@@ -4,4 +4,8 @@
 
  * Calculus materials separated from the `mosaic` package and housed here.
  * Reconfigured `mosaicCalc` as a separate package that works with the `mosaicCore` ecosystem.
+ 
+## mosaicCalc 0.6.0
+
+ 
 

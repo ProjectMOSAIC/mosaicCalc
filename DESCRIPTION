@@ -17,6 +17,7 @@ Imports:
     MASS, 
     mosaic,
     ggformula,
+    magrittr,
     rlang
 Suggests: 
     testthat,
@@ -32,3 +33,5 @@ LazyData: yes
 URL: https://github.com/ProjectMOSAIC/mosaicCalc
 BugReports: https://github.com/ProjectMOSAIC/mosaicCalc/issues
 RoxygenNote: 7.0.2
+Roxygen: list(markdown = TRUE)
+Encoding: UTF-8
