@@ -43,3 +43,4 @@ vignettes/*.md
 vignettes/*.out
 mosaicCalc.Rproj
 .Rhistory
+.DS_Store
