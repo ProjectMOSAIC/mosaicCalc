@@ -1,8 +1,28 @@
 #' Plot a function of a single variable
 #'
+#' In a slice plot, there  is one independent variable. The graph
+#' shows the output of the function versus the independent variable. It's
+#' called a slice plot to distinguish it from a contour plot, in which
+#' the graph has one axis for each independent variable and the output
+#' of the function is shown by color and labels.
 #'
+#' @param object (Not intended for user. Receives the input from  any previous graphics layers.)
+#' @param formula A tilde formula with one independent variable. All parameters must
+#' be assigned specific numerical values.
+#' @param domain A named list giving the extent of the x-axis scale. If there
+#' is a previous plot layer using the same independent variable name, the
+#' domain can be omitted and will be inferred from the previous layer.
+#' @param npts Integer, number of points at which to evaluate the function.
 #' @param label_text character string label to place near the graph curve. Default: none.
 #' @param label_x number between 0 and 1 indicating the horizontal placement  of the `label_text`.
+#'
+#' Additional arguments will be passed to `geom_line()`. Use, e.g. `color="red"`
+#' @examples
+#' \dontrun{
+#' slice_plot(sin(x) ~ x, domain(x = range(-5, 15)))
+#' f <- makeFun(sin(2*pi*t/P) ~ t)
+#' slice_plot(f(t, P=20) ~ t, domain(t = range(-5, 10)), label_text = "Period 20", label_x=0.9)
+#' }
 #'
 #' @export
 slice_plot <- function(object, formula, domain, npts=100,
@@ -36,7 +56,7 @@ slice_plot <- function(object, formula, domain, npts=100,
   if (length(independent_vars) != 1)
     stop("Formula must have only one var on RHS of tilde.")
 
-  Eval_grid <- mosaicUSAFA:::eval_on_domain(formula, domain, n = npts)
+  Eval_grid <- mosaicCalc:::eval_on_domain(formula, domain, n = npts)
   the_mapping <- aes(x = !!as.name(names(Eval_grid)[1]),
                      y = .output.)
 

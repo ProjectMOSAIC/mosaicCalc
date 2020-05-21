@@ -17,8 +17,11 @@ Imports:
     MASS, 
     mosaic,
     ggformula,
+    ggplot2,
     magrittr,
-    rlang
+    rlang,
+    metR,  
+    plotly
 Suggests: 
     testthat,
     knitr,

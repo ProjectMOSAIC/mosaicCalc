@@ -27,7 +27,7 @@
 #' @export
 interactive_plot <- function(formula, domain,  npts=50,
                          type = "surface") {
-  Eval_list <- mosaicUSAFA:::eval_as_vector_and_matrix(formula, domain, n = npts)
+  Eval_list <- mosaicCalc:::eval_as_vector_and_matrix(formula, domain, n = npts)
   plotly::plot_ly(x = Eval_list$x,
                   y = Eval_list$y,
                   z = Eval_list$.output.,

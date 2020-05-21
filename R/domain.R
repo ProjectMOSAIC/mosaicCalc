@@ -1,5 +1,14 @@
 #' Specify a domain over which a function is to be graphed
 #'
+#' This is a convenience function which creates a list with
+#' named elements. It's used as the second argument to `contour_plot()`
+#' and `slice_plot()`
+#'
+#' @examples
+#' \dontrun{
+#' contour_plot(x / y ~ x + y, domain(x=range(-5,5), y=range(1,4)))
+#' }
+#'
 #' @export
 domain <- function(...) {
   args <- list(...)
