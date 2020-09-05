@@ -12,6 +12,7 @@
 #' @export
 domain <- function(...) {
   args <- list(...)
+  args <- lapply(args, range) # reduce them to two numbers
   if (length(args) == 2) args
   else if (length(args)  == 1) c(args, NULL)
   else stop("Must specify a frame for one or two variables, e.g. `domain(x=c(0,1), y =  c(-1,1))`.")

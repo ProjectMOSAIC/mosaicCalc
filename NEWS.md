@@ -11,3 +11,6 @@
  * Internal functions no longer show up in package documentation.
  * Added a vignette oriented toward instructors.
 
+## mosaicCalc 0.5.2
+
+ * Added Planets data set.
