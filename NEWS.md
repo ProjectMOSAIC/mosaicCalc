@@ -10,3 +10,4 @@
  * Added cross-references to calculus functions in `mosaic`
  * Internal functions no longer show up in package documentation.
  * Added a vignette oriented toward instructors.
+ * Fixed reversal of axes in `interactive_plot()`

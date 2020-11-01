@@ -76,7 +76,7 @@ eval_as_vector_and_matrix <- function(formula, domain, n=100)  {
   # Now turn it into list with  x,  y, vals-matrix
   result <- list(x = sort(unique(grid[[1]])),
                  y = sort(unique(grid[[2]])))
-  result$.output. = matrix(vals, ncol = length(result$x))
+  result$.output. = matrix(vals, byrow = TRUE, ncol = length(result$x))
 
   result
 }
