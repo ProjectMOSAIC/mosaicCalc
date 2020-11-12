@@ -33,3 +33,19 @@ interactive_plot <- function(formula, domain,  npts=50,
                   z = Eval_list$.output.,
                   type = type)
 }
+#' @export
+surface_with_contours <- function(formula, domain, npts=50) {
+  Eval_list <- mosaicCalc:::eval_as_vector_and_matrix(formula, domain, n = npts)
+  plotly::plot_ly(x = Eval_list$x,
+                  y = Eval_list$y,
+                  z = Eval_list$.output.,
+                  opacity = 0.7) %>%
+    plotly::add_surface(
+      contours = list(z=list(show=TRUE, usecolormap=TRUE,
+                             highlightcolor="#ff0000",
+                             project = list(z=TRUE)))
+    )
+
+}
+
+
