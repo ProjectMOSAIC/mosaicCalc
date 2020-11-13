@@ -74,7 +74,7 @@ vectorfield_plot <- function(object=NULL, formula_x=NULL, formula_y=NULL,
                      y = !!as.name(input_names[2]),
                      xend = x_end, yend = y_end)
   if (is.null(object))
-    object <- ggplot(grid, the_mapping)
+    object <- ggplot(data=grid, mapping=the_mapping)
 
   P <- object
 
