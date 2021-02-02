@@ -3,7 +3,6 @@
 S3method(D,default)
 S3method(D,formula)
 export(D)
-export(Integrate)
 export(antiD)
 export(contour_plot)
 export(domain)
