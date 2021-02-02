@@ -47,7 +47,7 @@ contour_plot <- function(object,  formula,  domain,
                          guide  = FALSE,
                          guide_title = "output",
                          color_scale = scale_color_viridis_c(),
-                         fill_scale = scale_fill_viridis_c(),
+                         fill_scale = scale_fill_viridis_d(),
                          ...) {
   if (rlang::is_formula(object)) {
     # shift first two arguments down to  become formula

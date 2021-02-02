@@ -23,7 +23,7 @@ contour_plot(
   guide = FALSE,
   guide_title = "output",
   color_scale = scale_color_viridis_c(),
-  fill_scale = scale_fill_viridis_c(),
+  fill_scale = scale_fill_viridis_d(),
   ...
 )
 }
