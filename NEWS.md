@@ -11,3 +11,9 @@
  * Internal functions no longer show up in package documentation.
  * Added a vignette oriented toward instructors.
  * Fixed reversal of axes in `interactive_plot()`
+
+## mosaicCalc 0.5.2
+
+  * added `surface_with_contours()`.
+  * added `vectorfield_plot()` and `gradient_plot()`
+  
