@@ -7,7 +7,7 @@
 gradient_plot(
   object = NULL,
   formula,
-  dom,
+  domain,
   npts = 20,
   color = "black",
   alpha = 0.5
