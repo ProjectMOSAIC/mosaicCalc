@@ -43,6 +43,8 @@ contour_plot(
 \item{contours_at}{Vector of numbers. Contours will be drawn
 at these levels of the output.}
 
+\item{n_fill}{Integer number of points for calculating fill}
+
 \item{alpha}{Transparency of contours in \link{0-1}}
 
 \item{fill_alpha}{Transparency of fill}
@@ -65,8 +67,6 @@ to be drawn in a fixed color}
 \item{fill_scale}{See ggplot2 fill scales
 
 to a fixed color.}
-
-\item{nfill}{Integer number of points for calculating fill}
 }
 \description{
 Creats a ggplot2-compatible contour plot of a function

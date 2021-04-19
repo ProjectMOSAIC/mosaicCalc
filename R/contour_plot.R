@@ -12,7 +12,7 @@
 #' @param filled Logical flag: fill between the contours
 #' @param contours_at Vector of numbers. Contours will be drawn
 #' at these levels of the output.
-#' @param nfill Integer number of points for calculating fill
+#' @param n_fill Integer number of points for calculating fill
 #' @param alpha Transparency of contours in [0-1]
 #' @param fill_alpha Transparency of fill
 #' @param label_alpha Likewise, for contour labels
@@ -85,7 +85,8 @@ contour_plot <- function(object,  formula,  domain,
     warning("No dependence of function on y variable. Contour labels may be misplaced.")
   }
   Eval_grid <- mosaicCalc:::eval_on_domain(formula, domain, n = npts)
-
+  # If it's a boolean, turn it into a number
+  Eval_grid$.output. <- as.numeric(Eval_grid$.output.)
   # Check that specified contours are in range
   if (!is.null(contours_at)) {
     if (all(contours_at > max(Eval_grid$.output., na.rm=TRUE)) &&
