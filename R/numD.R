@@ -6,7 +6,7 @@
 #'
 #'
 #' @param formula a mathematical expression (see examples and \code{\link{plotFun}})
-#' @param ... additional parameters, typically default values for mathematical parameters
+#' @param \dots additional parameters, typically default values for mathematical parameters
 #' @param .hstep numerical finite-difference step (default is 1e-6 or 1e-4 for first and second-order derivatives, respectively)
 #' @param add.h.control arranges the returned function to have a \code{.hstep} argument that can be used to demonstrate convergence and error
 #'
@@ -58,7 +58,7 @@ numD <- function(formula, ..., .hstep=NULL, add.h.control=FALSE) {
   # What sort of derivative?
   if (length(dvars)==1)  #Simple first derivative
     res = dfdx( f, dvars[1], .hstep=ifelse(is.null(.hstep), 0.000001, .hstep))
-  else if (length(dvars==2) & dvars[1]==dvars[2]) # Second unmixed partial
+  else if (length(dvars==2) && dvars[1]==dvars[2]) # Second unmixed partial
     res = d2fdx2( f, dvars[1], .hstep=ifelse(is.null(.hstep), 0.0001, .hstep))
   else if (length(dvars)==2) # mixed partial
     res = d2fdxdy(f, dvars[1], dvars[2], .hstep=ifelse(is.null(.hstep), 0.0001, .hstep))
@@ -172,16 +172,17 @@ d2fdx2 <- function(.function, .wrt, .hstep) { # second order unmixed partial
 # differentiation process to make functions
 # returned by \code{numD} and
 # \code{D} easier to read.
-numerical.first.partial = function(f,wrt,h,av) {
-  H <- setInterval(as.list(av), wrt, h)
+# 
+numerical.first.partial = function(f,.wrt,h,av) {
+  H <- setInterval(as.list(av), .wrt, h)
   (do.call( f, H$R,quote=TRUE ) - do.call(f, H$L,quote=TRUE))/(2*h)
 }
 #
 # @note Not for direct use. This just packages up the numerical
 # differentiation process to make functions returned by \code{numD} and
 # \code{D} easier to read.
-numerical.second.partial = function(f,wrt,h,av) {
-  H <- setInterval(as.list(av), wrt, h)
+numerical.second.partial = function(f,.wrt,h,av) {
+  H <- setInterval(as.list(av), .wrt, h)
   (do.call( f, H$R ) + do.call(f, H$L) - 2*do.call(f, H$C))/(h^2)
 }
 #

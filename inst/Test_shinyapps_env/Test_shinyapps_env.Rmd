@@ -1,0 +1,33 @@
+---
+title: "Tutorial"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(mosaicCalc)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Testing environments
+
+On shinyapps.io, there's a different environment model than on desktop R. A manifestation of this is that `eval()` statements that work fine in `{learnr}` tutorials running on the desktop don't work on shinyapps.io.
+
+One example of this is the `mosaicCalc::domain()` function. The statement in the code block below works fine in this tutorial run on the desktop, but doesn't run on shinyapps.io.
+
+```{r test-domain, exercise=TRUE}
+center <- 3
+width <- 4
+f <- function() {
+  f2()
+}
+f2 <- function() {
+  eval(quote(center))
+}
+f2()
+# domain(x = center %pm% width)
+# should give list(x=c(-1, 7))
+```
+

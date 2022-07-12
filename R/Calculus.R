@@ -4,12 +4,22 @@
 #' functions.
 #'
 #' @rdname Calculus
-#' @importFrom stats runif
+#' @importFrom stats runif uniroot optimize median as.formula na.omit integrate optim quantile
 #' @importFrom mosaicCore rhs lhs makeFun parse.formula
-#' @importFrom mosaic inferArgs expandFun
+#' @importFrom mosaic inferArgs expandFun fitModel
 #' @importFrom MASS fractions
+#' @importFrom dplyr bind_rows
+#' @importFrom Deriv Deriv
+#' @importFrom Ryacas yac as_r
+#' @importFrom orthopolynom legendre.polynomials
+#' @importFrom glue glue
+#' @importFrom tibble tibble tribble
+#' @importFrom Matrix norm
+#' @importFrom grDevices extendrange
+#' @importFrom utils capture.output
 #'
-#' @param formula A formula. The right side of a formula specifies
+#'
+#' @param tilde A tilde expression. The right side of a formula specifies
 #'   the variable(s) with which to
 #'   carry out the integration or differentiation.  On the left side should be
 #'   an expression or a function that returns a numerical vector
@@ -30,6 +40,9 @@
 #' @param add.h.control logical indicating whether the returned derivative function
 #'   should have an additional parameter for setting .hstep.  Meaningful only for numerical
 #'   derivatives.
+#'   
+#' @param .tol Tolerance for numerical integration. Unless you know what this means, don't
+#' use this argument.
 #'
 #' @return For derivatives, the return value is a function of the variable(s)
 #' of differentiation, as well as any other symbols used in the expression.  Thus,
@@ -68,15 +81,15 @@
 #' f <- makeFun(x^2~x)
 #' D(f(cos(z))~z) #will look in user functions also
 #' @export
-
-D <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
+D <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
     UseMethod("D")
 }
 
 #'
 #' @export
-D.default <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
-  tryCatch( return( stats::D(formula, ...) ), error=function(e) {}  )
+D.default <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
+  # Defer to stats::D()
+  tryCatch( return( stats::D(tilde, ...) ), error=function(e) {}  )
   stop( paste("First argument should be a formula that explicitly identifies the",
               "variable with respect to which the derivative is to be taken. ",
               "Example:  D(sin(x) ~ x).", sep ="\n  " ) )
@@ -84,26 +97,29 @@ D.default <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
 
 #'
 #' @export
-D.formula <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
-  tryCatch( return( stats::D(formula, ...) ), error=function(e) {}  )
-
-  formulaEnv = environment(formula) # where was the formula made?
-  #Try to construct a symbolic derivative
-  res = try(symbolicD(formula, ...), silent=TRUE)
+D.formula <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
+  
+  formulaEnv = environment(tilde) # where was the formula made?
+  # # Simplify the input if you can
+  # formula[[2]] <- simplify_mult(formula[[2]])
+  # #Try to construct a symbolic derivative
+  res = try(symbolicD(tilde, ...), silent=TRUE)
   #Failed?  Do it numerically
   if( inherits(res, "try-error") ){ # first symbolic attempt unsuccessful
-    expandedForm <-try(expandFun(formula), silent=TRUE)
-    if(!inherits(expandedForm, "try-error"))
-      newformula <- expandedForm$formula
+    # replace by DTK on Sept. 28, 2021
+    newformula <- make_tilde_inline(tilde)
+    # expandedForm <-try(expandFun(formula), silent=TRUE)
+    # if(!inherits(expandedForm, "try-error"))
+    #   newformula <- expandedForm$formula
     res = try(symbolicD(newformula, ...), silent=TRUE)
     if( inherits(res, "try-error") ) # second symbolic attempt unsuccessful
-      res = numD( formula, ..., .hstep=.hstep, add.h.control=add.h.control)
-    else #extracted function correctly
-      formals(res) = expandedForm$formals
+      res = numD( tilde, ..., .hstep=.hstep, add.h.control=add.h.control)
+    # else #extracted function correctly
+    #   formals(res) = expandedForm$formals
   }
   else # it's generated from symbolicD
     environment(res) = formulaEnv # function should refer to environment of the formula
-  return(res)
+  return(simplify_fun(res))
 }
 
 # ============================
@@ -113,140 +129,72 @@ D.formula <- function(formula, ..., .hstep=NULL,add.h.control=FALSE){
 #'
 #' @param force.numeric If \code{TRUE}, a numerical integral is performed even when a
 #' symbolic integral is available.
+#' 
+#' @param .tol Tolerance for numerical integration. Most users do not need this.
 #'
 #' @return a function of the same arguments as the original expression with a
 #' constant of integration set to zero by default, named "C", "D", ... depending on the first
 #' such letter not otherwise in the argument list.
 #' @examples
 #' antiD( a*x^2 ~ x, a = 3)
-#' antiD( A/x~x ) # This gives a warning about no default value for A
+#' G <- antiD( A/x~x ) # there will be an unbound parameter in G()
+#' G(2, A=1) # Need to bound parameter. G(2) will produce an error.
 #' F <- antiD( A*exp(-k*t^2 ) ~ t, A=1, k=0.1)
 #' F(t=Inf)
-#' one = makeFun(1 ~ x + y)
-#' by.x = antiD(one(x=x, y=y) ~ x, y=1)
-#' by.xy = antiD(by.x(x = sqrt(1-y^2), y = y) ~ y)
+#' one = makeFun(1 ~ x)
+#' by.x = antiD(one(x) ~ x)
+#' by.xy = antiD(by.x(sqrt(1-y^2)) ~ y)
 #' 4 * by.xy(y = 1) # area of quarter circle
 #' @export
-antiD <- function(formula, ..., lower.bound=0, force.numeric=FALSE){
-  wrt <- all.vars(rhs(formula), unique=FALSE) # "with respect to" variable name
+antiD <- function(tilde, ..., lower.bound=0, force.numeric=FALSE, .tol=0.0001){
+  wrt <- all.vars(rhs(tilde), unique=FALSE) # "with respect to" variable name
   if (length(wrt) != 1)  stop("Integration with respect to multiple variables not supported directly.")
 
+  # if tilde is a call to a one-line function, substitute the body of the function
+  tilde <- make_tilde_inline(tilde)
+  
   if (!force.numeric){ # Try symbolic integral
-    res = try(symbolicInt(formula, ...), silent=TRUE)
-    if (!inherits(res, "try-error") ) return(res)
+    # First try Ryacas 
+    f <- try(simpleYacasIntegrate(tilde, ...), silent=TRUE)
+    if (is.function(f) && ! "AntiDeriv" %in% all.names(body(f))) return(f)
   }
   # Do integral numerically
-  f <- makeFun(formula, ..., strict.declaration=FALSE)
-  res <- makeAntiDfun(f, wrt, lower.bound, 1e-6)
+  res <- makeNumericalAntiD(tilde, wrt, lower.bound=lower.bound, .tol=.tol, ...)  
   return(res)
 }
-# ===================
-# The function returned by antiD will take the same arguments as
-# f, but will split one of the variables into a "to" and "from" component.
-# The "from" will have a default value of 0 or otherwise inherited from
-# the call to antiD
-# The variable of integration will be called "viName"
-#' @rdname Calculus
-#'
-#' @param .function function to be integrated
-#' @param .wrt character string naming the variable of integration
-#' @param from default value for the lower bound of the integral region
-# I don't want this function to be exported.
-makeAntiDfun <- function(.function, .wrt, from, .tol=.Machine$double.eps^0.25) {
-  resargs <- formals(.function)
 
-  intC <- LETTERS[-(1:2)][!LETTERS[-(1:2)]%in% names(resargs)][1]
-  if (length(intC)==0) intC <- paste("ConstantOfIntegration",runif(1),sep="")
-  resargs[intC] <- 0
-  # Create a new function of argument .vi that will take additional
-  # arguments
-  .newf <- function(.vi,.av){
-    .av[[.wrt]] = .vi
-    do.call(.function,.av,quote=TRUE) + 0*.vi  # make the same size as vi
-  }
-  # Create the numerical integral
-  res <- function(){
-    numerical_integration(.newf,.wrt,as.list(match.call())[-1],formals(),
-                          from,ciName=intC, .tol)
-  }
-
-  formals(res) <- c(resargs)
-  ## Vectorize at the end
-  # return(Vectorize(res))
-  return(res)
+# helper function for evaluating a function
+evalF <- function(fun, ...) {
+  do.call(fun, list(...))
 }
-# =============
-#' @rdname Calculus
-#'
-#' @param f A function.
-#' @param wrt Character string naming a variable: the var. of integration.
-#' @param av A list of the arguments passed to the function calling this.
-#' @param args Default values (if any) for parameters.
-#' @param vi.from The the lower bound of the interval of integration.
-#' @param ciName Character string giving the name of the symbol for the constant of integration.
-#' @param .tol Numerical tolerance.  See \code{\link[stats]{integrate}()}.
-#'
-#' @note \code{numerical_integration} is not intended for direct use.  It packages
-#' up the numerical anti-differentiation process so that the contents
-#' of functions produced by \code{antiD} look nicer to human readers.
-#' @export
-#'
-numerical_integration <- function(f,wrt,av,args,vi.from, ciName="C",.tol) {
-  # We are about to do the numerics.  At this point, every
-  # variable should have a numerical binding.  Just in case some
-  # are still expressions, go through the list and evaluate them
-  for(k in 1:length(av)) av[[k]] = eval.parent(av[[k]],n=2)
-  av2 = c(av, args) # combine the actual arguments with the formals
-  # to make sure that default values are included
-  # Extract the limits from the argument list
-  vi.to <- inferArgs(wrt, av2, defaults=alist(val=NaN),
-                     variants = c("","to",".to"))$val
-  # If they are calls, turn them into values.  Redundant with loop above
-  if( any(is.nan(vi.to)) | any(is.nan(vi.from))) stop("Integration bounds not given.")
-  # and delete them from the call
-  av[[paste(wrt,".from",sep="")]] <- NULL
-  av[[paste(wrt,".to",sep="")]] <- NULL
-  initVal <- av2[[ciName]]
-  av[[ciName]] <- NULL
-  newf <- function(vi){
-    av[[wrt]] = vi
-    # make the same size as input vi
-    f(vi,av) + 0*vi
-  }
-  # NEED TO ADD TOLERANCE
 
-  multiplier <- 1
-  if( length(vi.from) > 1 & length(vi.to) == 1 ){
-    temp <- to
-    to <- from
-    from <- temp
-    multiplier <- -1
-  }
-  # handle situation where both from and to are a set of values.
-  if( length(vi.from)>1 & length(vi.to)>1 ){
-    if( length(vi.from)!=length(vi.to) ) stop("Either fix 'from' or set it to the same length as 'to'")
-    res <- rep(0,length(vi.to))
-    for (k in 1:length(vi.to)) {
-      res[k] <- stats::integrate(newf,vi.from[k],vi.to[k],rel.tol=.tol)$value
-    }
-    return(res+initVal)
-  }
-  val0 <- stats::integrate(newf, vi.from, vi.to[1],rel.tol=.tol)$value
-  # work around a bug in integrate()
-  if( vi.to[1]==-Inf ) { # Aaron Meyerson fix June 2013
-    # A couple of bugs have popped up when upper limit is -Inf,
-    # so upper and lower are switched and we take the negative
-    val0 <- -1*stats::integrate(newf, vi.to[1], vi.from, rel.tol=.tol)$value
-  }
-  # add initial condition
-  val0 <- val0 + initVal
-  if (length(vi.to) == 1) {
-    return(multiplier*val0)
-  }
-  res <- rep(val0, length(vi.to))
-  for (k in 2:length(res)) {
-    res[k] <- stats::integrate(newf, vi.to[k-1], vi.to[k],rel.tol=.tol)$value
-  }
-  res <- cumsum(res)
-  return(multiplier*res)
+makeNumericalAntiD <- function(tilde, wrt, lower.bound, .tol, ...) {
+  new_fun_formals <- formals_from_expr(tilde[[2]])
+  # new_fun_formals[[wrt]] <- NULL # keep
+  dots <- list(...)
+  for (nm in names(dots)) new_fun_formals[[nm]] = dots[[nm]]
+  
+  free_params <- names(new_fun_formals)
+  if (length(free_params) == 0) assign <- ""
+  else assign <- paste0(paste(free_params, "=", free_params, collapse=", "), ", ")
+  
+  # Figure out a name for the constant of integration
+  intC <- LETTERS[-(1:2)][!LETTERS[-(1:2)]%in% names(new_fun_formals)][1]
+  intC_list <- list(C=0)
+  names(intC_list) <- intC
+
+  # Note: No comma after {assign} in the next line
+  command <- glue::glue("{{F <- makeF({capture.output(tilde)[1]}); evalFun(F, {assign}.const={intC})}}")
+  
+  .F <- create_num_antiD(tilde, ..., lower = lower.bound, .tol=0.0001)
+  makeF <- function(tilde) .F # very, very simple. Just hides .F
+  evalFun <- function(F, ..., .const)  {do.call(F, c(list(...))) + .const}
+  
+  
+  res <- function(){ }
+  body(res) <- parse(text = command)  
+  formals(res) <- c(new_fun_formals, intC_list)
+  
+  
+  res
 }

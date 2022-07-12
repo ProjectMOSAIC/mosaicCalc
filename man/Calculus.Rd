@@ -3,20 +3,14 @@
 \name{D}
 \alias{D}
 \alias{antiD}
-\alias{makeAntiDfun}
-\alias{numerical_integration}
 \title{Derivative and Anti-derivative operators}
 \usage{
-D(formula, ..., .hstep = NULL, add.h.control = FALSE)
+D(tilde, ..., .hstep = NULL, add.h.control = FALSE)
 
-antiD(formula, ..., lower.bound = 0, force.numeric = FALSE)
-
-makeAntiDfun(.function, .wrt, from, .tol = .Machine$double.eps^0.25)
-
-numerical_integration(f, wrt, av, args, vi.from, ciName = "C", .tol)
+antiD(tilde, ..., lower.bound = 0, force.numeric = FALSE, .tol = 1e-04)
 }
 \arguments{
-\item{formula}{A formula. The right side of a formula specifies
+\item{tilde}{A tilde expression. The right side of a formula specifies
 the variable(s) with which to
 carry out the integration or differentiation.  On the left side should be
 an expression or a function that returns a numerical vector
@@ -42,25 +36,7 @@ derivatives.}
 \item{force.numeric}{If \code{TRUE}, a numerical integral is performed even when a
 symbolic integral is available.}
 
-\item{.function}{function to be integrated}
-
-\item{.wrt}{character string naming the variable of integration}
-
-\item{from}{default value for the lower bound of the integral region}
-
-\item{.tol}{Numerical tolerance.  See \code{\link[stats]{integrate}()}.}
-
-\item{f}{A function.}
-
-\item{wrt}{Character string naming a variable: the var. of integration.}
-
-\item{av}{A list of the arguments passed to the function calling this.}
-
-\item{args}{Default values (if any) for parameters.}
-
-\item{vi.from}{The the lower bound of the interval of integration.}
-
-\item{ciName}{Character string giving the name of the symbol for the constant of integration.}
+\item{.tol}{Tolerance for numerical integration. Most users do not need this.}
 }
 \value{
 For derivatives, the return value is a function of the variable(s)
@@ -93,11 +69,6 @@ expression passed to it.  The returned function is the anti-derivative
 of the expression, e.g., antiD(f(x)~x) -> F(x).
 To calculate the integral of f(x), use F(to) - F(from).
 }
-\note{
-\code{numerical_integration} is not intended for direct use.  It packages
-up the numerical anti-differentiation process so that the contents
-of functions produced by \code{antiD} look nicer to human readers.
-}
 \examples{
 D(sin(t) ~ t)
 D(A*sin(t) ~ t )
@@ -113,11 +84,12 @@ gg(t=1, B=100)
 f <- makeFun(x^2~x)
 D(f(cos(z))~z) #will look in user functions also
 antiD( a*x^2 ~ x, a = 3)
-antiD( A/x~x ) # This gives a warning about no default value for A
+G <- antiD( A/x~x ) # there will be an unbound parameter in G()
+G(2, A=1) # Need to bound parameter. G(2) will produce an error.
 F <- antiD( A*exp(-k*t^2 ) ~ t, A=1, k=0.1)
 F(t=Inf)
-one = makeFun(1 ~ x + y)
-by.x = antiD(one(x=x, y=y) ~ x, y=1)
-by.xy = antiD(by.x(x = sqrt(1-y^2), y = y) ~ y)
+one = makeFun(1 ~ x)
+by.x = antiD(one(x) ~ x)
+by.xy = antiD(by.x(sqrt(1-y^2)) ~ y)
 4 * by.xy(y = 1) # area of quarter circle
 }

@@ -1,24 +1,36 @@
 Package: mosaicCalc
 Type: Package
-Title: Function-Based Numerical and Symbolic Differentiation and Antidifferentiation
-Description: Part of the Project MOSAIC (<http://mosaic-web.org/>)
-    suite that provides utility functions for doing calculus 
-    (differentiation and integration) in R. The main differentiation and 
-    antidifferentiation operators are described using formulas and return functions 
-    rather than numerical values. Numerical values can be obtained by evaluating
-    these functions.
-Version: 0.5.1
+Title: R-Language Based Calculus Operations for Teaching
+Description: Software to support the introductory *MOSAIC Calculus* 
+    textbook <https://dtkaplan.github.io/MC2/>),
+    one of many data- and modeling-oriented educational resources developed by 
+    Project MOSAIC (<http://www.mosaic-web.org/>). Provides symbolic and
+    numerical differentiation and integration, as well as support for 
+    applied linear algebra (for data science), and differential equations/dynamics.
+    Includes `{ggformula}`-based graphics for graphing functions, vector fields, trajectories, etc.
+    The software is suitable for general use, but mainly intended for teaching calculus.
+Version: 0.5.9
 Depends:
-    R (>= 3.0.0),
-    mosaicCore
+    R (>= 3.5.0),
 Imports:
-    methods,
-    stats,
-    MASS, 
-    mosaic,
+    cubature,
+    Deriv,
+    dplyr,
     ggformula,
-    magrittr,
-    rlang
+    ggplot2,
+    glue,
+    grDevices,
+    MASS, 
+    Matrix, 
+    metR (>= 0.11.0),  
+    mosaic,
+    mosaicCore,
+    orthopolynom,
+    plotly,
+    rlang,
+    Ryacas,
+    stats,
+    tibble
 Suggests: 
     testthat,
     knitr,
@@ -30,7 +42,7 @@ VignetteBuilder: knitr
 License: GPL (>=2)
 LazyLoad: yes
 LazyData: yes
-URL: https://github.com/ProjectMOSAIC/mosaicCalc
+URL: https://github.com/ProjectMOSAIC/mosaicCalc 
 BugReports: https://github.com/ProjectMOSAIC/mosaicCalc/issues
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)

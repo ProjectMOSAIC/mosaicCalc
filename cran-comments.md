@@ -1,34 +1,24 @@
 ## Test environments
 
   * local OS X install: 
-    * R version 3.6.3 (2020-02-29)
-    * Platform: x86_64-apple-darwin15.6.0 (64-bit)
-    * Running under: macOS Catalina 10.15.3
+    * R version 4.1.3 (2022-03-10)
+    * Platform: x86_64, darwin17.0
+    * Running under: macOS Monterey 12.3
   
   * win-builder via devtools
-    * R version 4.0.0 (2020-04-24)
+    * R version R Under development (unstable) (2022-07-06 r82554 ucrt)
     * Platform: x86_64-w64-mingw32 (64-bit)
     
 ## R CMD check results
 
-This is a re-submission of a package that was archived on CRAN for falling afoul of new documentation standards. These are fixed.
+OS X test environment: There were no ERRORs, WARNINGs, or NOTEs.
 
-There were no ERRORs or WARNINGs or NOTES on OS X R CMD check.
-
-One NOTE in win-builder R CMD check:
-
-Possibly mis-spelled words in DESCRIPTION:
-  Antidifferentiation (4:9)
-  antidifferentiation (8:5)
-
-I believe these are properly spelled.
-
+win-builder via devtools: No ERRORs or WARNINGs. One NOTE relating to a claimed mis-spelling "ggformula" in the DESCRIPTION field of the DESCRIPTION file. I believe this is a false-positive: "ggformula" is a genuine package available on CRAN.
 
 ## Downstream dependencies
 
-fastR2 is the only reverse dependency on CRAN. This has been checked.
-
+fastR2, MMAC, and RISCA are the reverse dependencies on CRAN. They has been checked.
 
 ## Other notes
 
-The only changes were light changes to documentation.
+This is a substantial update and extension of a package currently on CRAN. 

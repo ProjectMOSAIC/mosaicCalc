@@ -2,11 +2,9 @@
 #'
 #' A formula interface to integration of an ODE with respect to "t"
 #'
-#' @param dyn a formula specifying the dynamics, e.g. \code{dx ~ -a*x} for $dx/dt = -ax$.
-#' @param \ldots arguments giving additional formulas for dynamics in other variables,
-#' assignments of parameters, and assignments of initial conditions
-#' @param tdur the duration of integration.  Or, a list of the form
-#' \code{list(from=5,to=10,dt=.001)}
+#' @param \ldots A dynamics object (see `makeODE()`) and/or arguments giving additional formulas for dynamics in other variables,
+#' assignments of parameters, assignments of initial conditions, the start and end times of the 
+#' integration (through `domain()`), and the step size (through `dt=`).
 #'
 #' @details
 #' The equations must be in first-order form.  Each dynamical equation uses
@@ -21,39 +19,33 @@
 #' @return a list with splined function of time for each dynamical variable
 #'
 #' @examples
-#' soln = integrateODE(dx~r*x*(1-x/k), k=10, r=.5, tdur=20, x=1)
+#' soln = integrateODE(dx~r*x*(1-x/k), k=10, r=.5, domain(t=0:20), x=1)
 #' soln$x(10)
 #' soln$x(30) # outside the time interval for integration
-#' # plotFun(soln$x(t)~t, tlim=range(0,20))
-#' soln2 = integrateODE(dx~y, dy~-x, x=1, y=0, tdur=10)
-#' # plotFun(soln2$y(t)~t, tlim=range(0,10))
-#' # SIR epidemic
-#' epi = integrateODE(dS~ -a*S*I, dI ~ a*S*I - b*I, a=0.0026, b=.5, S=762, I=1, tdur=20)
+#' traj_plot(x(t)~t, soln, domain(t=0:10)) 
+#' soln2 = integrateODE(dx~y, dy~-x, x=1, y=0, domain(t=0:10))
+#' traj_plot(y(t)~t, soln2)
+#' SIR <- makeODE(dS~ -a*S*I, dI ~ a*S*I - b*I, a=0.0026, b=.5, S=762, I=1)
+#' epi = integrateODE(SIR, domain(t=0:20)) 
+#' traj_plot(I(t) ~ t, epi)
 #' @export
 
-integrateODE = function(dyn,...,tdur) {
-  new <- TRUE
-  inputs <- list(dyn,...)
+integrateODE = function(...) {
+  DE <- makeODE(...)
   # set up the integration parameters
-  if( missing(tdur) ) tdur = list(from=0, to=1, dt=0.01)
-  if( is.numeric(tdur) ) tdur = list(from=0,to=tdur,dt=0.01)
-  if( is.null(tdur$from) ) tdur$from = 0
-  if( is.null(tdur$dt) ) tdur$dt = diff(range(tdur$from,tdur$to))/1000
-
-  DE <- fetchDynamics(inputs)
-
-  # get the additional assignments in the argument list
-  additionalInds = (!names(inputs) %in% c(DE$names,"tdur")) & nchar(names(inputs))!=0 &
-    names(inputs) != "t"  # t is a special input
-  additionalAssignments = inputs[additionalInds]
+  if (is.null(DE$domain)) stop("Must specify domain for integration, e.g. domain(t=0:10).")
+  duration <- list(from=DE$domain$t[1], to=DE$domain$t[2], dt=DE$dt)
+  values <- DE$values
+  additionalAssignments <- unlist(DE$values[!DE$names %in% values])
 
   #create the initial condition vector
-  initstate = unlist( inputs[DE$names] )
+  #initstate = unlist( inputs[DE$names] )
+  initstate <- unlist(DE$values[DE$names])
   if (length(initstate) != length(DE$names) )
-    stop(paste("Must specify an initial condition for every variable."))
+    stop(paste("Must specify an initial condition for every state variable."))
   soln = rkintegrate(
     rkFunction(DE, additionalAssignments),
-    initstate,tstart=tdur$from,tend=tdur$to,dt=tdur$dt
+    initstate, tstart=duration$from, tend=duration$to, dt=duration$dt
   )
 
   # Return an object with functions for each of the dynamical variables,
@@ -62,6 +54,13 @@ integrateODE = function(dyn,...,tdur) {
   result <- list()
   for (k in 1:length(DE$names)) result[[k]] <- approxfun( soln$t, soln$x[,k])
   names(result) <- DE$names
+  class(result) <- "ODEsoln"
+  message(paste0(
+    "Solution containing functions ",
+    paste0(names(result), "(t)", collapse=", "),
+    "."
+  ))
+  
   return(result)
 }
 
@@ -87,7 +86,10 @@ fetchDynamics <- function(x) {
     dnames[k] <- sub("^d","",nm) # character string with the name
     dfuns[k] <- parse(text=form[3]) # an expression so single [ ]
   }
-  return ( list(names = dnames, functions=dfuns) )
+  res <- list(names = dnames, functions=dfuns) 
+  class(res) <- c("list", "dynamics")
+  
+  res
 }
 
 

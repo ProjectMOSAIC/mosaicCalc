@@ -9,7 +9,7 @@ numD(formula, ..., .hstep = NULL, add.h.control = FALSE)
 \arguments{
 \item{formula}{a mathematical expression (see examples and \code{\link{plotFun}})}
 
-\item{...}{additional parameters, typically default values for mathematical parameters}
+\item{\dots}{additional parameters, typically default values for mathematical parameters}
 
 \item{.hstep}{numerical finite-difference step (default is 1e-6 or 1e-4 for first and second-order derivatives, respectively)}
 

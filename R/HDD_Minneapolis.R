@@ -1,0 +1,35 @@
+#' Heating degree days in Minneapolis, Minnesota, USA
+#'
+#' A "heating degree day" is a measure of weather coldness. It's defined to be the difference
+#' between the outdoor ambient temperature and 65 degrees F, but has a value of zero when the ambient 
+#' temperature is above 65 degrees. This difference is averaged over time and multiplied by the number 
+#' of days in the time period covered. The heating degree day is often used as a measure of the demand for 
+#' domestic heating in a locale.
+#' 
+#' These data report monthly heating degree days. For teaching purposes, the data give an extreme example 
+#' of how a relationship (hdd vs year) can be revealed by including a covariate (month). Although interest focusses
+#' on the change in temperature over the century the data cover, there is such regular seasonal variation that 
+#' no systematic trend over the years is evident unless month is taken into account.
+#' 
+#' @format A data frame \code{HDD_Minneapolis} with 1412 rows and 4 variables:
+#' \itemize{
+#' \item year the year
+#' \item month the month
+#' \item hdd the number of heating degree days for that period.
+#' \item loc the location at which the temperature was measured. In the early years, this was downtown Minneapolis.
+#' Later, the site was moved to the Minneapolis/Saint-Paul International Airport.
+#' }
+
+
+#'
+#' @docType data
+#' @name HDD_Minneapolis
+#' @usage data(HDD_Minneapolis)
+#'
+#' @keywords datasets
+#'
+
+#' @examples
+#' mod_1 <- lm(hdd ~ year, data = HDD_Minneapolis)
+#' mod_2 <- lm(hdd ~ year + month, data = HDD_Minneapolis)
+"HDD_Minneapolis"

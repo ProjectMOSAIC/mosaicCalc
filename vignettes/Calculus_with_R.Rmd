@@ -87,7 +87,7 @@ antiD(a / x ~ x)
 
 ## Analytic or numeric
 
-The symbolic capabilities of `mosaicCalc` are weak. Only a few, simple forms of functions can be handled symbolically by `antiD()`.  The `D()` operation is similarly limited, although it handles composition and linear combinations  of functions well. For instance:
+The symbolic capabilities of `mosaicCalc` are built on top of the  `{Deriv}` and `{Ryacas}` packages. The interface uses the tilde-expression format; the translation of this into a suitable format for `{Deriv}` and `{Ryacas}` is handled automatically and is transparent to the user. 
 
 ```{r}
 D(a * x + b * x^2 + c * sin(x^2) ~ x)
