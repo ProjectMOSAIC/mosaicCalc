@@ -69,6 +69,8 @@ symbolicD <- function(tilde, ..., .order) {
             dots <- c(dots, old_formals[missing_args[k]])
         }
       }
+      # only keep the parameters that are bound
+      dots[unlist(lapply(dots, is.name))] <- NULL
       tilde[[2]] <- left
     }
   } 

@@ -2,7 +2,7 @@
 #' 
 #' These appear in the "Optimization & constraint" chapter.
 #' 
-#' @params x1, y1, x2, y2, x3, y3 coordinates of the masses.
+#' @param x1, y1, x2, y2, x3, y3 coordinates of the masses.
 #'
 #' @export
 PE_fun1 <- function(x1, y1) {
@@ -11,7 +11,7 @@ PE_fun1 <- function(x1, y1) {
     9.8 *y1 +  # gravity
     abs(x1-3)^3 + abs(y1)^3 - 1 # spring 3
 }
-#' @rdname PE_example1
+#' @rdname PE_fun1
 #' @export 
 PE_fun2 <- function(x1,y1,x2,y2,x3,y3) {
   L01sq <- x1^2 + y1^2 - 0.5

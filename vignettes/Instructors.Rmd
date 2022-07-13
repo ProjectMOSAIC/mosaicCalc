@@ -51,7 +51,7 @@ This is wordy and error prone. For example, mistakenly writing `p = -1` instead 
 
 ```{r}
 # mosaicCalc convention
-f <- makeFun(a*x + b ~ x)
+f <- makeFun(a*x + b ~ x) 
 ```
 
 The expression `a*x + b ~ x` is called a ***tilde expression***. . In conventional R terminology, such expressions involving the "tilde" character are called "formulas." Regretably, this name conflicts with mainstream uses of the word in mathematics (and even statistics). The unconventional term "tilde expression" puts front and center the role of the tilde character in the syntax.
@@ -75,9 +75,7 @@ slice_plot(dnorm(x) ~ x, bounds(x=-3:2))
 Integrate(dnorm(x) ~ x, bounds(x=-2:2))
 ```
 
-(For backwards compatibility, a synonym for `bounds()` is `domain()`. The names can be used interchangeably.)
-
-Bounds can incorporate two or more inputs, for instance:
+When there are multiple inputs to be bounded, list them all in the same call to `bounds()`. For instance: 
 
 ```r
 contour_plot(cos(x)*exp(-t) ~ x & t, bounds(x=0:10, t=0:2))
@@ -89,6 +87,55 @@ Several things to point out about `bounds()` and its use ...
 2. `bounds()` requires that the quantity being referred to, `x` and `t` in the above example, be explicit.
 3. When there is more than one quantity being bounded, all must be stated within a single call to `bounds()`.
 4. The preferred syntax in `bounds()` is something like `bounds(x=0.5:3.4)`, using the colon (`:`) operator. The `:` operator when used in this context is equivalent to `c(0.5, 3.4)`.
-5. Two other valid constructs in arguments to `bounds()` are `bounds(x=c(0.5, 3.4))` and `bounds(x=2.5 %pm% 1)`. The latter is helpful when you want to zoom in on a region. The `c(0.5, 3.4)` is unnecessarily verbose. (It also can lead to mistakes. Try `bounds(x=c(5:3.4)))` to see what goes amiss.)
+5. Two other valid constructs in arguments to `bounds()` have the form `bounds(x=c(0.5, 3.4))` and `bounds(x=2.5 %pm% 1)`. The latter is helpful when you want to zoom in on a region. The `c(0.5, 3.4)` is unnecessarily verbose. (It also can lead to mistakes. Try `bounds(x=c(5:3.4))` to see what goes amiss.) The special interpretation of the **colon** notation within `bounds()` is entirely to facilitate brevity: `bounds()` gets used a lot!
 6. In every `{mosaicCalc}` function that requires a region be specified, the call to `bounds()` must come *immediately* after the tilde expression(s). 
+7. For backwards compatibility, `domain()` has been made a synonym for `bounds()`. `domain()` was used in a previous development version of `mosaicCalc` which was never published to CRAN. 
 
+## One- and two-sided tilde expressions
+
+Many R users encounter statistical functions such as `lm()` that take as a first argument a tilde expression. For instance, the statement
+
+```{r}
+lm(mpg ~ wt + cyl, data = mtcars)
+```
+constructs a linear model using `mpg` as the response variable with `wt` and `cyl` as the explanatory variables. In fact, tilde expressions are of very general use, whenever it is desired to construct a **symbolic** statement, that is a statement that will not be evaluated by the R interpreter but remains as a fragment of code.
+
+`{mosaicCalc}` makes extensive use of symbolic statements, since they are a close analog to mathematical formulas. This section outlines the idioms of tilde expressions in `{mosaicCalc}` functions. Knowing the common patterns can help you avoid errors.
+
+
+The R-language mandates that every tilde expression have a *right-hand side* that is a syntactically correct expression. For example, `~ 1` and `~ sqrt(foobar)` are correct possibilities, but, for example, `1 ~` (without a right-hand side) and `~ 1b` are not correct.
+
+The *left-hand side* of the tilde expression, if present at all, must similarly be syntactically correct.
+
+All tilde expressions used with `mosaicCalc` functions must be two-sided.^[The only exception is `makeFun()`, which can be used with one-sided expressions: e.g. `makeFun(~ m*x + b)`. Even here, you can use a two-sided expression, for instance, `makeFun(m*x + b ~ .)`. The period `.` is a legitimate R expression.] The two sides stand for different things.
+
+One side of a `{mosaicCalc}` tilde expression is always the formula for a function (in a mathematical sense). Let's be clear about what this means. In the mathematical definition $$f(x) \equiv mx + b\ ,$$ the formula is $mx + b$. As an R expression, this translates to `m*x + b`.
+
+The other side of a tilde expression sets a context. Examples demonstrate the various contexts available.
+
+1. Context: **Define a function using `makeFun()`**. The left side of the tilde expression is a formula and the right side should be `.`. For instance:
+
+```{r}
+f <- makeFun(m*x + b ~ .)
+f
+```
+
+It's also possible to have a right-hand side that's not a period. Whatever names appear in the right-hand side, in the order in which they appear, will become the arguments to the resulting function *in that same order*. To illustrate,
+
+```{r}
+makeFun(m*x + b ~ b/(m*x)) # bad style!
+```
+More typically, if you want to specify the order of the arguments, you would use a right-hand side like `b & m & x`.
+
+2. Context: **Graph a function** with, e.g., `slice_plot()` or `contour_plot()`. The left side is a formula and the right side specifies the variable or variables *with respect to which* the graph is to be made. For instance, in graphing $mx + b$ against $x$, the appropriate tilde expression is `m*x + b ~ x`. 
+
+3. Context: **Differentiation** or **Integration**. These operations always involve a "with respect to variable." Classically, differentation of $f()$ with respect to $x$ is written $df/dx$ and integration is written $\int f(x) dx$.  Neither of these notations is naturally suited to the creation of computer commands by keyboard, so `{mosaicCalc}` provides various operators such as `D()` and `antiD()` to carry out the calculation. Both of these accept tilde expressions where the left-hand side is a formula and the right-hand side is the "with respect to variable." For instance:
+
+
+YOU WERE WORKING TO inline antiD().
+
+```{r}
+g <- makeFun(1/x ~ .)
+D(f(x) ~ x)
+antiD(f(x) ~ x)
+```

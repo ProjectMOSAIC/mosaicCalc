@@ -20,7 +20,8 @@ make_tilde_inline <- function(tilde) {
 #' @export
 simplify_fun <- function(fun) {
   bod <- paste(deparse(body(fun)), collapse=" ")
-  if (length(body(fun)) == 1) {
+  # if (length(body(fun)) == 1) {
+  if (class(bod) != "{") { # it's a one-line function.
     sbod <- try(Ryacas::as_r(Ryacas::yac(glue::glue("Simplify({bod})"))))
     if (inherits(sbod, "try-error")) return(fun)
     # bod <- body(fun)
