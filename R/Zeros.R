@@ -19,7 +19,9 @@
 #' @export
 Zeros <- function(tilde, domain=NULL, nsegs=131, ...) {
 
-  f <- makeFun(tilde, ..., suppress.warnings=TRUE)
+  f <- makeFun(tilde, ..., 
+               suppress.warnings=TRUE,
+               strict.declaration = FALSE, use.environment = FALSE)
   unbd <- unbound(f)
   if (length(unbd) > 1) 
     stop(paste("Must give numerical values for all parameters.", 

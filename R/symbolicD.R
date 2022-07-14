@@ -75,7 +75,10 @@ symbolicD <- function(tilde, ..., .order) {
     }
   } 
   
-  fun <- do.call(makeFun, c(tilde, dots, list(suppress.warnings=TRUE)))
+  fun <- do.call(makeFun, c(tilde, dots, 
+                            list(suppress.warnings=TRUE,
+                                 strict.declaration  = FALSE, 
+                                 use.environment = FALSE)))
   
   dfun <- Deriv::Deriv(fun, x=vars[1])
     

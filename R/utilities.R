@@ -8,7 +8,6 @@
 #' @param others Character string(s) with names of additional arguments to be 
 #' included in the formals
 #' 
-#' @export
 infer_RHS <- function(ex) {
   RHS <- paste(
     sort_args_by_convention(all.vars(ex)),
@@ -21,7 +20,6 @@ infer_RHS <- function(ex) {
 
 #' 
 #' @rdname infer_RHS
-#' @export
 formals_from_expr <- function(ex, others=character(0)) {
   names <- sort_args_by_convention( c(all.vars(ex), others))
   command <- paste0("alist(", 
@@ -30,6 +28,17 @@ formals_from_expr <- function(ex, others=character(0)) {
   
   eval(parse(text=command))
 }
+
+# re-arrange the formals to a function 
+conventional_argument_order <- function(fun) {
+  args <- formals(fun)
+  new_arrangement <- sort_args_by_convention(names(args))
+  new_args <- args[new_arrangement]
+  formals(fun) <- new_args
+  
+  fun
+}
+
 
 
 sort_args_by_convention <- function(vars) {
@@ -59,9 +68,6 @@ sort_args_by_convention <- function(vars) {
 #' and any other arguments not named explicitly in the parent function definition.
 #' @param two_tildes if `TRUE` then look for the first FOUR arguments, the middle 
 #' two of which will be tilde expressions.
-#' 
-#' 
-#' @export
 first_three_args <- function(..., two_tildes = FALSE) {
   args <- list(...)
   

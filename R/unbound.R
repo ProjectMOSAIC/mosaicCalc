@@ -20,7 +20,7 @@ bind_params <- function(f, ...) {
   if (length(new_values) == 1 && is.list(new_values[[1]])) new_values <- new_values[[1]]
   params <- formals(f)
   for (k in names(params)) {
-    if (k %in% names(new_values)) params[k] <- new_values[[k]]
+    if (k %in% names(new_values) && !inherits(new_values[[k]], "name")) params[k] <- new_values[[k]]
   }
   formals(f) <- params
   

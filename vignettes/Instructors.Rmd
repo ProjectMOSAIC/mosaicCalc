@@ -134,6 +134,8 @@ More typically, if you want to specify the order of the arguments, you would use
 
 YOU WERE WORKING TO inline antiD().
 
+Also, fix `tdur=` in the exercises to the textbook.
+
 ```{r}
 g <- makeFun(1/x ~ .)
 D(f(x) ~ x)

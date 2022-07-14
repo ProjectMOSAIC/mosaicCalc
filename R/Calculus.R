@@ -99,26 +99,27 @@ D.default <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
 #' @export
 D.formula <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
   
-  formulaEnv = environment(tilde) # where was the formula made?
-  # # Simplify the input if you can
-  # formula[[2]] <- simplify_mult(formula[[2]])
-  # #Try to construct a symbolic derivative
+  tildeEnv = environment(tilde) # where was the formula made?
+  #Try to construct a symbolic derivative
   res = try(symbolicD(tilde, ...), silent=TRUE)
-  #Failed?  Do it numerically
   if( inherits(res, "try-error") ){ # first symbolic attempt unsuccessful
     # replace by DTK on Sept. 28, 2021
-    newformula <- make_tilde_inline(tilde)
+    vars <- all.vars(rlang::f_rhs(tilde))
+    inline_results <- inline_expr(rlang::f_lhs(tilde),
+                as.name(vars[1]), as.name(vars[1]),
+                environment(tilde))
+    newformula <- tilde
+    newformula[[2]] <- inline_results$ex
+    args <- inline_results$args
     # expandedForm <-try(expandFun(formula), silent=TRUE)
     # if(!inherits(expandedForm, "try-error"))
     #   newformula <- expandedForm$formula
     res = try(symbolicD(newformula, ...), silent=TRUE)
     if( inherits(res, "try-error") ) # second symbolic attempt unsuccessful
       res = numD( tilde, ..., .hstep=.hstep, add.h.control=add.h.control)
-    # else #extracted function correctly
-    #   formals(res) = expandedForm$formals
   }
-  else # it's generated from symbolicD
-    environment(res) = formulaEnv # function should refer to environment of the formula
+  environment(res) = tildeEnv # function should refer to environment of the formula
+  res <- conventional_argument_order(res) %>% bind_params(args)
   return(simplify_fun(res))
 }
 
@@ -151,16 +152,23 @@ antiD <- function(tilde, ..., lower.bound=0, force.numeric=FALSE, .tol=0.0001){
   if (length(wrt) != 1)  stop("Integration with respect to multiple variables not supported directly.")
 
   # if tilde is a call to a one-line function, substitute the body of the function
-  tilde <- make_tilde_inline(tilde)
+  vars <- all.vars(rlang::f_rhs(tilde))
+  from_inline <- inline_expr(rlang::f_lhs(tilde),
+                                as.name(vars[1]), as.name(vars[1]),
+                                environment(tilde))
+  tilde[[2]] <- from_inline$ex
+  args <- from_inline$args
   
   if (!force.numeric){ # Try symbolic integral
     # First try Ryacas 
-    f <- try(simpleYacasIntegrate(tilde, ...), silent=TRUE)
-    if (is.function(f) && ! "AntiDeriv" %in% all.names(body(f))) return(f)
+    Fun <- try(simpleYacasIntegrate(tilde, ...), silent=TRUE)
+    if (is.function(Fun) && ! "AntiDeriv" %in% all.names(body(Fun))) return(Fun)
   }
   # Do integral numerically
-  res <- makeNumericalAntiD(tilde, wrt, lower.bound=lower.bound, .tol=.tol, ...)  
-  return(res)
+  res <- makeNumericalAntiD(tilde, wrt, lower.bound=lower.bound, .tol=.tol, ...) 
+  res <- res %>% bind_params(args)
+  
+  return(conventional_argument_order(res))
 }
 
 # helper function for evaluating a function
@@ -196,5 +204,5 @@ makeNumericalAntiD <- function(tilde, wrt, lower.bound, .tol, ...) {
   formals(res) <- c(new_fun_formals, intC_list)
   
   
-  res
+  conventional_argument_order(res)
 }

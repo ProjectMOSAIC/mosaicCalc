@@ -30,7 +30,10 @@ Integrate <- function(tilde, domain, ...,  tol=0.00001) {
   if (missing(domain))
       stop("Must specify either domain or both from and to arguments.")
   
-  f <- makeFun(tilde, suppress.warnings=TRUE) %>% bind_params(list(...))
+  f <- makeFun(tilde, suppress.warnings=TRUE,
+               strict.declaration = FALSE, 
+               use.environment = FALSE) %>% 
+    bind_params(list(...))
   ivars <- all.vars(rhs(tilde))
 
   # Check the domain

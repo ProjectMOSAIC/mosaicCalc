@@ -4,7 +4,10 @@
 #' @param \dots Bindings for parameters in `tilde`
 simpleYacasIntegrate <- function(tilde, ...) {
   the_expression <- deparse(rlang::f_lhs(tilde))
-  fun <- makeFun(tilde, ..., suppress.warnings=TRUE)
+  fun <- makeFun(tilde, ..., 
+                 suppress.warnings=TRUE,
+                 strict.declaration = FALSE, 
+                 use.environment = FALSE)
   vars <- all.vars(rlang::f_rhs(tilde), unique=FALSE)
   the_expression <- paste(fix_names_for_yacas(the_expression), collapse="")
 
@@ -15,6 +18,7 @@ simpleYacasIntegrate <- function(tilde, ...) {
       )
     )
   )
+  
   if (inherits(R_result, "try-error") || grepl("Integrate\\(", R_result)) {
     return(R_result)
   }

@@ -10,7 +10,10 @@
 argM <- function(tilde, domain) {
   # What are the variables?
   vars <- all.vars(rhs(tilde))
-  f <- makeFun(tilde, suppress.warnings = TRUE)
+  f <- makeFun(tilde, 
+               suppress.warnings = TRUE,
+               strict.declaration = FALSE, 
+               use.environment = FALSE)
   if (length(vars) == 1) {
     # single variable optimization
     mins <- optimize(f, range(domain))
