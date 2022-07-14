@@ -23,12 +23,15 @@ Imports:
     MASS, 
     Matrix, 
     metR (>= 0.11.0),  
+    MMAC,
     mosaic,
     mosaicCore,
     orthopolynom,
+    palmerpenguins,
     plotly,
     rlang,
     Ryacas,
+    sp,
     stats,
     tibble
 Suggests: 

@@ -13,7 +13,7 @@ inscribed_circle(ftilde, x0 = 0)
 }
 \value{
 \code{inscribed_circle()} return a data frame with \code{x} and \code{y} components describing the inscribed circle
-at $\link{x_0, f(x_0)}$. Plot this with \code{gf_path(y ~ x)}
+located at the point $(x_0, f(x_0))$. Plot this with \code{gf_path(y ~ x)}
 \code{curvature_function()} returns a function that gives the curvature of the specified
 function for any input $x$. It's much like \code{D()} in the way it is used.
 }

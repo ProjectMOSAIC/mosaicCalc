@@ -1,21 +1,9 @@
 #' Turn a 1-line function into an inline formula
 #'
-#' @param tilde a tilde expression as used by `makeFun()`.
 #' @param fun a function, such as produced by `makeFun()`.
 #' @param ex An expression, such as `quote(x^2)`.
-#' @examples
-#' infer_RHS(x^2 ~ x) # Formula is unchanged
-# make_tilde_inline <- function(tilde) {
-#   vars <- all.vars(rlang::f_rhs(tilde))
-#   rlang::f_lhs(tilde) <-
-#   from_inlining <-   inline_expr(rlang::f_lhs(tilde),
-#                 as.name(vars[1]), as.name(vars[1]),
-#                 environment(tilde))
-# 
-#   tilde
-# }
 
-#' @rdname make_tilde_inline
+#' @rdname inline
 simplify_fun <- function(fun) {
   bod <- paste(deparse(body(fun)), collapse=" ")
   if (class(bod) != "{") { # it's a one-line function.
@@ -30,7 +18,7 @@ simplify_fun <- function(fun) {
 #' @param env the environment for the expression
 #' @param old the name to be replaced
 #' @param new the name to be substituted in for old
-#' @rdname make_tilde_inline
+#' @rdname inline
 inline_expr <- function(ex, old, new, env) {
   if (length(ex) != 2) return(list(ex=ex, fargs=NULL))
 
@@ -59,7 +47,7 @@ inline_expr <- function(ex, old, new, env) {
 #' @param old the name to be replaced as produced by as.name()
 #' @param new the name to be substituted in for arg_name
 
-#' @rdname make_tilde_inline
+#' @rdname inline
 replace_arg_in_expr <- function(ex, old, new) {
   if (length(ex) == 1) {
     if (ex == old) return(new)

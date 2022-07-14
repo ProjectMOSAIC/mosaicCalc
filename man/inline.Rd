@@ -22,12 +22,7 @@ replace_arg_in_expr(ex, old, new)
 \item{new}{the name to be substituted in for arg_name}
 
 \item{env}{the environment for the expression}
-
-\item{tilde}{a tilde expression as used by \code{makeFun()}.}
 }
 \description{
 Turn a 1-line function into an inline formula
-}
-\examples{
-infer_RHS(x^2 ~ x) # Formula is unchanged
 }

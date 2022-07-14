@@ -10,7 +10,7 @@ PE_fun1(x1, y1)
 PE_fun2(x1, y1, x2, y2, x3, y3)
 }
 \arguments{
-\item{x1, }{y1, x2, y2, x3, y3 coordinates of the masses.}
+\item{x1, y1, x2, y2, x3, y3}{coordinates of the masses.}
 }
 \description{
 These appear in the "Optimization & constraint" chapter.

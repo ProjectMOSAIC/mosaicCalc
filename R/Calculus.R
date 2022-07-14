@@ -17,6 +17,7 @@
 #' @importFrom Matrix norm
 #' @importFrom grDevices extendrange
 #' @importFrom utils capture.output
+#' @importFrom sp point.in.polygon
 #'
 #'
 #' @param tilde A tilde expression. The right side of a formula specifies
@@ -111,9 +112,6 @@ D.formula <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
     newformula <- tilde
     newformula[[2]] <- inline_results$ex
     args <- inline_results$args
-    # expandedForm <-try(expandFun(formula), silent=TRUE)
-    # if(!inherits(expandedForm, "try-error"))
-    #   newformula <- expandedForm$formula
     res = try(symbolicD(newformula, ...), silent=TRUE)
     if( inherits(res, "try-error") ) # second symbolic attempt unsuccessful
       res = numD( tilde, ..., .hstep=.hstep, add.h.control=add.h.control)
