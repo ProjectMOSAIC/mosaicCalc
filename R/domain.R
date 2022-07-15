@@ -134,7 +134,7 @@ eval_on_domain <- function(formula, domain, n=100, params) {
   grid <- do.call(expand.grid, grid)
 
   # test if function can be evaluated with the names from `grid`
-  test_result <- try(do.call(fun, grid[1, , drop=FALSE]))
+  test_result <- try(do.call(fun, grid[1, , drop=FALSE]), silent=TRUE)
   if (inherits(test_result, "try-error")) {
     
     stop(glue::glue("Function specified by {capture.output(formula)[1]}\n
@@ -143,7 +143,7 @@ eval_on_domain <- function(formula, domain, n=100, params) {
   }
     
   # try to evaluate as if it were vectorized
-  vals <- try(do.call(fun, grid))
+  vals <- try(do.call(fun, grid), silent=TRUE)
   if (inherits(vals, "try-error")) stop("Need to write non-vectorized evaluation of function  on  grid.")
   grid$.output. <- vals
   return(grid)
@@ -163,7 +163,7 @@ eval_as_vector_and_matrix <- function(formula, domain, n=100)  {
   grid <- do.call(expand.grid, grid)
 
   # try to evaluate as if it were vectorized
-  vals <- try(do.call(fun, grid))
+  vals <- try(do.call(fun, grid), silent=TRUE)
   if (inherits(vals, "try-error")) stop("Need to write non-vectorized evaluation of function  on  grid.")
 
   # Now turn it into list with  x,  y, vals-matrix

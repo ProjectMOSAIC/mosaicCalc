@@ -16,7 +16,8 @@ simpleYacasIntegrate <- function(tilde, ...) {
       glue::glue(
         "Simplify(Integrate({vars[[1]]}) {the_expression});"
       )
-    )
+    ),
+    silent=TRUE
   )
   
   if (inherits(R_result, "try-error") || grepl("Integrate\\(", R_result)) {

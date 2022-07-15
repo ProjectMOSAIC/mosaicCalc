@@ -24,7 +24,7 @@ create_num_antiD <- function(tilde, ..., lower = NULL, .tol=0.0001) {
     # (Those arguments will be added later, near the end of create_num_antiD().)
     unbound <- character(0)
     for (nm in names(dots)) {
-      val <- try(get(nm))
+      val <- try(get(nm), silent=TRUE)
       if (inherits(val, "try-error")) unbound <- c(unbound, nm)
       else {
         #if (nm != wrt && length(val) > 1) stop("All parameters must have length 1.")

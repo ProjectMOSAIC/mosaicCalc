@@ -7,7 +7,7 @@
 simplify_fun <- function(fun) {
   bod <- paste(deparse(body(fun)), collapse=" ")
   if (class(bod) != "{") { # it's a one-line function.
-    sbod <- try(Ryacas::as_r(Ryacas::yac(glue::glue("Simplify({bod})"))))
+    sbod <- try(Ryacas::as_r(Ryacas::yac(glue::glue("Simplify({bod})"))), silent=TRUE)
     if (inherits(sbod, "try-error")) return(fun)
     body(fun) <- sbod
   }

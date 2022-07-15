@@ -56,6 +56,26 @@ symbolicD <- function(tilde, ..., .order) {
     # are included, even if they are not mentioned in the tilde
     # The length(left) <= 2 makes sure it's a function of at most one argument
     inside <- get(left[[1]]) # function being called
+    inside_arg <- left[[2]]
+    # Check special case: is it a spline or a connector?
+    if (!is.null(environment(inside)$SF) && !environment(inside)$connect) {
+      # it's a spline but not a first-order spline
+      fun_args <- formals(inside)
+      # Just bump the number on the deriv argument or, if already 3, return the zero function.
+      bump_to <- 
+        if (any(vars != inside_arg)) 4 # generate the zero function
+        else length(vars) + fun_args[["deriv"]] 
+            
+      if (bump_to > 3) {
+        # return a zero function
+        zero_fun <- function(x) 0
+        formals(zero_fun) <- fun_args[names(fun_args) != "deriv"]
+        return(zero_fun)
+      } else {
+        new_fun <- inside %>% bind_params(deriv = bump_to)
+        return(new_fun)
+      }
+    }
     if (inherits(body(inside), "{")) stop("Can't work with multi-line function.")
     if (is.function(inside)) old_formals <- formals(inside)
     else old_formals = list()
