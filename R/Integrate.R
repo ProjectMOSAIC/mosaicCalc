@@ -32,7 +32,7 @@ Integrate <- function(tilde, domain, ...,  tol=0.00001) {
   
   f <- makeFun(tilde, suppress.warnings=TRUE,
                strict.declaration = FALSE, 
-               use.environment = FALSE) %>% 
+               use.environment = TRUE) %>% 
     bind_params(list(...))
   ivars <- all.vars(rhs(tilde))
 

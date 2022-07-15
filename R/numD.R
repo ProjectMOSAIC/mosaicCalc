@@ -46,6 +46,7 @@
 # and grabs the arguments, adding and subtracting the finite-difference step h
 # as appropriate, then evaluating f at the new points to find the finite difference.
 
+#' @rdname numD
 #' @export
 numD <- function(formula, ..., .hstep=NULL, add.h.control=FALSE) {
   formulaEnv = environment(formula) # where did the formula come from?
@@ -130,7 +131,7 @@ setCorners <- function(C, var1, var2, h) {
 # @param .hstep the finite-difference step size
 # @note Helper function for \code{numD} for first-order derivs.
 dfdx <- function(.function, .wrt, .hstep) { # first order partial
-  res <- function() numerical.first.partial(.function, .wrt, .hstep, match.call())
+  res <- function() mosaicCalc:::numerical.first.partial(.function, .wrt, .hstep, match.call())
   formals(res) <- formals(.function)
   return(res)
 }
@@ -163,16 +164,18 @@ d2fdx2 <- function(.function, .wrt, .hstep) { # second order unmixed partial
 }
 # =============
 #
-# @param f function to differentiate
-# @param wrt character string naming the variable of differentiation
-# @param h size of the finite-difference step
-# @param av arguments to the function calling this
-# @section Numerical partials: These functions are not intended
-# for direct use. They just package up the numerical
-# differentiation process to make functions
-# returned by \code{numD} and
-# \code{D} easier to read.
-# 
+#' @param f function to differentiate
+#' @param wrt character string naming the variable of differentiation
+#' @param h size of the finite-difference step
+#' @param av arguments to the function calling this
+#' @section Numerical partials: These functions are not intended
+#' for direct use. They just package up the numerical
+#' differentiation process to make functions
+#' returned by \code{numD} and
+#' \code{D} easier to read.
+#' 
+#' @rdname numD
+#' @export
 numerical.first.partial = function(f,.wrt,h,av) {
   H <- setInterval(as.list(av), .wrt, h)
   (do.call( f, H$R,quote=TRUE ) - do.call(f, H$L,quote=TRUE))/(2*h)
@@ -181,19 +184,23 @@ numerical.first.partial = function(f,.wrt,h,av) {
 # @note Not for direct use. This just packages up the numerical
 # differentiation process to make functions returned by \code{numD} and
 # \code{D} easier to read.
+#' @rdname numD
+#' @export
 numerical.second.partial = function(f,.wrt,h,av) {
   H <- setInterval(as.list(av), .wrt, h)
   (do.call( f, H$R ) + do.call(f, H$L) - 2*do.call(f, H$C))/(h^2)
 }
 #
-# @param f function to differentiate
-# @param var1 character string naming the first variable of differentiation
-# @param var2 character string naming the second variable of differentiation
-# @param h size of the finite-difference step
-# @param av arguments to the function calling this
-# @note Not for direct use. This just packages up the numerical
+#' @param f function to differentiate
+#' @param var1 character string naming the first variable of differentiation
+#' @param var2 character string naming the second variable of differentiation
+#' @param h size of the finite-difference step
+#' @param av arguments to the function calling this
+#' @note Not for direct use. This just packages up the numerical
 # differentiation process to make functions returned by \code{numD} and
 # \code{D} easier to read.
+#' @rdname numD
+#' @export
 numerical.mixed.partial = function(f,var1,var2,h,av){
   H <- setCorners(as.list(av), var1, var2, h)
   (do.call(f, H$RU) + do.call(f, H$LB) - (do.call(f, H$RB) + do.call(f, H$LU)))/(4*h^2)

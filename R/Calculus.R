@@ -116,7 +116,7 @@ D.formula <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
     if( inherits(res, "try-error") ) # second symbolic attempt unsuccessful
       res = numD( tilde, ..., .hstep=.hstep, add.h.control=add.h.control)
   }
-  environment(res) = tildeEnv # function should refer to environment of the formula
+  
   res <- conventional_argument_order(res) %>% bind_params(args)
   return(simplify_fun(res))
 }

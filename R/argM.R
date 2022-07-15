@@ -13,7 +13,7 @@ argM <- function(tilde, domain) {
   f <- makeFun(tilde, 
                suppress.warnings = TRUE,
                strict.declaration = FALSE, 
-               use.environment = FALSE)
+               use.environment = TRUE)
   if (length(vars) == 1) {
     # single variable optimization
     mins <- optimize(f, range(domain))

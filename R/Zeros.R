@@ -19,9 +19,7 @@
 #' @export
 Zeros <- function(tilde, domain=NULL, nsegs=131, ...) {
 
-  f <- makeFun(tilde, ..., 
-               suppress.warnings=TRUE,
-               strict.declaration = FALSE, use.environment = FALSE)
+  f <- makeFun(tilde, ...,  suppress.warnings=TRUE)
   unbd <- unbound(f)
   if (length(unbd) > 1) 
     stop(paste("Must give numerical values for all parameters.", 
@@ -37,11 +35,12 @@ Zeros <- function(tilde, domain=NULL, nsegs=131, ...) {
   foundx <- rep(NA, nsegs)
   foundfx <- rep(NA, nsegs)
   for (k in 2:length(xpts)) {
-    raw <- try(uniroot(f, c(xpts[k-1], xpts[k])),
+    raw_ans <- try(uniroot(f, c(xpts[k-1], xpts[k])),
                silent = TRUE)
-    if (inherits(raw, "try-error")) next
-    foundx[k] <- raw$root
-    foundfx[k] <- raw$f.root
+    if (!inherits(raw_ans, "try-error")) {
+      foundx[k] <- raw_ans$root
+      foundfx[k] <- raw_ans$f.root
+    }
   }
 
   result <- tibble::tibble(

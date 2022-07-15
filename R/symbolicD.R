@@ -56,6 +56,7 @@ symbolicD <- function(tilde, ..., .order) {
     # are included, even if they are not mentioned in the tilde
     # The length(left) <= 2 makes sure it's a function of at most one argument
     inside <- get(left[[1]]) # function being called
+    if (inherits(body(inside), "{")) stop("Can't work with multi-line function.")
     if (is.function(inside)) old_formals <- formals(inside)
     else old_formals = list()
     missing_args <- setdiff(names(old_formals), c(all.vars(left), "pi"))
@@ -78,7 +79,7 @@ symbolicD <- function(tilde, ..., .order) {
   fun <- do.call(makeFun, c(tilde, dots, 
                             list(suppress.warnings=TRUE,
                                  strict.declaration  = FALSE, 
-                                 use.environment = FALSE)))
+                                 use.environment = TRUE)))
   
   dfun <- Deriv::Deriv(fun, x=vars[1])
     

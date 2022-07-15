@@ -2,9 +2,18 @@
 % Please edit documentation in R/numD.R
 \name{numD}
 \alias{numD}
+\alias{numerical.first.partial}
+\alias{numerical.second.partial}
+\alias{numerical.mixed.partial}
 \title{Numerical Derivatives}
 \usage{
 numD(formula, ..., .hstep = NULL, add.h.control = FALSE)
+
+numerical.first.partial(f, .wrt, h, av)
+
+numerical.second.partial(f, .wrt, h, av)
+
+numerical.mixed.partial(f, var1, var2, h, av)
 }
 \arguments{
 \item{formula}{a mathematical expression (see examples and \code{\link{plotFun}})}
@@ -14,6 +23,18 @@ numD(formula, ..., .hstep = NULL, add.h.control = FALSE)
 \item{.hstep}{numerical finite-difference step (default is 1e-6 or 1e-4 for first and second-order derivatives, respectively)}
 
 \item{add.h.control}{arranges the returned function to have a \code{.hstep} argument that can be used to demonstrate convergence and error}
+
+\item{f}{function to differentiate}
+
+\item{h}{size of the finite-difference step}
+
+\item{av}{arguments to the function calling this}
+
+\item{var1}{character string naming the first variable of differentiation}
+
+\item{var2}{character string naming the second variable of differentiation}
+
+\item{wrt}{character string naming the variable of differentiation}
 }
 \value{
 a function implementing the derivative as a finite-difference approximation
@@ -35,7 +56,17 @@ if taking a second derivative, much better to do it in one step to preserve nume
 }
 \note{
 WARNING: In the expressions, do not use variable names beginning with a dot, particularly \code{.f} or \code{.h}
+
+Not for direct use. This just packages up the numerical
 }
+\section{Numerical partials}{
+ These functions are not intended
+for direct use. They just package up the numerical
+differentiation process to make functions
+returned by \code{numD} and
+\code{D} easier to read.
+}
+
 \examples{
 g = numD( a*x^2 + x*y ~ x, a=1)
 g(x=2,y=10)

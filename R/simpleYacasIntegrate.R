@@ -7,7 +7,7 @@ simpleYacasIntegrate <- function(tilde, ...) {
   fun <- makeFun(tilde, ..., 
                  suppress.warnings=TRUE,
                  strict.declaration = FALSE, 
-                 use.environment = FALSE)
+                 use.environment = TRUE)
   vars <- all.vars(rlang::f_rhs(tilde), unique=FALSE)
   the_expression <- paste(fix_names_for_yacas(the_expression), collapse="")
 
