@@ -53,8 +53,19 @@ test_that("default values of parameters retained in the anti-derivative",{
   expect_that( formals(g)[["A"]], equals(10))
 })
 
+test_that("numerical derivatives work", {
+  g <- numD( a*x^2*y^2 ~ x, a=10) # numerical
+  expect_that( g(x=1:10,y=5), equals(500*(1:10),tol=.0001) )
+  g <- D( a*x^2*y^2 ~ x, a=10) # symbolic
+  expect_that( g(x=1:10,y=5), equals(500*(1:10),tol=.0000001) )
+  
+  numD(ff(x, y, a=20) ~ y)
+  numD(ff(x, y, a=20) ~ y & y)
+  # make sure arguments are in the right order internally
+})
+
 test_that("mixed partials work", {
-  g <- D( a*x^2*y^2 ~ x&y, a=10) # numerical
+  g <- numD( a*x^2*y^2 ~ x&y, a=10) # numerical
   expect_that( g(x=1:10,y=5), equals(10*2*2*(1:10)*5,tol=.0001) )
   g <- D( a*x^2*y^2 ~ x&y, a=10) # symbolic
   expect_that( g(x=1:10,y=5), equals(10*2*2*(1:10)*5,tol=.0000001) )
@@ -174,9 +185,9 @@ test_that("symbolic parameters are passed correctly",{
 })
 
 test_that("Derivatives can be iterated.",{
-  g <- numD( a*x^3 ~ x, a=10, .hstep=.001)
-  gg <- numD( g(y)~y, .hstep=.001 )
-  ggg <- numD( gg(x)~x, .hstep=.001 )
+  g <- numD( a*x^3 ~ x, a=10, .h=.001)
+  gg <- numD( g(y)~y, .h=.01 )
+  ggg <- numD( gg(x)~x, .h=.01 )
   expect_that(gg(3), equals(180, tol=.01))
   expect_that(ggg(3), equals(60, tol=.01))
 })
@@ -195,11 +206,6 @@ test_that("Vars. killed by differentiation remain arguments",{
   expect_that(g(f=2, h=1), equals(4,tol=0.0001))
 })
 
-test_that("add.h.control works",{
-  f <- mosaicCalc:::numD( sin(x)~x, add.h.control=TRUE)
-  expect_that(f(3, .hstep=1),
-              equals(-.83305,tol=0.0001))
-})
 
 test_that("symbolic derivative on simple function works",{
   f <- makeFun(x^2~x)

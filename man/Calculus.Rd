@@ -5,7 +5,7 @@
 \alias{antiD}
 \title{Derivative and Anti-derivative operators}
 \usage{
-D(tilde, ..., .hstep = NULL, add.h.control = FALSE)
+D(tilde, ...)
 
 antiD(tilde, ..., lower.bound = 0, force.numeric = FALSE, .tol = 1e-04)
 }
@@ -23,13 +23,6 @@ but with \code{x} replaced by the first argument of \code{f}.}
 See examples.#'  Note that in creating anti-derivative functions,
 default values of "from" and "to" can be assigned.  They are to be written with
 the name of the variable as a prefix, e.g. \code{y.from}.}
-
-\item{.hstep}{horizontal distance between points used for secant slope
-calculation in numerical derivatives.}
-
-\item{add.h.control}{logical indicating whether the returned derivative function
-should have an additional parameter for setting .hstep.  Meaningful only for numerical
-derivatives.}
 
 \item{lower.bound}{for numerical integration only, the lower bound used}
 

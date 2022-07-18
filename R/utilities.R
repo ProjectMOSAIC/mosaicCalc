@@ -30,10 +30,10 @@ formals_from_expr <- function(ex, others=character(0)) {
 }
 
 # re-arrange the formals to a function 
-conventional_argument_order <- function(fun) {
+conventional_argument_order <- function(fun, save_for_last=character(0)) {
   args <- formals(fun)
-  new_arrangement <- sort_args_by_convention(names(args))
-  new_args <- args[new_arrangement]
+  new_arrangement <- sort_args_by_convention(setdiff(names(args), save_for_last))
+  new_args <- args[c(new_arrangement, save_for_last)]
   formals(fun) <- new_args
   
   fun

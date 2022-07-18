@@ -6,7 +6,7 @@
 #' @rdname Calculus
 #' @importFrom stats runif uniroot optimize median as.formula na.omit integrate optim quantile
 #' @importFrom mosaicCore rhs lhs makeFun parse.formula
-#' @importFrom mosaic inferArgs expandFun fitModel spliner
+#' @importFrom mosaic inferArgs expandFun fitModel spliner 
 #' @importFrom MASS fractions
 #' @importFrom dplyr bind_rows
 #' @importFrom Deriv Deriv
@@ -28,20 +28,10 @@
 #'   The expression can contain unbound variables.  Functions
 #'   will be differentiated as if the formula {f(x) ~ x} were specified
 #'   but with \code{x} replaced by the first argument of \code{f}.
-#'
-#'
 #' @param \dots Default values to be given to unbound variables in the expression \code{expr}.
 #' See examples.#'  Note that in creating anti-derivative functions,
 #' default values of "from" and "to" can be assigned.  They are to be written with
 #' the name of the variable as a prefix, e.g. \code{y.from}.
-#'
-#' @param .hstep  horizontal distance between points used for secant slope
-#'   calculation in numerical derivatives.
-#'
-#' @param add.h.control logical indicating whether the returned derivative function
-#'   should have an additional parameter for setting .hstep.  Meaningful only for numerical
-#'   derivatives.
-#'   
 #' @param .tol Tolerance for numerical integration. Unless you know what this means, don't
 #' use this argument.
 #'
@@ -82,13 +72,13 @@
 #' f <- makeFun(x^2~x)
 #' D(f(cos(z))~z) #will look in user functions also
 #' @export
-D <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
+D <- function(tilde, ...){
     UseMethod("D")
 }
 
 #'
 #' @export
-D.default <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
+D.default <- function(tilde, ...){
   # Defer to stats::D()
   tryCatch( return( stats::D(tilde, ...) ), error=function(e) {}  )
   stop( paste("First argument should be a formula that explicitly identifies the",
@@ -98,7 +88,7 @@ D.default <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
 
 #'
 #' @export
-D.formula <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
+D.formula <- function(tilde, ...){
   
   tildeEnv = environment(tilde) # where was the formula made?
   #Try to construct a symbolic derivative
@@ -114,7 +104,7 @@ D.formula <- function(tilde, ..., .hstep=NULL,add.h.control=FALSE){
     args <- inline_results$args
     res = try(symbolicD(newformula, ...), silent=TRUE)
     if( inherits(res, "try-error") ) # second symbolic attempt unsuccessful
-      res = numD( tilde, ..., .hstep=.hstep, add.h.control=add.h.control)
+      res = numD( tilde, ...)
   }
   
   res <- conventional_argument_order(res) %>% bind_params(args)
@@ -190,7 +180,7 @@ makeNumericalAntiD <- function(tilde, wrt, lower.bound, .tol, ...) {
   names(intC_list) <- intC
 
   # Note: No comma after {assign} in the next line
-  command <- glue::glue("{{F <- makeF({capture.output(tilde)[1]}); evalFun(F, {assign}.const={intC})}}")
+  command <- glue::glue("{{F <- makeF({capture.output(tilde[[2]])}); evalFun(F, {assign}.const={intC})}}")
   
   .F <- create_num_antiD(tilde, ..., lower = lower.bound, .tol=0.0001)
   makeF <- function(tilde) .F # very, very simple. Just hides .F
