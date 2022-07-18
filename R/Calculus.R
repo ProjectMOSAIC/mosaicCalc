@@ -6,7 +6,7 @@
 #' @rdname Calculus
 #' @importFrom stats runif uniroot optimize median as.formula na.omit integrate optim quantile
 #' @importFrom mosaicCore rhs lhs makeFun parse.formula
-#' @importFrom mosaic inferArgs expandFun fitModel spliner 
+#' @importFrom mosaic inferArgs expandFun fitModel spliner connector
 #' @importFrom MASS fractions
 #' @importFrom dplyr bind_rows
 #' @importFrom Deriv Deriv

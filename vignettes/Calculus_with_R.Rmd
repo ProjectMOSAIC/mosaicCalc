@@ -16,8 +16,36 @@ library(mosaicCalc)
 library(ggformula)
 ```
 
+This document is intended to guide students or instructors who are beginners with R and who want to learn how to perform calculus operations. The document describes the use of the "R package" called `{mosaicCalc}`. The package provides software with a unified and consistent user interface for the calculus operations. It was developed specifically to support the [*MOSAIC Calculus*](dtkaplan.github.io/MC2) textbook, available freely online. However, instructors and other textbooks can and do use `{mosaicCalc}` independently of *MOSAIC Calculus*.
 
-The `mosaicCalc` package provides basic functions for computing derivatives and anti-derivatives, as well as for integrating ordinary differential equations. It is designed for teaching calculus. 
+R, as you may know, is an environment and language for technical computing. It's most widely associated with data science and statistics, but it is also well suited to calculus. R is widely used in many diverse fields. This results, in part, from the "open source" nature of the R environment. An aspect of "open source" is that anyone can contribute new capabilities to the environment. Those new capabilities are typically provided in a officially standardized format called an "R package." There are thousands of such packages available through the official distribution network, called CRAN. `{mosaicCalc}` is one of those packages and works in conjunction with other CRAN packages.
+
+As you can see from the previous two paragraphs, we are using a `monospaced font` when referring to names that are part of the computer system. Many of the names you will encounter, like `D()`, `antiD()`, and `Integrate()` will be names of "functions" that allow you to perform computations such as differentiation and integration. `{mosaicCalc}` is not a function. Rather it is a *collection* of functions that inter-operate and follow similar conventions. The written for name is written inside curly braces as a reminder to the human reader that `{mosaicCalc}` is a collection of functions. 
+
+To use `{mosaicCalc}` successfully, you need to learn 
+
+- a small set of simple **object types**, such as "tilde expressions," "functions," and "bounds."
+- a few **functions** that carry out calculus and other mathematical operations, graphing, etc.
+- how to construct **commands** that tell the R environment to set up and carry out the operations used to apply calculus to the settings of interest in your chosen field.
+
+## Tilde expressions
+
+
+## Functions
+
+
+## Bounds
+
+
+## Graphing
+
+
+
+
+
+The `{mosaicCalc}` package provides R functions for computing derivatives and anti-derivatives, graphics, zero-finding (often called "solving"), numerical optimization, and integrating ordinary differential equations. It is designed for teaching calculus. 
+
+
 
 `mosaicCalc` extends the `mosaic` package. Graphics capabilities for displaying functions built with `mosaicCalc` are provided by `mosaic`, `ggformula`, and related packages.
 

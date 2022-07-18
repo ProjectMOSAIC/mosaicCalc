@@ -66,9 +66,14 @@ traj_plot <- function(..., npts=500, nt=5) {
   
   DF <- eval_tilde_on_domain(tilde, dom, npts, dots, soln ) 
   
+  time_span <- range(DF[[1]])
   
-  tick_times <- tibble(x = pretty(range(DF[[1]]), n = nt))
-  names(tick_times) <- names(DF)[1]
+  tick_times <- pretty(time_span, n = nt)
+  N <- length(tick_times)
+  if (tick_times[[1]] <- min(time_span)) tick_times[1] <- min(time_span)
+  if (tick_times[[N]] <- max(time_span)) tick_times[N] <- max(time_span)
+  tick_times <- tibble(x=tick_times) # any name will do
+  names(tick_times) <- names(DF)[1] # ... because we change it here
 
   Ticks <- eval_tilde_on_domain(tilde, tick_times, npts, dots, soln ) 
   Ticks$label <- tick_times[[1]]

@@ -91,7 +91,7 @@ Several things to point out about `bounds()` and its use ...
 6. In every `{mosaicCalc}` function that requires a region be specified, the call to `bounds()` must come *immediately* after the tilde expression(s). 
 7. For backwards compatibility, `domain()` has been made a synonym for `bounds()`. `domain()` was used in a previous development version of `mosaicCalc` which was never published to CRAN. 
 
-## One- and two-sided tilde expressions
+## Varied structures of tilde expressions
 
 Many R users encounter statistical functions such as `lm()` that take as a first argument a tilde expression. For instance, the statement
 
@@ -129,15 +129,144 @@ More typically, if you want to specify the order of the arguments, you would use
 
 2. Context: **Graph a function** with, e.g., `slice_plot()` or `contour_plot()`. The left side is a formula and the right side specifies the variable or variables *with respect to which* the graph is to be made. For instance, in graphing $mx + b$ against $x$, the appropriate tilde expression is `m*x + b ~ x`. 
 
-3. Context: **Differentiation** or **Integration**. These operations always involve a "with respect to variable." Classically, differentation of $f()$ with respect to $x$ is written $df/dx$ and integration is written $\int f(x) dx$.  Neither of these notations is naturally suited to the creation of computer commands by keyboard, so `{mosaicCalc}` provides various operators such as `D()` and `antiD()` to carry out the calculation. Both of these accept tilde expressions where the left-hand side is a formula and the right-hand side is the "with respect to variable." For instance:
-
-
-YOU WERE WORKING TO inline antiD().
-
-Also, fix `tdur=` in the exercises to the textbook.
+3. Context: **Differentiation** or **Integration**. These operations always involve a "with respect to variable." Classically, differentation of $f()$ with respect to $x$ is written $df/dx$ and integration is written $\int f(x) dx$.  Neither of these notations is naturally suited to the creation of computer commands by keyboard, so `{mosaicCalc}` provides various operators such as `D()` and `antiD()` to carry out the calculation. Both of these accept tilde expressions where the left-hand side is a formula and the right-hand side is the with-respect-to variable. For instance:
 
 ```{r}
+# Defining a function
 g <- makeFun(1/x ~ .)
-D(f(x) ~ x)
-antiD(f(x) ~ x)
+# Differentiation
+D(g(x) ~ x)
+D(g(x) ~ x & x) # 2nd derivative
+# Integration
+antiD(g(x) ~ x)
 ```
+
+4. Context: **Paths** or **Parametric plots**. The `{mosaicCalc}` `traj_plot()` function can plot out a path in $(x,y)$ space when the functions $x(t)$ and $y(t)$ are available. Often, these are called "parametric plots" where, in this example, the parameter is $t$. Another term in use is "trajectory." The left-hand side of the tilde expression is $y(t)$, as with `slice_plot()`. The right-hand side of the tilde expression is $x(t)$. Note that the ordinary slice plot is equivalent to the tilde expression `y(t) ~ t`. (Unlike the slice plot, `traj_plot()` will mark discrete values of `t` along the path.)
+
+```{r}
+x <- spliner(x ~ t, data = Robot_stations) # makes a function from data
+y <- spliner(y ~ t, data = Robot_stations) # ditto
+traj_plot(y(t) ~ x(t), domain(t=1:16))
+```
+
+5. Context: **Vector fields** and **ODEs**.
+
+A vector field is the assignment of a vector to each point in a region of space. Since `{mosaicCalc}` graphics are two-dimensional, specifying a vector field is a matter of defining functions giving the two components of the vectors. This is done by specifying **two** tilde expressions, one for each component of the vector. Like this: 
+
+```{r}
+vectorfield_plot(-y ~ x & y, x ~ x & y, domain(x=-1:1, y=-1:1))
+```
+
+The first tilde expression specifies the first component of the vector, the second tilde expression gives the second component. The function itself is on the left-hand side of the tilde expression. The right side names the two inputs to those functions, as with `contour_plot()`. 
+
+6. Context: **Differential equations**. The workhorse function for solving ordinary differential equations in `{mosaicCalc}` is `integrateODE()`. ODEs
+can involve multiple dynamical variables. For `integrateODE()`, each dynamical variable must have its own tilde expression. These tilde expression have a distinctive format.
+
+The left-hand side will be the letter "d" preceeding the name of a dynamical variable. The right-hand side will be the function of the dynamical variables that gives the time derivative of the variable indicated by the left-hand side. There must be as many tilde expressions as there are dynamical variables, one tilde expression for each variable. For example, here are the famous Lorenz equations from chaos theory, with state variables $x$, $y$, and $z$.
+
+
+```{r}
+T1 <- integrateODE(dx ~ sigma*(y-x),    # x dynamics
+                   dy ~(x*(rho-z) - y), # y dynamics
+                   dz ~ (x*y - beta*z), # z dynamics
+                   domain(t=0:10), 
+                   x=-5, y=-7, z=19.4,  # initial conditions
+                   rho=28, sigma=10, beta = 8/3) # parameters
+traj_plot(z(t) ~ y(t), T1, npts=1000)   # T1 is the solution
+```
+
+## Parameters and binding
+
+Consider a function that might be written conventionally as $$f(x) \equiv a x^2 + b x + c\ .$$
+According to the convention, $x$ is the *input* and $a, b, c$ are parameters. Many instructors will want to teach this convention to their students. This section is not about the virtues or demerits of the convention, but only about the implementation in `{mosaicCalc}`.
+
+The `{mosaicCalc}` principle is very simple: there is no operational distinction between inputs and parameters. This principle is not a statement about mathematical pedagogy. Instead, it reflects the desire to avoid having to teach the concept of "scope" in computing languages.
+
+Implementing in R the above function $f(x)$ in a natural way is accomplished with
+
+```{r}
+f <- makeFun(a*x^2 + b*x + c ~ .)
+f
+```
+
+Notice that `f()` has *four* arguments. What we conventionally call "parameters" are implemented as arguments.
+
+Often, parameters represent some physical constant. When this is the case, the user has a choice of writing the constant explicitly or representing it with a symbol. For instance, a function giving the y-position of a falling object might be written like this:
+
+```{r}
+y <- makeFun(-9.8*t^2/2 + v0*t + y0 ~ .)
+y
+```
+or like this:
+
+```{r}
+y <- makeFun(g*t^2/2 + v0*t + y0 ~ ., g=-9.8)
+y
+```
+The quantity 9.8 (m/s^2^) is the "acceleration due to gravity" near the surface of the Earth. This is typically named $g$. Physically, $v_0$ and $y_0$ stand for the initial vertical velocity and position respectively. In the second definition of `y()`, the value of $g$ is specified *outside of* the tilde expression. 
+
+We call parameters like $g$ **bound parameters** when a numerical value has been assigned to them outside the tilde expression. In contrast, **unbound parameters** are those to which no numerical value has been assigned. $v_0$ and $x_0$ are examples of unbound parameters. 
+
+As the `y()` examples show, you do not need to bind all parameters at the time you define a function. Similarly, you do not need to bind all parameters to undertake a **symbolic calculation**. For example, here is the velocity function $v_y(t)$ as derived from $y(t)$:
+
+```{r}
+v_y <- D(y(t) ~ t)
+v_y
+```
+
+For *numerical* operations, however, all parameters must be bound. Typically, `{mosaicCalc}` operations allow you to bind (or re-bind) parameters at any stage, and they keep track of the most recent bindings.  For instance, to find a zero crossing for  $v_y(t)$, we need to bind a numerical value to the parameter `v0`. Suppose that is to be $v_0 = 20$ m/s^2^. The calculation requires that a value be given to $v_0$, like this:
+
+```{r results=FALSE}
+Zeros(v_y(t, v0=20) ~ t, domain(t=0:20))
+```
+Or, if we wanted to know the situation on the moon, where the acceleration due to gravity is -1.6 m/s^2^, we write
+
+```{r}
+Zeros(v_y(t, v0=20, g=-1.6) ~ t, bounds(t=0:20))
+```
+
+Notice that the value of $g$ is specified in the arguments to $v_y()$. It will not work to bind the parameter $g$ to $v_y()$ in the numerical function. For instance, this generates an error:
+
+```{r error=TRUE}
+Zeros(v_y(t, v0=20, g=-1.6) ~ t, bounds(t=0:20))
+```
+
+A working alternative is to build the velocity function with the new, moon binding built in. Like this:
+
+```{r}
+v_y_on_moon <- D(y(t) ~ t, g=-1.6)
+v_y_on_moon
+```
+
+Then, with a default moon value for $g$ in `v_y_on_moon()`, we need only specify the initial velocity to find the zero crossing:
+
+```{r}
+Zeros(v_y_on_moon(t, v0=20) ~ t, bounds(t=0:20))
+```
+
+It is admittedly confusing that you can't bind arguments at the phase where a numerical evaluation is being done. The reason for this is technical, viz, a function $g()$ with bound parameters might be used in the construction of another function $f()$ without the parameter being explicitly mentioned in $f()$. Therefore, $f()$ will not "know" that the bound parameters even exist.
+
+The overall rule is that operations like `D()`, `antiD()`, and `makeFun()`, which **build** new functions can use the binding syntax (e.g. `D(y(t) ~ t, g=-1.6)`). Operations like `Zeros()` or `argM()` or `slice_plot()` which don't build functions cannot use the binding syntax. Instead, they have to set the parameter as an argument to the function in the tilde expression (e.g., `slice_plot(v_y(t, v0=20, g=-1.6) ~ t, bounds(t=0:20))`).
+
+## Argument order
+
+In R, creating functions that take multiple named inputs must impose an order on those inputs. That order can be a matter of personal preference. However, the tilde-expression interface provides little means to specify the input order. For example, suppose we have a function `accel()` which will depend on position `pos` and velocity `c`. Many people would prefer to have the function take `pos` first and `c` second. This is not what happens in the prefered use of `makeFun()`:
+
+```{r}
+accel <- makeFun(ballistics(pos, c) ~ .)
+accel
+```
+
+If you absolutely must have things your way, then you can declare the argument order explicitly by naming arguments in order on the right-hand side of the tilde expression:
+
+```{r}
+accel <- makeFun(ballistics(pos, c) ~ pos & c)
+accel
+```
+
+But in the case of `D()` and `antiD()`, the right-hand side of the tilde expression has another use: specifying the with-respect-to variable. Thus `D()` and `antiD()` need to have another way to determine the argument order.  They do this by adopting a **convention**. `makeFun()` also follows this convention when the right-hand side of the tilde expression is a single dot.
+
+The argument ordering convention gives preference to names with the traditional single letter: $x, y, t, u, v, w, z$ in that order. Any other names are sorted alphabetically after the single-letter special cases.
+
+A good practice, when there are multiple arguments to a function, is to evaluate the function using R's "named arguments". For example, `ballistics(pos=3, c=2)` will work whatever the order of the arguments in the definition of `ballistics`. 
+

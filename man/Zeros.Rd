@@ -4,7 +4,7 @@
 \alias{Zeros}
 \title{Finds zeros of a function within a specified domain}
 \usage{
-Zeros(tilde, domain = NULL, nsegs = 131, ...)
+Zeros(tilde, domain = NULL, nsegs = 131)
 }
 \arguments{
 \item{tilde}{tilde expression defining a function, suitable
@@ -14,8 +14,6 @@ for \code{makeFun()}}
 
 \item{nsegs}{Subdivide the domain into this many segments, looking for a zero
 in each of those segments. This helps to find multiple zeros.}
-
-\item{\dots}{assignments for parameters in the tilde expression}
 }
 \value{
 A data frame with two columns. The first has the name

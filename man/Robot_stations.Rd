@@ -3,17 +3,18 @@
 \docType{data}
 \name{Robot_stations}
 \alias{Robot_stations}
-\title{Waypoints on a path in two dimensions}
+\title{Waypoints on the path of a fictitious robot}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 16 rows and 3 columns.
+A data frame with 16 cases, each of which is an x-y location at the indicated time.
+\itemize{
+\item x,y X-Y location in mm
+\item t time in seconds
+}
 }
 \usage{
 Robot_stations
 }
 \description{
-Used as an example in \emph{MOSAIC Calculus} in the "Data-driven functions" chapter.
-}
-\details{
-A data frame with \code{x} and \code{y} components
+This is used in \emph{MOSAIC Calculus} examples about splining.
 }
 \keyword{datasets}

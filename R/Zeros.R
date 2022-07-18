@@ -5,7 +5,6 @@
 #' @param domain specification of domain, as in `slice_plot()`
 #' @param nsegs Subdivide the domain into this many segments, looking for a zero 
 #' in each of those segments. This helps to find multiple zeros.
-#' @param \dots assignments for parameters in the tilde expression
 #'
 #' @returns A data frame with two columns. The first has the name
 #' of the input in the tilde expression, and gives the values
@@ -17,9 +16,8 @@
 #' Zeros(a*x + b ~ x, a=1, b=2)
 #'
 #' @export
-Zeros <- function(tilde, domain=NULL, nsegs=131, ...) {
-
-  f <- makeFun(tilde, ...,  suppress.warnings=TRUE)
+Zeros <- function(tilde, domain=NULL, nsegs=131) {
+  f <- makeFun(tilde, suppress.warnings=TRUE) 
   unbd <- unbound(f)
   if (length(unbd) > 1) 
     stop(paste("Must give numerical values for all parameters.", 
