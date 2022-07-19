@@ -17,7 +17,7 @@ vectorfield_plot(
 }
 \arguments{
 \item{\dots}{(Optional: a previous graphics layer), formula for horizontal component, formula for vertical component,
-(optionally: a domain)}
+(optionally: a domain), (optionally: an object from `makeODE()``)}
 
 \item{npts}{number of arrows to draw in one row or column of the field.}
 

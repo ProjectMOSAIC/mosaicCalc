@@ -50,22 +50,28 @@ makeODE <- function(...) {
   args[dynInds] <- NULL # strip them out
   
   # form the dynamics from the tilde expressions
-  formInds <- which( sapply(args, function(x) inherits(x, 'formula') ) )
-  dnames <- c()
-  dfuns <- c()
-  for (k in seq_along(formInds) ) {
-    form = args[[formInds[k]]]
-    nm = form[[2]] # should be name type so double [[ ]]
-    if ( ! inherits(nm, "name") ) stop(paste("Invalid name on LHS of formula",nm))
-    nm = as.character(nm)
-    if (grep("^d",nm)!=1) stop("Dynamical variables must start with 'd'")
-    dnames[k] <- sub("^d","",nm) # character string with the name
-    dfuns[k] <- parse(text=form[3]) # an expression so single [ ]
+  if (length(args) > 0) {
+    formInds <- which( sapply(args, function(x) inherits(x, 'formula') ) )
+    dnames <- c()
+    dfuns <- c()
+    for (k in seq_along(formInds) ) {
+      form = args[[formInds[k]]]
+      nm = form[[2]] # should be name type so double the brackets [[ ]]
+      if ( ! inherits(nm, "name") ) stop(paste("Invalid name on LHS of formula",nm))
+      nm = as.character(nm)
+      if (grep("^d",nm)!=1) {
+        dnames[k] <- nm
+        warning("Dynamical variables should start with 'd'")
+      } else {
+        dnames[k] <- sub("^d","",nm) # character string with the name
+      }
+      dfuns[k] <- parse(text=form[3]) # an expression so single [ ]
+    }
+    Dyn_object$names <- c(Dyn_object$names, dnames)
+    Dyn_object$functions <- c(Dyn_object$functions, dfuns)
+    # Add these in to the return structure
+    args[formInds] <- NULL
   }
-  Dyn_object$names <- c(Dyn_object$names, dnames)
-  Dyn_object$functions <- c(Dyn_object$functions, dfuns)
-  # Add these in to the return structure
-  args[formInds] <- NULL
   
   # Get the domain, if any
   if (length(args) > 0) {
@@ -103,7 +109,7 @@ makeODE <- function(...) {
   Dyn_object$params <- Dyn_object$values[setdiff(names(Dyn_object$values), Dyn_object$names)]
   Dyn_object$vfun <- dyn_vector_fun(Dyn_object$functions, Dyn_object$names,
                                     Dyn_object$params)
-  
+    
   class(Dyn_object) <- c("list", "dynamics")
   
   return(Dyn_object)

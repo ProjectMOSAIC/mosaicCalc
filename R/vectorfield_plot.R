@@ -1,7 +1,7 @@
 #' Plot a vector field
 #'
 #' @param \dots (Optional: a previous graphics layer), formula for horizontal component, formula for vertical component,
-#' (optionally: a domain)
+#' (optionally: a domain), (optionally: an object from `makeODE()``)
 #' @param npts number of arrows to draw in one row or column of the field.
 #' @param color character string specifying the color of the arrows.
 #' @param alpha transparency of the arrots
@@ -34,7 +34,7 @@ gradient_plot <- function(..., # canonical first three arguments
   object <- args$gg
   tilde <- args$tilde
   domain <- args$domain
-  
+  # construct the tilde expressions
   vnames <- all.vars(tilde[[3]])
   xn <- vnames[1]
   yn <- vnames[2]
@@ -99,23 +99,31 @@ gradient_plot <- function(..., # canonical first three arguments
 vectorfield_plot <- function(..., # canonical first four arguments
                              npts=20, color="black", alpha = 0.5,
                              transform = sqrt) {
-  args <- first_three_args(..., two_tildes = TRUE)
+  args <- makeODE(...) # using makeODE() to handle the two tilde expressions
+  #args <- first_three_args(..., two_tildes = TRUE)
   # gives $tilde and $tilde2
-  object <- args$gg
-  formula_x <- args$tilde
-  formula_y <- args$tilde2
-  domain <- args$domain
+  Pprev <- args$Pprev # previous graphic layers
+  domain <- args$xydomain
+  # construct tilde expressions for the dynamics. 
+  # formula_x will be for the first variable in the domain
+  # formula_y will be for the second variable in the domain
+  formula_x <- formula_y <- left ~ right  # a framework for the tilde expr. 
+  formula_x[[2]] <- args$functions[[which(names(args$xydomain)[1] == args$names)]]
+  formula_y[[2]] <- args$functions[[which(names(args$xydomain)[2] == args$names)]]
+  formula_x[[3]] <- parse(text=paste(args$names, collapse="&"))[[1]]
+  formula_y[[3]] <- formula_x[[3]]
+ 
   
 
   
   # check whether to inherit domain from previous layer
-  if (inherits(object, "gg")) {
+  if (inherits(Pprev, "gg")) {
     if (is.null(domain)) {
       look_for <- all.vars(formula_x[[3]]) # the input variable names
-      if (all(look_for %in% names(object$data))) {
+      if (all(look_for %in% names(Pprev$data))) {
         domain <- list()
-        domain[[look_for[1]]] <- range(object$data[[look_for[1]]])
-        domain[[look_for[2]]] <- range(object$data[[look_for[2]]])
+        domain[[look_for[1]]] <- range(Pprev$data[[look_for[1]]])
+        domain[[look_for[2]]] <- range(Pprev$data[[look_for[2]]])
       } else {
         stop("Must specify domain or use same x/y variables as previous layer.")
       }
@@ -129,8 +137,8 @@ vectorfield_plot <- function(..., # canonical first four arguments
   dy <- environment(formula_y)$dy
   
   # Check that there are no unbound parameters in the two functions
-  test_x <- makeFun(formula_x) %>% bind_params(args$dots)
-  test_y <- makeFun(formula_y) %>% bind_params(args$dots)
+  test_x <- makeFun(formula_x) %>% bind_params(args$params)
+  test_y <- makeFun(formula_y) %>% bind_params(args$params)
   still_unbound <- setdiff(
     c(unbound(test_x), unbound(test_y)),
     names(domain)
@@ -142,11 +150,11 @@ vectorfield_plot <- function(..., # canonical first four arguments
     stop(msg)
   }
   
-  grid <- eval_on_domain(formula_x, domain, n=npts, args$dots)
+  grid <- eval_on_domain(formula_x, domain, n=npts, args$params)
   input_names <-  names(grid)
   input_names <- input_names[input_names != ".output."]
   grid$dx <- grid$.output.
-  grid$dy <- eval_on_domain(formula_y, domain, n=npts, args$dots)$.output.
+  grid$dy <- eval_on_domain(formula_y, domain, n=npts, args$params)$.output.
   # Now everything is in grid
 
   # Scale length according to <transform> argument
@@ -167,13 +175,15 @@ vectorfield_plot <- function(..., # canonical first four arguments
   grid$x_end <- grid[[1]] + x_length
   grid$y_end <- grid[[2]] + y_length
 
-  if (is.null(object))
-    object <- ggplot(data=grid, 
-                     aes(x = x_start,
-                         y = y_start,
-                         xend = x_end, yend = y_end))
-
-  P <- object
+  # Construct basis for the graphics or use the graphics layer piped in
+  if (is.null(Pprev)) {
+    P <- ggplot(data=grid, 
+                aes(x = x_start,
+                    y = y_start,
+                    xend = x_end, yend = y_end))
+  } else {
+    P <- Pprev
+  }
 
   P + geom_segment(data=grid, 
                    aes(x = x_start,
