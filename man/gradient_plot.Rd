@@ -17,8 +17,9 @@ vectorfield_plot(
 )
 }
 \arguments{
-\item{\dots}{(Optional: a previous graphics layer), formula for horizontal component, formula for vertical component,
-(optionally: a domain), (optionally: an object from `makeODE()``)}
+\item{\dots}{(Optional: a previous graphics layer), tilde expressions for horiz and vertical
+component of vectors, a domain (if not inherited from the graphics layer). The tilde expressions
+should be in the same style as for \code{makeODE()}. See details.}
 
 \item{npts}{number of arrows to draw in one row or column of the field.}
 
@@ -34,6 +35,13 @@ vectorfield_plot(
 Plot a vector field
 }
 \details{
+There will be one tilde expression for the horizontal component of the vector and another tilde
+expression for the vertical component. Suppose the horizontal axis is called u and the vertical axis is called
+v, as would be established by a bounds specification like \code{bounds(u=-1:1, v=-1:1)}. Then the horizontal
+tilde expression \strong{must} have a left side called \verb{u ~}. Similarly, the vertical
+tilde expression will have a left side called \verb{v ~}. On the right side of the tilde expressions
+will go the formulas for the respective components of the vectors, e.g. \code{u ~ sin(u-v)} and \code{v ~ v*u^2}.
+
 Typically, the length of the arrows is not meaningful in the units of the
 horizontal or vertical axis. For instance, in a gradient plot of f(x,y), the axis is in units of x, but
 the gradient component has units of f(x,y)/x. Similarly for the flow of a differential
@@ -47,9 +55,10 @@ be drawn somewhat longer. If you want the natural scaling instead, use \code{tra
 want to make the arrows even more similar in length. Then use, for instance \code{transform=function(L) L^0.1}
 }
 \examples{
-gradient_plot(x * sin(y) ~ x & y, domain(x=-1:1, y=-1:1), transform=I)
-vectorfield_plot(-y ~ x & y, x ~ x & y, domain(x=-1:1, y=-1:1))
+gradient_plot(x * sin(y) ~ x & y, bounds(x=-1:1, y=-1:1), transform=I)
+vectorfield_plot(x ~ -y, y ~ x, bounds(x=-1:1, y=-1:1))
 gf_label(0 ~ 0, label="center", color="red") \%>\%
-vectorfield_plot(-y ~ x & y, x ~ x & y, domain(x=-1:1, y=-1:1))
-vectorfield_plot(-y ~ x & y, x ~ x & y, domain(x=-1:1, y=-1:1), transform=function(x) x^0.2 )
+vectorfield_plot(x ~ -y, y ~ x, bounds(x=-1:1, y=-1:1), transform=function(x) x^0.2 )
+vectorfield_plot(u ~ sin(u-v), v ~ v*u^2, bounds(u=0:1, v=-1:1))
+ 
 }

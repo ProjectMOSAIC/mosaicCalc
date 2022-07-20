@@ -9,7 +9,7 @@ Description: Software to support the introductory *MOSAIC Calculus*
     applied linear algebra (for data science), and differential equations/dynamics.
     Includes `{ggformula}`-based graphics for graphing functions, vector fields, trajectories, etc.
     The software is suitable for general use, but mainly intended for teaching calculus.
-Version: 0.5.9
+Version: 0.6.0
 Depends:
     R (>= 3.5.0),
 Imports:

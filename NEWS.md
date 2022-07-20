@@ -58,5 +58,9 @@
   * Improved checking for unbound parameters in graphics functions slice_plot(), contour_plot(), vectorfield_plot(), and gradient_plot().
   * Added ability to bind or re-bind parameters in those graphics functions calls.
   * Exported bind_params(), perhaps useful for demonstrations of difference between arguments and parameters in mathematical functions.
+
+## mosaicCalc 0.6.0
+
+  * Updated vignette and added two new vignettes: an instructor-facing guide and a quick reference.
   
   
