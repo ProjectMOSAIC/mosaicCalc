@@ -1,13 +1,23 @@
 #' Plot a vector field
 #'
-#' @param \dots (Optional: a previous graphics layer), formula for horizontal component, formula for vertical component,
-#' (optionally: a domain), (optionally: an object from `makeODE()``)
+#' @param \dots (Optional: a previous graphics layer), tilde expressions for horiz and vertical
+#' component of vectors, a domain (if not inherited from the graphics layer). The tilde expressions
+#' should be in the same style as for `makeODE()`. See details.
 #' @param npts number of arrows to draw in one row or column of the field.
 #' @param color character string specifying the color of the arrows.
 #' @param alpha transparency of the arrots
 #' @param transform controls the relative length of the arrows. See details.
+#' @param env Not for end-users. Handles details of where things are defined.
 #'
-#' @details Typically, the length of the arrows is not meaningful in the units of the
+#' @details There will be one tilde expression for the horizontal component of the vector and another tilde 
+#' expression for the vertical component. Suppose the horizontal axis is called u and the vertical axis is called
+#' v, as would be established by a bounds specification like `bounds(u=-1:1, v=-1:1)`. Then the horizontal
+#' tilde expression **must** have a left side called `u ~`. Similarly, the vertical 
+#' tilde expression will have a left side called `v ~`. On the right side of the tilde expressions
+#' will go the formulas for the respective components of the vectors, e.g. `u ~ sin(u-v)` and `v ~ v*u^2`. 
+#'  
+#' 
+#' Typically, the length of the arrows is not meaningful in the units of the
 #' horizontal or vertical axis. For instance, in a gradient plot of f(x,y), the axis is in units of x, but
 #' the gradient component has units of f(x,y)/x. Similarly for the flow of a differential
 #' equation. Nonetheless, the relative lengths of the arrows, one to another, does have meaning.
@@ -20,11 +30,12 @@
 #' want to make the arrows even more similar in length. Then use, for instance `transform=function(L) L^0.1`
 #'
 #' @examples
-#' gradient_plot(x * sin(y) ~ x & y, domain(x=-1:1, y=-1:1), transform=I)
-#' vectorfield_plot(-y ~ x & y, x ~ x & y, domain(x=-1:1, y=-1:1))
+#' gradient_plot(x * sin(y) ~ x & y, bounds(x=-1:1, y=-1:1), transform=I)
+#' vectorfield_plot(x ~ -y, y ~ x, bounds(x=-1:1, y=-1:1))
 #' gf_label(0 ~ 0, label="center", color="red") %>%
-#' vectorfield_plot(-y ~ x & y, x ~ x & y, domain(x=-1:1, y=-1:1))
-#' vectorfield_plot(-y ~ x & y, x ~ x & y, domain(x=-1:1, y=-1:1), transform=function(x) x^0.2 )
+#' vectorfield_plot(x ~ -y, y ~ x, bounds(x=-1:1, y=-1:1), transform=function(x) x^0.2 )
+#' vectorfield_plot(u ~ sin(u-v), v ~ v*u^2, bounds(u=0:1, v=-1:1))
+#'  
 #' @export
 gradient_plot <- function(..., # canonical first three arguments
                           #object=NULL, formula, domain,
@@ -65,17 +76,17 @@ gradient_plot <- function(..., # canonical first three arguments
   # Make sure dx() and dy() are functions only of the domain names <xn> & <yn>
   horiz_formula <-
     as.formula(
-      glue::glue("dx({xn}={xn}, {yn}={yn}) ~ {xn} + {yn}")
+      glue::glue("d{xn} ~ dx({xn}={xn}, {yn}={yn})")
     )
   vert_formula <-
     as.formula(
-      glue::glue("dy({xn}={xn}, {yn}={yn}) ~ {xn} + {yn}")
+      glue::glue("d{yn} ~ dy({xn}={xn}, {yn}={yn})")
     )
   
   # check whether to inherit domain from previous layer
   if (inherits(object, "gg")) {
     if (is.null(domain)) {
-      look_for <- all.vars(horiz_formula[[3]]) # the input variable names
+      look_for <- c(all.vars(horiz_formula[[2]], all.vars(vert_formula[[2]]))) # the input variable names
       if (all(look_for %in% names(object$data))) {
         domain <- list()
         domain[[look_for[1]]] <- range(object$data[[look_for[1]]])
@@ -92,13 +103,14 @@ gradient_plot <- function(..., # canonical first three arguments
                    domain = domain, 
                    npts = npts,
                    color=color, alpha=alpha,
-                   transform=transform)
+                   transform=transform, 
+                   env=environment(horiz_formula))
 }
 #' @rdname gradient_plot
 #' @export
 vectorfield_plot <- function(..., # canonical first four arguments
                              npts=20, color="black", alpha = 0.5,
-                             transform = sqrt) {
+                             transform = sqrt, env=NULL) {
   args <- suppressMessages(makeODE(...)) # using makeODE() to handle the two tilde expressions
   #args <- first_three_args(..., two_tildes = TRUE)
   # gives $tilde and $tilde2
@@ -112,6 +124,11 @@ vectorfield_plot <- function(..., # canonical first four arguments
   formula_y[[2]] <- args$functions[[which(names(args$xydomain)[2] == args$names)]]
   formula_x[[3]] <- parse(text=paste(args$names, collapse="&"))[[1]]
   formula_y[[3]] <- formula_x[[3]]
+  
+  if (is.environment(env)) {
+    environment(formula_x) <- env
+    environment(formula_y) <- env
+  }
  
   
 

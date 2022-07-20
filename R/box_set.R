@@ -54,7 +54,7 @@ box_set <- function(tilde = NULL, domain, n=10, sum=FALSE, dx=NULL) {
 
   FUN <- makeFun(tilde)
 
-  if (!is.list(domain)) stop("Domain must be a named list, as in Integrate() or contour_plot().")
+  if (!is.list(domain)) stop("Bounds must be a named list, as in Integrate() or contour_plot().")
   nms <- names(domain)
   if (length(domain) == 1) {
     if (is.null(dx))

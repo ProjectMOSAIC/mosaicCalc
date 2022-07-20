@@ -7,7 +7,7 @@
 integrateODE(...)
 }
 \arguments{
-\item{\ldots}{A dynamics object (see \code{makeODE()}) and/or arguments giving additional formulas for dynamics in other variables,
+\item{\dots}{A dynamics object (see \code{makeODE()}) and/or arguments giving additional formulas for dynamics in other variables,
 assignments of parameters, assignments of initial conditions, the start and end times of the
 integration (through \code{domain()}), and the step size (through \verb{dt=}).}
 }

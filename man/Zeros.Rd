@@ -4,13 +4,15 @@
 \alias{Zeros}
 \title{Finds zeros of a function within a specified domain}
 \usage{
-Zeros(tilde, domain = NULL, nsegs = 131)
+Zeros(tilde, domain = NULL, ..., nsegs = 131)
 }
 \arguments{
 \item{tilde}{tilde expression defining a function, suitable
 for \code{makeFun()}}
 
 \item{domain}{specification of domain, as in \code{slice_plot()}}
+
+\item{\dots}{Assignments to parameters}
 
 \item{nsegs}{Subdivide the domain into this many segments, looking for a zero
 in each of those segments. This helps to find multiple zeros.}

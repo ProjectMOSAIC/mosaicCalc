@@ -3,6 +3,7 @@
 #' @param tilde tilde expression defining a function, suitable
 #' for `makeFun()`
 #' @param domain specification of domain, as in `slice_plot()`
+#' @param \dots Assignments to parameters
 #' @param nsegs Subdivide the domain into this many segments, looking for a zero 
 #' in each of those segments. This helps to find multiple zeros.
 #'
@@ -16,8 +17,8 @@
 #' Zeros(a*x + b ~ x, a=1, b=2)
 #'
 #' @export
-Zeros <- function(tilde, domain=NULL, nsegs=131) {
-  f <- makeFun(tilde, suppress.warnings=TRUE) 
+Zeros <- function(tilde, domain=NULL, ..., nsegs=131) {
+  f <- makeFun(tilde, suppress.warnings=TRUE) %>% bind_params(...)
   unbd <- unbound(f)
   if (length(unbd) > 1) 
     stop(paste("Must give numerical values for all parameters.", 

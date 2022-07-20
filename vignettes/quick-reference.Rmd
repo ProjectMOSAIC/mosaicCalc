@@ -18,6 +18,8 @@ knitr::opts_chunk$set(
 library(mosaic)
 library(ggformula)
 library(mosaicCalc)
+library(palmerpenguins)
+library(knitr)
 ```
 
 <details>
@@ -50,7 +52,7 @@ Before you can use `{mosaicCalc}`, you need to tell R to access the software. Th
 library(mosaicCalc)
 ``` 
 
-If you fail to do this, you will encounter an error message in this format
+If you fail to do this, when you start using `{mosaicCalc}` functions you will encounter an error message in this format
 ```
 Error in makeFun() : could not find function "makeFun"
 ```
@@ -139,19 +141,24 @@ A ***tilde expression*** is a special feature of R that let's you write down a m
 
 <details>
 <summary>Constructing your own mathematical functions</summary>
-* `g <- makeFun(2 + 3*x - 7*x^2 ~ x)`
+
+```{r echo=FALSE, results="hide"}
+g <- makeFun(2 + 3*x - 7*x^2 ~ .)
+```
+
+* `g <- makeFun(2 + 3*x - 7*x^2 ~ .)`
     - *What it does* Creates an R function named `g` corresponding to $g(x)\equiv 2 + 3x - 7\,x^2$
     - *Vocabulary* 
         - `makeFun()` is a ***function constructor***
         - The argument to `makeFun()` is a ***tilde expression***
     - *Notes*
-        - The name of the ***input*** goes on the right side of the tilde <span style="font-size: 30pt;">~</span>
+        - A tilde expression is always centered on the special character named  "tilde": <span style="font-size: 30pt;">~</span>. Tilde expressions have a right side and a left side. 
+        - For `makeFun()` the right side should be a simple period (`.`) 
         - Like all names, `makeFun()` is ***case sensitive***. So using `makefun` (note: lower-case `f` in `fun`) won't work.
         - If you use just the name of your function as a command, that is, `g`, you will get the output
-    ```    function (x) 
-
-    2 + 3 * x - 7 * x^2
-    <environment: 0x55d2ee828678>    ```* x^2
+    ```{r echo=FALSE} 
+    g
+    ```
 
     The first line tells you that you defined g as a function of x.  The second line tells the formula for it.  The third line is relevant only to advanced R programmers; you can ignore it. 
         
@@ -163,28 +170,28 @@ A ***tilde expression*** is a special feature of R that let's you write down a m
 <details>
 <summary>Graphing functions with a single input</summary>
 
-* `slice_plot(exp(x) ~ x, domain(x = -3 : 3))`
+* `slice_plot(exp(x) ~ x, bounds(x = -3 : 3))`
     - *What it does* Draws a graph of the function $e^x$ with the horizontal axis running from $-3 \leq x \leq 3$.
     - *Vocabulary* 
-        - The first argument is a ***tilde expression***. 
-        - The second argument specifies the ***domain*** to use in the graph, that is, the extent of the horizontal axis. This will **always** be in the form shown above: applying the `domain()` function to a ***named argument***.
-        - A named argument consists of two parts: a name and an R expression. In the example, the name is `x` and the R expression is $-3 : 3$. That R expression means "from -3 to 3." The colon (`:`) is essential punctuation; it's what separates grammatically the lower end of the domain from the upper end. (For experienced R users: If you prefer to use the form `c(-3,3)` instead of the colon, that works. For specialized R programmers: The ordinary integer orientation of `:` is suspended within `domain()` so the limits you give will be treated exactly.) 
+        - The first argument is a ***tilde expression***. This is a general pattern in `{mosaicCalc}` commands.
+        - The second argument specifies the ***bounds*** to use in the graph, that is, the extent of the horizontal axis. This will **always** be in the form shown above: applying the `bounds()` function to a ***named argument***.
+        - A named argument consists of two parts: a name and an R expression. In the example, the name is `x` and the R expression is $-3 : 3$. That R expression means "from -3 to 3." The colon (`:`) is essential punctuation; it's what separates grammatically the lower end of the bounds from the upper end. (For experienced R users: If you prefer to use the form `c(-3,3)` instead of the colon, that works. For specialized R programmers: The ordinary integer orientation of `:` is suspended within `bounds()` so the limits you give will be treated exactly.) 
         - The plotting function is called `slice_plot()` because we think of a function of one input as a slice of a multivariable surface, but we won’t get into that immediately.
     - *Notes*
         - Used as shown above, there will be **three consecutive closing parentheses** at the end of the command.
-        - The argument to `domain()` will always be named. That name should match the one on the right-hand side of the tilde expression. 
-        - You will always use `c()` to collect together the lower and upper bounds of the graphics domain. To graph the function from 0 to 10, you would replace the `c(-3,3)` with `c(0, 10)`.
+        - The argument to `bounds()` will always be named. That name should match the one on the right-hand side of the tilde expression. 
+        - You will always use `:` to collect together the lower and upper bounds of the graphics frame. To graph the function from 0 to 10, you would replace the `-3:3` with `0:10`.
         - The extent of the vertical axis, that is, the ***range***, is determined automatically.
     - *Useful additional arguments* 
         - You can draw the function in a color by adding an additional argument, e.g. `color="blue"`. To see the full list of named colors in R, give the command `colors()` in a sandbox. (You need the empty parentheses, otherwise you'll be shown the software underlying the list of colors.) Notice that the color should always be in quotes, e.g. `"green"` or `"darkorchid"`.
         - You can draw a thicker curve with the `size` argument, for instance `size=2`.
         - If you want the curve to be semi-transparent, for instance so that you can see another curve underneath, use the argument `alpha = 0.2`. The alpha value can range from 0.0 (completely invisible) to 1.0 (completely opaque).
     - *Common mistakes*
-        - If you type `slice_plot(exp(x)~x, domain(c(-3,3)))` (leaving out the name `x` inside `domain()`), you get an error of, "Domain involves 0 variables, but function has 1"
-        - If you type `slice_plot(exp(x)~x, domain(t=c(-3,3)))` (mismatching names in tilde expression and domain), you get an error of, "Domain has variable(s) t but function has argument(s) named x"
-        - If you type `slice_plot(exp(x), domain(x=c(-3,3)))` (forgetting the `~x` in the tilde expression), you get an error of, "object 'x' not found"
-        - If you type `slice_plot(exp(x)~x)`, you get an error of, "Domain must be specified when there is no preceeding layer."  Aside from the misspelling of preceding, this is telling the user that there wasn’t a previous graph to pull the domain from, so you need to specify the domain as an argument to `slice_plot()`.
-        - If you leave out a closing parenthesis, you will get the error of, "Error in parse(text = x, keep.source = TRUE) : <text>:4:0: unexpected end of input 2:…" 
+        - If you type `slice_plot(exp(x)~x, bounds(-3:3)))` (leaving out the name `x` inside `bounds()`), you get an error of, "Bounds involves 0 variables, but function has 1"
+        - If you type `slice_plot(exp(x)~x, bounds(t=-3:3))` (mismatching names in tilde expression and bounds), you get an error of, "Bounds has variable(s) t but function has argument(s) named x"
+        - If you type `slice_plot(exp(x), bounds(x=-3:3))` (forgetting the `~x` in the tilde expression), you get an error of, "object 'x' not found"
+        - If you type `slice_plot(exp(x)~x)`, you get an error of, "bounds must be specified when there is no preceeding layer."  Aside from the misspelling of preceding, this is telling the user that there wasn’t a previous graph to pull the bounds from, so you need to specify the bounds as an argument to `slice_plot()`.
+        - If you leave out a closing parenthesis, you will get the admittedly cryptic error of, "Error in parse(text = x, keep.source = TRUE) : <text>:4:0: unexpected end of input 2:…" 
 
 </details>
 <!---------------------------------->
@@ -192,16 +199,16 @@ A ***tilde expression*** is a special feature of R that let's you write down a m
 <summary>Drawing contour plots</summary>
 In *MOSAIC Calculus*, we generally use a contour-plot format to display graphically a function with two inputs. This is done in much the same way as `slice_plot()`.
 
-* `contour_plot(3 + 2*x - 4*y + 0.5*x*y ~ x & y, domain(x=-5 : 5), y=0 : 10))`
-    - *What it does* Draws a contour plot on a domain with two dimensions.
-    - *Vocabulary* Nothing here that you haven't seen in `slice_plot()`: tilde expression, domain, ...
+* `contour_plot(3 + 2*x - 4*y + 0.5*x*y ~ x & y, bounds(x=-5 : 5), y=0 : 10))`
+    - *What it does* Draws a contour plot in a graphics frame with two dimensions.
+    - *Vocabulary* Nothing here that you haven't seen in `slice_plot()`: tilde expression, bounds, ...
     - *Notes*
-        - The tilde expression names two inputs on the right-hand side. Those names should match the ones in the left-hand side and in the arguments to `domain()`.
+        - The tilde expression names two inputs on the right-hand side. Those names should match the ones in the left-hand side and in the arguments to `bounds()`.
         - The right-hand side of the tilde can be written either with `+` or `&`. Both have the same effect.
-        - There are **two arguments** to `domain()`, one for each of the two inputs to the function being plotted.
-        - The input represented on the horizontal axis is determined by the first name in the arguments to `domain()`. The vertical axis is set by the second name.
-        - The extent of the domain for one input doesn't need to match the extent for the other input. 
-    - *Useful additional arguments* After the tilde expression and the `domain()` statement, you can add additional named arguments, separated as always by commas, to customize your graph.
+        - There are **two arguments** to `bounds()`, one for each of the two inputs to the function being plotted.
+        - The input represented on the horizontal axis is determined by the first name in the arguments to `bounds()`. The vertical axis is set by the second name.
+        - The extent of the bounds for one input doesn't need to match the extent for the other input. 
+    - *Useful additional arguments* After the tilde expression and the `bounds()` statement, you can add additional named arguments, separated as always by commas, to customize your graph.
         - `skip = 0` Label every one of the contours, rather than the default of skipping one between labels.
         - `filled = FALSE` Don't color in the background. This is particularly useful when showing two or more graphical layers.
         - `contour_color = "blue"` (or any other color) Instead of using the function output level to determine the color of each contour, use just one color for all. This is useful when, for example, you want to show just the zero contour of each of two functions.
@@ -212,7 +219,7 @@ In *MOSAIC Calculus*, we generally use a contour-plot format to display graphica
 When you use `makeFun()` to define a function of two inputs, the created function will take two arguments, one for each of the inputs. Those arguments are named and it is a good idea when evaluating the function you created using the names explicitly.
 
 ```r
-h <- makeFun(x + 15*y - x*y ~ x + y)
+h <- makeFun(x + 15*y - x*y ~ .)
 ```
 
 * `h(y=3, x=2)`
@@ -221,7 +228,7 @@ h <- makeFun(x + 15*y - x*y ~ x + y)
         - ***Named inputs*** let you direct a value to a specific input.
     - *Notes*
         - The way we defined the example function `h()`, the first argument will be `x` and the second `y`. So you could perform the same evaluation as in the above command with `h(2, 3)`. But it's easy to forget or mistake the order of the arguments. Using the named-argument style makes it clearer which value is intended for which argument.
-        - You may notice commands like `slice_plot(h(x=x, y=3) ~ x, domain(x=c(-1,1)))`. At first glance, this may look silly. What it means is that the $x$ argument to $h()$ will take on the set of values inside the domain, which is itself written in terms of $x$.
+        - You may notice commands like `slice_plot(h(x=x, y=3) ~ x, bounds(x=-1:1))`. At first glance, this may look silly. What it means is that the $x$ argument to $h()$ will take on the set of values inside the bounds, which is itself written in terms of $x$.
 
 
 </details>
@@ -232,20 +239,19 @@ h <- makeFun(x + 15*y - x*y ~ x + y)
 <summary>Layering graphics</summary>
 Sometimes you may want to compare two or more functions in the same graphics frame. You do this by drawing the individual functions in the usual way, but connecting the commands with a ***pipe***, signified by the token `%>%`
 
-* `slice_plot(x^2 ~ x, domain(x=c(-2, 2))) %>% slice_plot(sin(x) ~ x, color="blue")`
+* `slice_plot(x^2 ~ x, bounds(x=-2:2)) %>% slice_plot(sin(x) ~ x, color="blue")`
     - *What it does* Overlays one graphics layer on another.
     - *Vocabulary* 
         - The `%>%` symbol is pronounced "***pipe***"
         - A command involving a pipe is called a ***pipeline***. Think of the calculation as flowing from one command to the next, left to right.
     - *Notes*
-        - If you have specified the `domain()` at an early stage in the pipeline, you don't need to specify it again in the later plotting commands. But, if you want, feel free to set the domain explicitly. This is helpful if you want the graphics domains to be different for the different layers.
-        - You can add as many stages as you like to the pipeline. Each stage will add a new graphics layer. But remember that the last stage **should not** be followed by the pipe symbol.
+        - If you have specified the `bounds()` at an early stage in the pipeline, you don't need to specify it again in the later plotting commands. But, if you want, feel free to set the bounds explicitly. This is helpful if you want the graphics bounds to be different for the different layers.
         - It's a good idea to write a pipeline with one line for each stage, with the pipe symbol at the **end** of each stage. Like this:
     ```r
-    slice_plot(x^2 ~ x, domain(x=c(-2,2))) %>%
+    slice_plot(x^2 ~ x, bounds(x=-2:2)) %>%
       slice_plot(sin(x) ~ x, color="blue")
     ```
-
+        - You can add as many stages as you like to the pipeline. Each stage will add a new graphics layer. But remember that the last stage **should not** be followed by the pipe symbol.
 </details>
 
 
@@ -285,7 +291,7 @@ There is one type of data graphic that we will be using in this course: the ***p
 A point plot always involves two variables from a data frame. To illustrate, consider the `palmerpenguins::penguins` data frame, where each case is a individual penguin.
 
 ```{r echo=TRUE}
-DT::datatable(palmerpenguins::penguins)
+kable(penguins)
 ```
 
 Suppose we want to look at flipper length versus body mass. The appropriate command is:
@@ -371,18 +377,18 @@ Suppose you were creating a function to represent the distance travelled by an o
 
 To evaluate this function, you need to know the three parameters $v_0, t_0,$ and $g$. On Earth, $g=-9.8$ meters/sec$^2$, but you may not know $v_0$ or $t_0$ until it comes time to use the function in some context. It's tempting to put in numerical values for the parameters to make the function easy to use. For instance, if the object starts from rest at time $t=0$, it would be tempting to make the R definition something like:
 
-`dist <- makeFun(0*(t-0) - 9.8*(t-0)^2 / 2 ~ t)` or even `makeFun(-9.8*t^2 / 2 ~ t)`
+`dist <- makeFun(0*(t-0) - 9.8*(t-0)^2 / 2 ~ .)` or even `makeFun(-9.8*t^2 / 2 ~ .)`
 
 A better practice is to create the function with the parameter names shown explicitly:
 
-`dist <- makeFun(v0 * (t - t0) + g*(t-t0)^2/2 ~ t)`
+`dist <- makeFun(v0 * (t - t0) + g*(t-t0)^2/2 ~ .)`
 
 Unfortunately, the resulting function will have four arguments which have to be specified every time you use it. A nice compromise is to assign ***default values*** for the parameters. For instance $t_0 = 0$ and $v_0 = 0$ and $g = -9.8$ meters/sec$^2$ would be sensible. 
 
 You specify the default parameters by adding them as additional arguments after the tilde expression.
 
 ```{r echo=TRUE}
-dist <- makeFun(v0*(t-t0) + g*(t-t0)^2 / 2 ~ t, g=-9.8, v0=0, t0=0)
+dist <- makeFun(v0*(t-t0) + g*(t-t0)^2 / 2 ~ ., g=-9.8, v0=0, t0=0)
 ```
 
 This way, you can use the function simply when the default parameters are appropriate, or modify them as needed. For instance, the free-fall distance over two seconds:
@@ -402,7 +408,7 @@ on_Mars  <- dist(2, g=-3.7)
 ```{r echo=TRUE}
 df <- D(exp(t) * cos(t) ~ t)
 df
-slice_plot(df(t) ~ t, domain(t=0:10))
+slice_plot(df(t) ~ t, bounds(t=0:10))
 ```
 
 The name on the right-hand side of the tilde expression will be the "with respect to" variable. If you want a second derivative, use and expression like `t + t` on the right-hand side. You can also calculate mixed partial derivatives with right-hand side expressions like `t & x`.
@@ -432,11 +438,11 @@ R/mosaic knows only a few symbolic anti-derivatives. When it doesn't know the sy
 
 In R/mosaic, solving is implemented as the `Zeros()` function. `Zeros()` looks for solutions where $f(x^\star) = 0$, but any solution problem, regardless of $v$, can be placed in this form. 
 
-`Zeros()` is used in the same way as many other R/mosaic functions: the first argument is a tilde expression, the second is a domain. The output will be a data-frame with the solutions found.  For instance, here we find the inputs to $\sin(x)$ that produce an output of 0.5. Notice that we have created a new function ($\sin(x) - 0.5$) whose output will be zero at the solutions we seek. 
+`Zeros()` is used in the same way as many other R/mosaic functions: the first argument is a tilde expression, the second is a bounds. The output will be a data-frame with the solutions found.  For instance, here we find the inputs to $\sin(x)$ that produce an output of 0.5. Notice that we have created a new function ($\sin(x) - 0.5$) whose output will be zero at the solutions we seek. 
 
 ```{r echo=TRUE}
-solutions <- Zeros(sin(x) - 0.5 ~ x, domain(x=0:10))
-slice_plot(sin(x) ~ x, domain(x=0:10)) %>%
+solutions <- Zeros(sin(x) - 0.5 ~ x, bounds(x=0:10))
+slice_plot(sin(x) ~ x, bounds(x=0:10)) %>%
   gf_point(0.5 ~ x, data = solutions)
 solutions
 ```
@@ -449,7 +455,7 @@ In optimization, you have an objective function $f(x)$ and you seek the argmin(s
 
 ```{r echo=TRUE}
 f <- rfun(~ x, seed=943) # a random function
-slice_plot(f(x) ~ x, domain(x=-5:5))
+slice_plot(f(x) ~ x, bounds(x=-5:5))
 ```           
 It's so easy to spot the argmins and argmaxes from a graph that it's reasonable to wonder why we need derivatives and solving to do it. The answer is that we are helping you establish a conceptual foundation for more interesting optimization problems where you can't just look at a graph. So let's step through the problem formally using derivatives.
 
@@ -460,7 +466,7 @@ df <- D(f(x) ~ x)
 If there were symbolic parameters in your definition of $f()$, you would need to resolve them at this point, assigning the parameters definite numerical values.
 2. Find the zeros of the derivative function:
 ```{r echo=TRUE}
-dzeros <- Zeros(df(x) ~ x, domain(x=-5:5))
+dzeros <- Zeros(df(x) ~ x, bounds(x=-5:5))
 dzeros
 ```
 The output of `Zeros()` has two columns. The first lists the solutions, the second gives the value of the function at those solutions. Note that the function output is very close to zero, there's not really any information there. And there's nothing that tells you whether a given $x$ is an argmax or an argmin. Of course, you could figure this out by referring to the graph of $f(x)$ itself, but let's be a little more formal by extracting this information from `dzeros`, `f()`, and the second derivative of `f()`. To do this, we introduce a new function, `mutate()`, that operates on data frames. And we'll need the second derivative $\partial_{xx}f()$ to establish whether the function is concave up or down at the solutions found.
@@ -480,7 +486,7 @@ From the sign of the convexity at the solutions $x$, you can tell immediately wh
 For fun, we can graph our findings on top of the function $f()$ to confirm that we have things right:
 
 ```{r echo=TRUE}
-slice_plot(f(x) ~ x, domain(x=-5:5)) %>%
+slice_plot(f(x) ~ x, bounds(x=-5:5)) %>%
   gf_point(val ~ x, data = dzeros, color= ~ convexity)
 ```
 </details>
@@ -491,19 +497,19 @@ slice_plot(f(x) ~ x, domain(x=-5:5)) %>%
 Optimization is such an important procedure that clever algorithms to handle all sorts of difficulties has been invented. This is an extensive topic in its own right, but for simplicity, R/mosaic provides a function `argM()` that works with functions with multiple inputs, pretty much automatically. It's called `argM()` because it returns both argmins and argmaxes, along with some supplemental information.
 
 ```{r echo=TRUE}
-argM(f(x) ~ x, domain(x=-5:5))
+argM(f(x) ~ x, bounds(x=-5:5))
 ```
 `argM()` will not necessarily find **all** the local argmins and argmaxes. But it also works for functions with multiple inputs.
 
 
 ```{r echo=TRUE}
-f2 <- makeFun(x*sin(sqrt(3+x))*(1+cos(y))-y ~ x & y)
-solns <- argM(f2(x, y) ~ x & y, domain(x=c(-3,3), y=c(-3,3)))
+f2 <- makeFun(x*sin(sqrt(3+x))*(1+cos(y))-y ~ .)
+solns <- argM(f2(x, y) ~ x & y, bounds(x=c(-3,3), y=c(-3,3)))
 solns
 ```
 
 ```{r echo=TRUE}
-contour_plot(f2(x,y) ~ x & y, domain(x=c(-3,3), y=c(-3,3))) %>%
+contour_plot(f2(x,y) ~ x & y, bounds(x=c(-3,3), y=c(-3,3))) %>%
   gf_point(y ~ x, data = solns, color="red")
 ```
 </details>
@@ -555,11 +561,11 @@ power_law(3)
 
 ```{r assembling-functions, exercise=TRUE, exercise.cap="Assembling functions", exercise.lines=10}
 # Linear combination (example)
-f <- makeFun(a0 + a1*exp(k * x) ~ x, a0=30, a1=150, k=-0.5)
+f <- makeFun(a0 + a1*exp(k * x) ~ ., a0=30, a1=150, k=-0.5)
 # Product (example)
-g <- makeFun(dnorm(x, mean=0, sd=3) * sin(2*pi*t/P) ~ x + t, P=3)
+g <- makeFun(dnorm(x, mean=0, sd=3) * sin(2*pi*t/P) ~ ., P=3)
 # Composition (example)
-h <- makeFun(exp(sin(2*pi*t/P) ~ x) ~ x, P = 3)
+h <- makeFun(exp(sin(2*pi*t/P) ~ x) ~ ., P = 3)
 ```
 
 </details>
@@ -569,9 +575,9 @@ h <- makeFun(exp(sin(2*pi*t/P) ~ x) ~ x, P = 3)
 
 ```{r graphing-functions, exercise=TRUE,  exercise.cap="Graphing functions", exercise.lines=10}
 slice_plot(dnorm(x, mean=1, sd=2) ~ x, 
-           domain(x=c(-5, 5)))
+           bounds(x=-5:5))
 contour_plot(dnorm(x, mean=1, sd=2) * pnorm(y, mean=-3, sd=1) ~ x + y,
-             domain(x=c(-5, 5), y=c(-5,5)))
+             bounds(x=-5:5, y=-5:5))
 
 ```
 </details>
@@ -582,19 +588,19 @@ contour_plot(dnorm(x, mean=1, sd=2) * pnorm(y, mean=-3, sd=1) ~ x + y,
 
 
 ```{r calculus-ops-der, exercise=TRUE, exercise.cap="Differentiation", exercise.lines=10}
-f <- makeFun(exp(-0.5*x) * sin(2*pi*x/3) ~ x)
+f <- makeFun(exp(-0.5*x) * sin(2*pi*x/3) ~ .)
 df <- D(f(x) ~ x)
-slice_plot(df(x) ~ x, domain(x=c(-5, 5))) %>%
-  slice_plot(f(x) ~ x, color="orange3")
+slice_plot(df(x) ~ x, bounds(x=-5:5)) %>%
+  slice_plot(f(x) ~ x, bounds(x=-5:5), color="orange3")
 ```
 
 ```{r calculus-ops-anti, exercise=TRUE, exercise.cap="Anti-differentiation", exercise.lines=10}
-f <- makeFun(dnorm(x, mean=1, sd=2) ~ x)
+f <- makeFun(dnorm(x, mean=1, sd=2) ~ .)
 F <- antiD(f(x) ~ x)
-slice_plot(F(x) ~ x, domain(x=c(-5, 5))) %>%
+slice_plot(F(x) ~ x, bounds(x=-5:5)) %>%
   slice_plot(f(x) ~ x, color="orange3")
 # Set "constant of integration"
-slice_plot(F(x) ~ x, domain(x=c(-5, 5))) %>%
+slice_plot(F(x) ~ x, bounds(x=-5:5)) %>%
   slice_plot(f(x) ~ x, color="orange3") %>%
   slice_plot(F(x, C=0.25) ~ x, color="green")
 # Definite integral
@@ -602,10 +608,10 @@ F(5) - F(-5)
 ```
 
 ```{r calculus-ops-solve, exercise=TRUE, exercise.cap="Zero finding", warning=FALSE, exercise.lines=10}
-f <- makeFun(exp(sin(2*pi*x/3)) - 0.5 ~ x)
+f <- makeFun(exp(sin(2*pi*x/3)) - 0.5 ~ .)
 Zeros <- findZeros(f(x) ~ x, near=0, within=5)
 Zeros
-slice_plot(f(x) ~ x, domain(x=c(-5,5))) %>%
+slice_plot(f(x) ~ x, bounds(x=-5:5)) %>%
   gf_hline(yintercept=0, color="orange3") %>%
   gf_vline(xintercept= ~ x, color="dodgerblue", data=Zeros)
 ```
@@ -641,16 +647,17 @@ Plot <- gf_point(temp ~ time, data = CoolingWater) %>%
 Approximate a function $f(x)$ around a selected point $x=x_0$.
 
 ```{r linear-quad, exercise=TRUE, exercise.lines=10, warning=FALSE}
-f <- makeFun(exp(-0.5*x)*sin(2*pi*x/3) ~ x)
-x0 <- 0.9
+f <- makeFun(exp(-0.5*x)*sin(2*pi*x/3) ~ .)
+
 df <- D(f(x) ~ x)
+center_fun_on <- 0.9
 ddf <- D(df(x) ~ x) # alternatively, D(f(x) ~ x + x)
-lin_approx <- makeFun(f(x0) + df(x0)*(x-x0) ~ x)
-quad_approx <- makeFun(lin_approx(x) + 0.5*ddf(x0)*(x-x0)^2 ~ x)
-slice_plot(f(x) ~ x, domain(x=c(0, 1.5)), size=2) %>%
+lin_approx <- makeFun(f(x0) + df(x0)*(x-x0) ~ x, x0 = center_fun_on)
+quad_approx <- makeFun(lin_approx(x) + 0.5*ddf(x0)*(x-x0)^2 ~ x, x0 = center_fun_on)
+slice_plot(f(x) ~ x, bounds(x=0:1.5), size=2) %>%
   slice_plot(lin_approx(x) ~ x, color="blue") %>%
-  slice_plot(quad_approx(x) ~ x, color="orange") %>%
-  gf_vline(xintercept = x0, alpha=0.2, color="yellow", size=3)
+  slice_plot(quad_approx(x) ~ x, bounds(x=0:1.5), color="orange") %>%
+  gf_vline(xintercept = center_fun_on, alpha=0.2, color="yellow", size=3)
 ```
 
 </details>

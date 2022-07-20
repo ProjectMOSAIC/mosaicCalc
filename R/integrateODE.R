@@ -2,7 +2,7 @@
 #'
 #' A formula interface to integration of an ODE with respect to "t"
 #'
-#' @param \ldots A dynamics object (see `makeODE()`) and/or arguments giving additional formulas for dynamics in other variables,
+#' @param \dots A dynamics object (see `makeODE()`) and/or arguments giving additional formulas for dynamics in other variables,
 #' assignments of parameters, assignments of initial conditions, the start and end times of the 
 #' integration (through `domain()`), and the step size (through `dt=`).
 #'

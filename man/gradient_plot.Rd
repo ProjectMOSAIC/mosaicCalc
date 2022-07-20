@@ -12,7 +12,8 @@ vectorfield_plot(
   npts = 20,
   color = "black",
   alpha = 0.5,
-  transform = sqrt
+  transform = sqrt,
+  env = NULL
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ vectorfield_plot(
 \item{alpha}{transparency of the arrots}
 
 \item{transform}{controls the relative length of the arrows. See details.}
+
+\item{env}{Not for end-users. Handles details of where things are defined.}
 }
 \description{
 Plot a vector field

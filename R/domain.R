@@ -79,7 +79,7 @@ validate_domain <- function(dom, free_args) {
   }
   known_names <- names(dom)[!(names(dom) == "" |grepl("\\.unknown_", names(dom)))]
   if (length(known_names) > 0 && any(!known_names %in% free_args)) {
-    stop(paste("Domain has variable(s)",
+    stop(paste("Bounds has variable(s)",
                paste(names(dom), collapse = " & "),
                "but function has argument(s) named",
                paste(free_args, collapse = " & ")))
@@ -90,7 +90,7 @@ validate_domain <- function(dom, free_args) {
     rest_of_them <- lapply(1:missing, function(x) c(-5,5))
     names(rest_of_them) <- paste0(".unknown_a", 1:missing)
     dom <- c(dom, rest_of_them)
-    warning("Using -5 to 5 in domain for missing domain names.")
+    warning("Using -5 to 5 in bounds for missing domain names.")
   }
 
   if (length(dom) == length(free_args)) {
@@ -98,17 +98,17 @@ validate_domain <- function(dom, free_args) {
     if (any(unknown <- names(dom) == "" | grepl("\\.unknown_", names(dom)))) {
       missing_names <- setdiff(free_args, names(dom)[!unknown])
       names(dom)[unknown] <- missing_names
-      warning(paste("Missing domain names:", paste(missing_names, collapse=", ")))
+      warning(paste("Missing bounds names:", paste(missing_names, collapse=", ")))
       return (validate_domain(dom, free_args))
     }
     else { # there's a mis-match with names needed for plotting.
-      stop(paste("Domain has variable(s)",
+      stop(paste("Bounds has variable(s)",
                   paste(names(dom), collapse = " & "),
                   "but function has argument(s) named",
                   paste(free_args, collapse = " & ")))
     }
   } else {
-    stop(paste("Domain involves",
+    stop(paste("Bounds involve",
                length(names(dom)),
                "variables, but function has",
                length(free_args)))
@@ -137,7 +137,7 @@ eval_on_domain <- function(formula, domain, n=100, params) {
   test_result <- try(do.call(fun, grid[1, , drop=FALSE]), silent=TRUE)
   if (inherits(test_result, "try-error")) {
     
-    stop(glue::glue("Function specified by {capture.output(formula)[1]}\n
+    stop(glue::glue("Function specified by {capture.output(formula)[1]} 
                     cannot be evaluated using input names 
                     {paste0(names(grid), collapse=', ')}"))
   }

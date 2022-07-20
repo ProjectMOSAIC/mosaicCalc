@@ -10,7 +10,7 @@
 #' 
 infer_RHS <- function(ex) {
   RHS <- paste(
-    sort_args_by_convention(all.vars(ex)),
+    sort_args_by_convention(setdiff(all.vars(ex), "pi")),
     collapse="&")
   res <- as.formula(paste("a ~", RHS))
   res[[2]] <- ex

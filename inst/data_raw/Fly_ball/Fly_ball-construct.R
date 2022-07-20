@@ -3,8 +3,8 @@
 # The data come from a simulation which is presented as an Excel spreadsheet.
 # (See reference in documentation for `Fly_ball`.)
 
-file_name <- here::here("inst/raw_data/Fly_ball/TrajectoryCalculator-new-3D.xlsx")
-Fly_ball <- readxl::read_excel(file_name, skip=30) %>%
+file_name <- here::here("inst/raw_data/Fly_ball/TrajectoryCalculator-new-3D.rds")
+Fly_ball <- readRDS(file_name) %>%
   select(t, y, z) %>%
   filter(z >= 0)
 
