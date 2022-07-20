@@ -25,46 +25,49 @@ This guide is intended for instructors who plan to use the `{mosaicCalc}` packag
 
 There are many ways to define calculus, the perspective taken in `{mosaicCalc}` and the associated [*MOSAIC Calculus* textbook](http://dtkaplan.github.io/MC2) puts *continuous functions* at the core. Consequently, the representation of mathematical functions is a central design choice for `{mosaicCalc}`.
 
-`{mosaicCalc}` uses *two* different R-language constructs to represent mathematical functions. The simple mathematical definition $$f(x) \equiv a x + b$$ suffices to illustrate the situation. In this mathematical notation, $f$ is the name of the function, $x$ is the sole *argument* of the mathematical function, and $a$ and $b$ are *parameters*. Like so much traditional mathematics notation, the identification of $a$ and $b$ as "parameters" is implicit, not explicit, in the notation.
+Consider the case of defining R versions of two mathematical functions $$f(x) \equiv a x + b\ \ \ \ \text{and}\ \ \ \ g(t) \equiv a e^{-k t}\ .$$
 
-To see why two R-language constructs are used in `{mosaicCalc}` to represent functions, consider what would be to many people the obvious translation of $f(x) \equiv a x + b$ into R:
-
-```{r}
-f <- function(x) a*x + b  # not mosaicCalc convention
-```
-
-The above definition reads well but leaves unsettled what should be the values of `a` and `b` in the function body. In computer languages, this question is settled by "scoping rules." Expert R programmers know that `a` and `b` will be captured from the environment where the command is carried out. 
-
-The function-building conventions of `{mosaicCalc}` were developed to avoid students needing to know about scoping or environments in R. This is managed by making *every* parameter an *argument* to the function. In standard R, this definition would do the job:
+A "natural" but misguided way to translate these definition into R is 
 
 ```{r}
-f <- function(x, a, b) a*x + b  # every param an argument
+# misguided!
+f0 <- function(x) a*x + b 
+g0 <- function(t) a*exp(-k*t)
 ```
 
-Standard R also allows "default values" to be assigned to any or all of the arguments, for instance
+The problem here is that the parameter `a` will always be numerically the same in both $f()$ and $g()$. Avoiding such linkage in this style of function definition would require new names for parameters in every new function. That is unsustainable, since constructing a new function would involve knowing all other functions in order to avoid their parameter names.
+
+R offers a native solution to this unintended linkage problem by declaring parameters to be *arguments* to functions. In this style, the definitions would be
 
 ```{r}
-f <- function(x, a = 3, b = -1) a*x + b  # default values set
+f1 <- function(x, a, b) a*x + b 
+g1 <- function(t, k, a) a*exp(-k*t)
 ```
-
-This is wordy and error prone. For example, mistakenly writing `p = -1` instead of `b = -1` results in a function that will silently draw the value of `b` from the surounding environment. In the design of `{mosaicCalc}`, we sought to avoid the wordiness and reduce the possibility for error. Although it's perfectly feasible to use the wordy construction, `{mosaicCalc}` provides a shortcut:
+Even better is when numerical values can be assigned to the parameters when the function is constructed, for instance
 
 ```{r}
-# mosaicCalc convention
-f <- makeFun(a*x + b ~ x) 
+f2 <- function(x, a=2, b=-3) a*x + b 
+g2 <- function(t, k=0.5, a=10) a*exp(-k*t)
 ```
+This way, functions `f2()` and `g2()` can be used with a single argument.
 
-The expression `a*x + b ~ x` is called a ***tilde expression***. . In conventional R terminology, such expressions involving the "tilde" character are called "formulas." Regretably, this name conflicts with mainstream uses of the word in mathematics (and even statistics). The unconventional term "tilde expression" puts front and center the role of the tilde character in the syntax.
-
-
-Optionally, `makeFun()` can be used to set default values for parameters that can optionally be overridden when the function is invoked .
+You can successfully use the parameter-as-argument style of function definition with `{mosaicCalc}`, but the `{mosaic}` suite of packages offer an alternative:
 
 ```{r}
-# setting default values for parameters
-f <- makeFun(a*x + b ~ x, a=3, b=-1)
+f3 <- makeFun(a*x + b ~ . , a=2, b=3)
+g3 <- makeFun(a*exp(-k*t) ~ . , a=10, k=0.5)
 ```
 
-Starting in version 0.6 of `{mosaicCalc}`, one-sided formulas can be used in `makeFun()`, for instance `f <- makeFun(~ a*x + b, a=3, b=77)`. We will return to the matter of one- versus two-sided formulas later.
+Notice that the formulas inside `f3()` and `g3()` are being conveyed to `makeFun()` as **tilde expressions**, about which we'll say more later. (Experienced R programmers will recognize that what we call a "tilde expression" is conventionally called a "formula." We prefer "tilde expression" because in calculus we need to use the word "formula" in its mathematical, not R-computing, sense.)
+
+In calculus, an everyday task is constructing new functions out of old ones. For instance, we might need to use the function $f(x) g(t)$. With a tilde expression, this product of functions can be constructed at a stroke, as in these calculations of the mixed partial derivative: 
+
+```{r}
+D(f3(x)*g3(t) ~ x & t)
+D(f3(x, a=10) * g3(t, k=1) ~ x & t)
+```
+
+
 
 ## Bounds
 
@@ -107,7 +110,7 @@ The R-language mandates that every tilde expression have a *right-hand side* tha
 
 The *left-hand side* of the tilde expression, if present at all, must similarly be syntactically correct.
 
-All tilde expressions used with `mosaicCalc` functions must be two-sided.^[The only exception is `makeFun()`, which can be used with one-sided expressions: e.g. `makeFun(~ m*x + b)`. Even here, you can use a two-sided expression, for instance, `makeFun(m*x + b ~ .)`. The period `.` is a legitimate R expression.] The two sides stand for different things.
+All tilde expressions used with `mosaicCalc` functions must be two-sided.^[The only exception is `makeFun()`, which can optionally be used with one-sided expressions: e.g. `makeFun(~ m*x + b)`. Even here, you can use a two-sided expression, for instance, `makeFun(m*x + b ~ .)`. The two forms are completely equivalent. Note that the period `.` is a legitimate R expression and thus fulfills the requirement for a two-sided tilde expression.] The two sides stand for different things.
 
 One side of a `{mosaicCalc}` tilde expression is always the formula for a function (in a mathematical sense). Let's be clear about what this means. In the mathematical definition $$f(x) \equiv mx + b\ ,$$ the formula is $mx + b$. As an R expression, this translates to `m*x + b`.
 
@@ -154,7 +157,7 @@ traj_plot(y(t) ~ x(t), domain(t=1:16))
 A vector field is the assignment of a vector to each point in a region of space. Since `{mosaicCalc}` graphics are two-dimensional, specifying a vector field is a matter of defining functions giving the two components of the vectors. This is done by specifying **two** tilde expressions, one for each component of the vector. Like this: 
 
 ```{r}
-vectorfield_plot(-y ~ x & y, x ~ x & y, domain(x=-1:1, y=-1:1))
+vectorfield_plot(x ~ -y, dy ~ x, domain(x=-1:1, y=-1:1))
 ```
 
 The first tilde expression specifies the first component of the vector, the second tilde expression gives the second component. The function itself is on the left-hand side of the tilde expression. The right side names the two inputs to those functions, as with `contour_plot()`. 
@@ -250,23 +253,9 @@ The overall rule is that operations like `D()`, `antiD()`, and `makeFun()`, whic
 
 ## Argument order
 
-In R, creating functions that take multiple named inputs must impose an order on those inputs. That order can be a matter of personal preference. However, the tilde-expression interface provides little means to specify the input order. For example, suppose we have a function `accel()` which will depend on position `pos` and velocity `c`. Many people would prefer to have the function take `pos` first and `c` second. This is not what happens in the prefered use of `makeFun()`:
+Students working with `{mosaicCalc}` will be building mathematical functions and using the functions they build. Since many students will have had no previous experience in defining functions, it is to be expected that they will not start with programming skills such as paying attention to the order of arguments to functions. Getting arguments in the wrong order can lead to frustration and loss of motivation.
 
-```{r}
-accel <- makeFun(ballistics(pos, c) ~ .)
-accel
-```
+Based on experience using `{mosaicCalc}` to teach calculus to hundreds of students, we think it best to simplify student tasks by automating the process of assigning order to arguments when defining functions. The automation gives preference to names with the traditional single letter: $x, y, z, t, u, v, w$ in that order. Any other argument names are sorted alphabetically after the single-letter special cases.
 
-If you absolutely must have things your way, then you can declare the argument order explicitly by naming arguments in order on the right-hand side of the tilde expression:
-
-```{r}
-accel <- makeFun(ballistics(pos, c) ~ pos & c)
-accel
-```
-
-But in the case of `D()` and `antiD()`, the right-hand side of the tilde expression has another use: specifying the with-respect-to variable. Thus `D()` and `antiD()` need to have another way to determine the argument order.  They do this by adopting a **convention**. `makeFun()` also follows this convention when the right-hand side of the tilde expression is a single dot.
-
-The argument ordering convention gives preference to names with the traditional single letter: $x, y, t, u, v, w, z$ in that order. Any other names are sorted alphabetically after the single-letter special cases.
-
-A good practice, when there are multiple arguments to a function, is to evaluate the function using R's "named arguments". For example, `ballistics(pos=3, c=2)` will work whatever the order of the arguments in the definition of `ballistics`. 
+A good practice, when there are multiple arguments to a function, is to evaluate the function using R's named-argument syntax. For example, `accel(vel=2, pos=3)` will work whatever the order of the arguments in the definition of `ballistics`. 
 

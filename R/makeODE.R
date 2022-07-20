@@ -59,12 +59,13 @@ makeODE <- function(...) {
       nm = form[[2]] # should be name type so double the brackets [[ ]]
       if ( ! inherits(nm, "name") ) stop(paste("Invalid name on LHS of formula",nm))
       nm = as.character(nm)
-      if (grep("^d",nm)!=1) {
-        dnames[k] <- nm
-        warning("Dynamical variables should start with 'd'")
-      } else {
+      if (grepl("^d",nm)) {
         dnames[k] <- sub("^d","",nm) # character string with the name
-      }
+      } else {
+        dnames[k] <- nm
+        message("The name on the left side of a diff. eq. tilde expression should be
+                prefixed with 'd', as in dx ~ x+y")
+      } 
       dfuns[k] <- parse(text=form[3]) # an expression so single [ ]
     }
     Dyn_object$names <- c(Dyn_object$names, dnames)

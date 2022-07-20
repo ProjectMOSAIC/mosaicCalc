@@ -42,7 +42,7 @@ conventional_argument_order <- function(fun, save_for_last=character(0)) {
 
 
 sort_args_by_convention <- function(vars) {
-  special <- c("x", "y", "t", "u", "v", "w", "z")
+  special <- c("x", "y", "z", "t", "u", "v", "w")
   hits <- special %in% vars
   first_ones <- special[hits]
   remaining_ones <- sort(setdiff(vars, first_ones))

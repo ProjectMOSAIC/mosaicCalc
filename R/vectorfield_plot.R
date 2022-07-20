@@ -99,7 +99,7 @@ gradient_plot <- function(..., # canonical first three arguments
 vectorfield_plot <- function(..., # canonical first four arguments
                              npts=20, color="black", alpha = 0.5,
                              transform = sqrt) {
-  args <- makeODE(...) # using makeODE() to handle the two tilde expressions
+  args <- suppressMessages(makeODE(...)) # using makeODE() to handle the two tilde expressions
   #args <- first_three_args(..., two_tildes = TRUE)
   # gives $tilde and $tilde2
   Pprev <- args$Pprev # previous graphic layers

@@ -4,7 +4,7 @@ author: "Daniel Kaplan"
 date: "July 2022"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Calculus_with_R}
+  %\VignetteIndexEntry{Beginners' Guide to Calculus with R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
