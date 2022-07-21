@@ -24,21 +24,9 @@ R is most widely associated with data science and statistics, but it is also wel
 
 As you can see from the previous two paragraphs, we are using a `monospaced font` when referring to names that are part of the computer system. Many of the names you will encounter, like `D()`, `antiD()`, and `Integrate()` will be names of "functions" that allow you to perform computations such as differentiation and integration. `{mosaicCalc}` is not a function. Rather it is a *collection* of functions that inter-operate and follow similar conventions. The written for name is written inside curly braces as a reminder to the human reader that `{mosaicCalc}` is a collection of functions. 
 
-To use `{mosaicCalc}`, you need to install the package and related ones. If this has not already been done, you can do so with a single R command which you can cut-and-paste into your R console:
+If you are reading this document from within RStudio on the computer you will be using, chances are that `{mosaicCalc}` has already been installed. You can check by giving the R command `library(mosaicCalc)`. If that command gives an error message (check your spelling carefully!) you need to install `{mosaicCalc}` and some related packages. To do so, first check with your instructor if there is a specific process for your educational institution. (An example would be "Use rstudio.cloud.")  Otherwise, you can carry out the installation using the setup instructions in the *MOSAIC Calculus* textbook, via [this link](dtkaplan.github.io/MC2/R-mosaic-setup.html). 
 
-```r
-install.packages(c("mosaic", "mosaicCalc", "ggformula"))
-```
-
-With `{mosaicCalc}` and its allies installed, you're ready to start. Open R or RStudio to commence an R session. As your first command, type
-
-```r
-library(mosaicCalc)
-```
-which tells R to use the `{mosaicCalc}` software.
-
-
-This guide will introduce you to a variety of calculus-related tasks that can be accomplished with `{mosaicCalc}`. It is best to begin by learning about the core elements used extensively in `{mosaicCalc}`
+This guide will introduce you to a variety of calculus-related tasks that can be accomplished with `{mosaicCalc}`. It is best to begin by learning about the core elements used extensively in `{mosaicCalc}`. 
 
 - a small set of simple **object types**, such as "tilde expressions," "functions," and "bounds."
 - a few **functions** that carry out calculus and other mathematical operations, graphing, etc.
@@ -56,6 +44,13 @@ traj_plot(S(t) ~ I(t), soln, color="blue") %>%
 ```
 
 We haven't shown you yet how to construct this graph or others. Let's get started now.
+
+**Reminder**: Whenever you open anew the R or RStudio apps, give the command needed to direct your R session to the `{mosaicCalc}` software:
+
+```r
+library(mosaicCalc)
+```
+
 
 ## Tilde expressions
 
