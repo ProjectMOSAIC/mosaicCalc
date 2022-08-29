@@ -4,14 +4,14 @@ Title: R-Language Based Calculus Operations for Teaching
 Description: Software to support the introductory *MOSAIC Calculus* 
     textbook <https://dtkaplan.github.io/MC2/>),
     one of many data- and modeling-oriented educational resources developed by 
-    Project MOSAIC (<http://www.mosaic-web.org/>). Provides symbolic and
+    Project MOSAIC (<https://www.mosaic-web.org/>). Provides symbolic and
     numerical differentiation and integration, as well as support for 
     applied linear algebra (for data science), and differential equations/dynamics.
-    Includes `{ggformula}`-based graphics for graphing functions, vector fields, trajectories, etc.
-    The software is suitable for general use, but mainly intended for teaching calculus.
+    Includes `{ggformula}`-based graphics for functions, vector fields, trajectories, etc.
+    The software is suitable for general use, but intended mainly for teaching calculus.
 Version: 0.6.0
 Depends:
-    R (>= 4.2.0),
+    R (>= 3.4.0),
 Imports:
     cubature,
     Deriv,
@@ -41,6 +41,7 @@ Suggests:
 Author: Daniel T. Kaplan <kaplan@macalester.edu>, Randall Pruim <rpruim@calvin.edu>, Nicholas J. Horton <nhorton@amherst.edu>
 Maintainer: Daniel Kaplan <kaplan@macalester.edu>
 VignetteBuilder: knitr
+NeedsCompilation: no
 License: GPL (>=2)
 LazyLoad: yes
 LazyData: yes

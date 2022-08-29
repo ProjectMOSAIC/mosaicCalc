@@ -1,8 +1,8 @@
 ## Test environments
 
   * local OS X install: 
-    * R version 4.1.3 (2022-03-10)
-    * Platform: x86_64, darwin17.0
+    * R version 4.2.1 (2022-06-23)
+    * Platform: x86_64-apple-darwin17.0 (64-bit)
     * Running under: macOS Monterey 12.3
   
   * win-builder via devtools
@@ -11,13 +11,13 @@
     
 ## R CMD check results
 
-OS X test environment: There were no ERRORs, WARNINGs, or NOTEs.
+OS X test environment: No ERRORs, WARNINGs, or NOTEs.
 
-win-builder via devtools: No ERRORs or WARNINGs. One NOTE relating to a claimed mis-spelling "ggformula" in the DESCRIPTION field of the DESCRIPTION file. I believe this is a false-positive: "ggformula" is a genuine package available on CRAN.
+win-builder via devtools: No ERRORs or WARNINGs. One NOTE relating to a possible misspelling of "ggformula" in the DESCRIPTION field of the DESCRIPTION file. This is a false-positive: "ggformula" is a genuine package available on CRAN.
 
 ## Downstream dependencies
 
-fastR2, MMAC, and RISCA are the reverse dependencies on CRAN. They has been checked.
+fastR2, MMAC, and RISCA are the reverse dependencies on CRAN. They have been checked.
 
 ## Other notes
 

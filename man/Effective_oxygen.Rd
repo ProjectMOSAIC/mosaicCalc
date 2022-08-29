@@ -12,7 +12,7 @@ A data frame with 30 rows
 }
 }
 \source{
-\url{https://wildsafe.org/resources/ask/altitude-safety/oxygen-levels/}
+\url{https://wildsafe.org/resources/ask-the-experts/altitude-safety-101/oxygen-levels/}
 }
 \usage{
 data(Effective_oxygen)

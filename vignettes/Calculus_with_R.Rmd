@@ -16,34 +16,53 @@ library(mosaicCalc)
 library(ggformula)
 ```
 
-This document is intended to guide students or instructors who are beginners with R and who want to learn how to perform calculus operations. The document describes the use of the "R package" called `{mosaicCalc}`. The package provides software with a unified and consistent user interface for the calculus operations. It was developed specifically to support the [*MOSAIC Calculus*](dtkaplan.github.io/MC2) textbook, available freely online. However, instructors and other textbooks can and do use `{mosaicCalc}` independently of [*MOSAIC Calculus*](dtkaplan.github.io/MC2).
+This document guides students or instructors who are beginners with R and who want to learn calculus. It describes the use of the "R package" called `{mosaicCalc}`. The package provides software with a unified and consistent user interface for calculus operations. `{mosaicCalc}` is the engine behind the [*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) textbook, available free online. However, instructors can and do use `{mosaicCalc}` independently of [*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/).
 
-R, as you may know, is an environment and language for technical computing. The term "technical computing" is used to distinguish from the everyday forms of computing used by almost everybody: email, word processing, video editing, accounting, etc. Think of technical computing as serving the specialized needs of scientists and engineers. 
+R, as you may know, is an environment and language for technical computing. Think of technical computing as serving the specialized needs of scientists and engineers. 
 
-R is most widely associated with data science and statistics, but it is also well suited to calculus as well as many other diverse fields. This results, in part, from the "open source" nature of the R environment. An aspect of "open source" is that anyone can contribute new capabilities to the environment. Those new capabilities are typically provided in a officially standardized format called an "R package." There are thousands of such packages available through the official distribution network, called CRAN. `{mosaicCalc}` is one of those packages and works in conjunction with other CRAN packages.
+R is most widely associated with data science and statistics, but it is also well suited to calculus and many other diverse fields. This results, in part, from the "open source" nature of the R environment. An aspect of "open source" is that anyone can contribute new capabilities to the environment using an officially standardized format called an "R package." There are thousands of such packages available through the official distribution network called CRAN. `{mosaicCalc}` is one of those packages and works in conjunction with other CRAN packages.
 
-As you can see from the previous two paragraphs, we are using a `monospaced font` when referring to names that are part of the computer system. Many of the names you will encounter, like `D()`, `antiD()`, and `Integrate()` will be names of "functions" that allow you to perform computations such as differentiation and integration. `{mosaicCalc}` is not a function. Rather it is a *collection* of functions that inter-operate and follow similar conventions. The written for name is written inside curly braces as a reminder to the human reader that `{mosaicCalc}` is a collection of functions. 
+As you can see from the previous two paragraphs, we use a `monospaced font` when referring to names that are part of the computer system. Many of the names you will encounter, like `D()`, `antiD()`, and `Integrate()`, will be names of "functions" that allow you to perform computations such as differentiation and integration. `{mosaicCalc}` is not a function. Rather it is a *collection* of functions that inter-operate and follow similar conventions. The curly braces in `{mosaicCalc}` remind readers that it is a collection of functions. 
 
-If you are reading this document from within RStudio on the computer you will be using, chances are that `{mosaicCalc}` has already been installed. You can check by giving the R command `library(mosaicCalc)`. If that command gives an error message (check your spelling carefully!) you need to install `{mosaicCalc}` and some related packages. To do so, first check with your instructor if there is a specific process for your educational institution. (An example would be "Use rstudio.cloud.")  Otherwise, you can carry out the installation using the setup instructions in the *MOSAIC Calculus* textbook, via [this link](dtkaplan.github.io/MC2/R-mosaic-setup.html). 
+`{mosaicCalc}`, like all R packages, needs to be installed before it can be used. Often, instructors arrange to have packages installed automatically. You can check by giving the R command `library(mosaicCalc)`. If the command works, the installation has already been done. Otherwise, the command will produce an error message (check your spelling carefully!) if you need to install `{mosaicCalc}` and some related packages. In this case, check with your instructor if there is a specific process for your educational institution. (An example would be "Use rstudio.cloud.")  Otherwise, you can carry out the installation using the setup instructions in the *MOSAIC Calculus* textbook via [this link](https://dtkaplan.github.io/MC2/R-mosaic-setup.html). 
 
-This guide will introduce you to a variety of calculus-related tasks that can be accomplished with `{mosaicCalc}`. It is best to begin by learning about the core elements used extensively in `{mosaicCalc}`. 
+## The `{mosaicCalc}` command pattern 
 
-- a small set of simple **object types**, such as "tilde expressions," "functions," and "bounds."
-- a few **functions** that carry out calculus and other mathematical operations, graphing, etc.
-- how to construct **commands** that tell the R environment to set up and carry out the operations used to apply calculus to the settings of interest in your chosen field.
+A "command" is a complete instruction to the computer to perform a specified task. There are only about a dozen commonplace tasks used in calculus. To begin, consider the familiar task of "graphing a mathematical function." A function-graphing command needs to include at least three pieces of information. 
 
-Once you have learned about these things, you will be able to construct and use both simple and complicated mathematical objects. As a motivating example, here is a graph that summarizes a fundamental mathematical description of the spread of epidemics, called the "SIR model."
+1. Which type of graph to make.
+2. What mathematical function to graph.
+3. The bounds for the input(s) to the function.
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.align="center"}
-SIR <- makeODE(dS~ -a*S*I, dI ~ a*S*I - b*I, 
-               a=0.0026, b=.5, S=400, I=1)
-soln <- integrateODE(SIR, bounds(t=0:20))
-traj_plot(S(t) ~ I(t), soln, color="blue") %>% 
-  vectorfield_plot(SIR, bounds(I=0:75, S=60:400), transform=I, 
-                   npts=20, alpha = 0.6)
+Constructing a command means laying out this information in a manner the computer can make sense of. Most `{mosaicCalc}` commands follow a consistent pattern. For instance, 
+
+```{r}
+slice_plot(x*sin(x) ~ x, bounds(x = 0:10))
 ```
 
-We haven't shown you yet how to construct this graph or others. Let's get started now.
+The pattern becomes clearer if we divide it into parts, one for each piece of information.
+
+$$\underbrace{\mathtt{slice\_plot}}_\text{task name}{\color{magenta}{\left(\strut\right.}}\ \underbrace{\mathtt{x*sin(x)\  {\verb+~+}\ x}}_\text{function description}\ \color{magenta}{\LARGE,}\ \  \underbrace{\mathtt{bounds(x = 0\!:\!5)}}_\text{bounds on input to function}\color{magenta}{\left.\strut\right)}$$
+
+The command includes punctuation which, like punctuation in English, marks boundaries between elements. There are three elements in this command:
+
+
+The task name is the first element of every `{mosaicCalc}` command, and it is **always** followed by an *opening* parenthesis. The corresponding *closing* parenthesis goes at the very end of the command.
+
+Almost always, the function description is the second element of a command, following the opening parenthesis. The description is always written in a particular format called a "tilde expression" which is described in the next section of this document.
+
+Graphics tasks always have a third element specifying the bounds to be used in the graphic. Note that a comma separates the second and third elements of the command.
+
+Commands occasionally include additional elements to give more details such as the color of the graph. These are always separated from the previous elements by a punctuating comma.
+
+As you progress through a calculus course, you will encounter new calculus tasks. Each such task has a distinctive `{mosaicCalc}` task name. But the commands you construct to perform these tasks will always have a format similar to the example above. For instance, there is a calculus task called "anti-differentiation" which can be carried out with a command starting with `antiD()`, for instance
+
+```{r}
+antiD(x*sin(x) ~ x)
+```
+
+Even if you don't know what "anti-differentiation" is, you should be able to make sense of the structure of the command: a task name followed by a function description, with the appropriate punctuation. The computer produces a result in response to the command. In the `slice_plot()` example the response is a graph. In the `antiD()` example, the response is a new mathematical function.
+
 
 **Reminder**: Whenever you open anew the R or RStudio apps, give the command needed to direct your R session to the `{mosaicCalc}` software:
 
@@ -67,19 +86,19 @@ Many newcomers mis-interpret ![](www/tilde-small.png) as meaning "equals." But i
 
 ## Functions
 
-"Functions" are a fundamental structure both in mathematics and in computer programming. Indeed, calculus is about the study and use of "continuous functions." ([*MOSAIC Calculus*](dtkaplan.github.io/MC2) and every other calculus text explain what "continuous" means mathematically.) 
+"Functions" are a fundamental structure both in mathematics and in computer programming. Indeed, calculus is about the study and use of "continuous functions." ([*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) and every other calculus text explain what "continuous" means mathematically.) 
 
 The purpose of mathematical functions is to represent relationships between one quantity, called the "output," and other quantities called the "input" or "inputs." (Seen this way, calculus is about describing and using relationships, for example the relationship between position and velocity.). With functions being so important in computer programming, learning about them in calculus gives an impressive boost to students who later study programming. 
 
 It's likely that you have already learned about some important mathematical functions, such as the sine function and the logarithm function. Regrettably, the notation usually encountered in high-school mathematics is ambiguous about what is a function and what is not. Since calculus is the study of functions, the high-school ambiguity about functions leads to difficulty and frustration in many students who go on to study calculus. 
 
-[*MOSAIC Calculus*](dtkaplan.github.io/MC2) and `{mosaicCalc}` aim to avoid the ambiguity introduced in high school. A first step in doing this is to point out key distinctions that high-school notation confuses: a "formula" versus an "equation" versus a "function."
+[*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) and `{mosaicCalc}` aim to avoid the ambiguity introduced in high school. A first step in doing this is to point out key distinctions that high-school notation confuses: a "formula" versus an "equation" versus a "function."
 
 - **Formulas** are instructions for carrying out a calculation. For example, $a x^2 + b x + c$ is a formula. If someone gave you a piece of paper with numerical values for $a, b, c$ and $x$, you could use the formula to carry out the calculation. Calculators are familiar tools to use for this purpose.
 - **Equations** are statements that center on an equal sign: $=$. Like a tilde expression, equations *always* involve a left side and a right side. A typical high-school equation is $$y = m x + b\ .$$ The left and right sides are each formulas, although you might not recognize $y$ as a formula since it is so simple. Equations are properly used as a basis for re-organizing formulas. For instance, the equation $y - b = m x$ is a valid re-organization of $y=mx + b$.
 - **Functions** describe a relationship between one or more *inputs* an an output. For example, the sine function takes any number as input and produces as output a number between $-1$ and $1$. Likewise, the logarithm function takes any positive number as input and returns as output a number that can be anywhere from $-\infty$ to $\infty$. (Making sense of $\infty$ is part of what calculus is about.) 
 
-[*MOSAIC Calculus*](dtkaplan.github.io/MC2) is careful to describe functions by specifying three things:
+[*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) is careful to describe functions by specifying three things:
 
 - The name of the function. For example, the name of the sine function in R is `sin`.
 - The name(s) of the function's input(s).
@@ -90,7 +109,7 @@ For example, here is a function that happens to be important in physics and engi
 $$g(x, t) \equiv e^{-kx} \sin(\omega t)$$
 The function name is $g$. The input names are $x$ and $t$, shown inside the parentheses following $g$. The formula is on the right-hand side of the $\equiv$ symbol. That special symbol is used to make clear that the mathematical expression is a **definition** of $g$.
 
-The first task in defining a function for computing is to translate the formula into computer notation. `{mosaicCalc}` does this with tilde expressions. For example, the formula $e^{-kx} \sin(\omega t)$ translates to 
+The first task in defining a function for computing is to translate the formula into a tilde expression. For example, here is the tilde expression corresponding to the formula $e^{-kx} \sin(\omega t)$ translates to 
 
 ```{r results="hide"}
 exp(-k*x) * sin(omega*t) ~ .
@@ -98,15 +117,13 @@ exp(-k*x) * sin(omega*t) ~ .
 
 You can see the computer notation is slightly different from the mathematical formula. For instance, whereas multiplication is traditionally written by juxtaposing two symbols, as in $kt$ or $\omega t$, in computer notation the `*` symbol must be inserted between the two symbols.
 
-The above tilde expression represents a *formula*. To define a *function*, you need to specify additional pieces of information: 1) the name to be used for the function, and 2) the name(s) of the inputs(s) to the function. In `{mosaicCalc}` the definition is written like this with `{mosaicCalc}` figuring out automatically what are the input names:
+The above tilde expression represents a *formula*. The `makeFun()` task turns a tilde expression into a **function**. The period to the right of tilde in the above expression will tell `makeFun()` to figure out the input names automatically. All that remains is to give a name to the function created by `makeFun()`. For instance, the following command creates a function named `g`.
 
 ```{r}
 g <- makeFun(exp(-k*x) * sin(omega*t) ~ .)
 ```
 
-Note that `makeFun` is followed by a pair of parentheses. Inside those parentheses is the tilde expression---`~ .` and all---holding the formula for the function.
-
-Once the previous R command has been run, the name `g` stands for a function. You can see the function by giving the name `g` as a command:
+In response to the command, the computer creates a new function named `g`. You can see the function by giving the name `g` as a command:
 
 ```{r}
 g
@@ -126,7 +143,7 @@ g
 
 ## Bounds
 
-The finite size of paper or the computer screen means that, whenever you graph a function or perform similar operations, you need to pick specific, finite interval(s) for the input(s). For example, the function `g()` can be evaluated for any $x$ or $t$. But to see something meaningful in the graph, you have to pick intervals for both $x$ and $t$. This is called "setting bounds" on the input variables. As an example, consider the plot of $g(x, t=pi/2)$, where the input $t$ has been fixed at $\pi/2$, leaving only a single remaining input $x$.
+The finite size of paper or the computer screen means that, whenever you graph a function or perform similar operations, you need to pick specific, finite interval(s) for the input(s). For example, the function `g()` can be evaluated for any $x$ or $t$. But to see something meaningful in the graph, you have to pick intervals for both $x$ and $t$. This is called "setting bounds" on the input variables. As an example, consider the plot of $g(x, t=\pi/2)$, where the input $t$ has been fixed at $\pi/2$, leaving only a single remaining input $x$.
 
 Graphs of functions with a single input are made by `slice_plot()`, like this:
 
@@ -160,7 +177,7 @@ Mathematically, both differentiation and anti-differentiation take as input a fu
 
 Many calculus courses and textbooks cover "integration" before coming to "anti-differentiation." Usually, integration is presented as a way to compute the "area under a curve." This is true enough, so far as it goes, but it is a bit like presenting a race car as "a vehicle that can be parked in a garage." 
 
-[*MOSAIC Calculus*](dtkaplan.github.io/MC2) presents anti-differentiation before integration. This is for a very good reason. If differentiation is like turning a coin from the "heads" side to the "tails" side, anti-differentiation is turning from the "tails" side back to the "heads" side. It's a very simple operation conceptually and might as well be encountered at the same time as differentiation.
+[*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) presents anti-differentiation before integration. This is for a very good reason. If differentiation is like turning a coin from the "heads" side to the "tails" side, anti-differentiation is turning from the "tails" side back to the "heads" side. It's a very simple operation conceptually and might as well be encountered at the same time as differentiation.
 
 The `Integrate()` operation in `{mosaicCalc}` carries out "definite integration." Definite integration involves a function, a with-respect-to variable, and an interval. In `{mosaicCalc}` these are represented as a tilde expression (left side formula, right side the name of the with-respect-to input) and a "bounds" (represented, of course, as a `bounds()` expression). 
 
@@ -206,11 +223,11 @@ To go directly to the documentation of a specific function, use the `?` syntax, 
 
 ## Going forward
 
-Purely for the sake of demonstrating how`{mosaicCalc}` tasks can be combined, consider again the figure at the very start of this guide and reproduced below. The calculus involved is covered in [*MOSAIC Calculus*](dtkaplan.github.io/MC2) at the end of the course, so beginners likely won't understand the mathematics. Still, the graph can be interpreted. The blue line shows the number of "susceptible" and "infective" people in a population over the course of an epidemic. At the outbreak, there are very few infectives and lots of susceptibles. That situation changes over time, as will be familiar from the COVID-19 pandemic. A mathematical model of the "mechanics" of infection is represented by the field of arrows. Each arrow indicates how, starting at a given number of susceptibles and infectives, the situation will develop over a short period of time. Finding the pattern over a long period of time is a matter of following the arrows as each is encountered.
+Purely for the sake of demonstrating how`{mosaicCalc}` tasks can be combined, consider again the figure at the very start of this guide and reproduced below. The calculus involved is covered in [*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) at the end of the course, so beginners likely won't understand the mathematics. Still, the graph can be interpreted. The blue line shows the number of "susceptible" and "infective" people in a population over the course of an epidemic. At the outbreak, there are very few infectives and lots of susceptibles. That situation changes over time, as will be familiar from the COVID-19 pandemic. A mathematical model of the "mechanics" of infection is represented by the field of arrows. Each arrow indicates how, starting at a given number of susceptibles and infectives, the situation will develop over a short period of time. Finding the pattern over a long period of time is a matter of following the arrows as each is encountered.
 
-Here are the commands that produced the graphic:
+As a motivating example, here is a graph that summarizes a widely used mathematical description of the spread of epidemics, called the "SIR model." The model and the graphic are topics near the end of the *MOSAIC Calculus* text, so beginners can hardly be expected to make sense of the mathematics involved.
 
-```{r message=FALSE, fig.align="center"}
+```{r warning=FALSE, message=FALSE, fig.align="center"}
 SIR <- makeODE(dS ~ -a*S*I, dI ~ a*S*I - b*I, 
                a=0.0026, b=.5, S=400, I=1)
 soln <- integrateODE(SIR, bounds(t=0:20))
@@ -219,5 +236,5 @@ traj_plot(S(t) ~ I(t), soln, color="blue") %>%
                    npts=20, alpha = 0.6)
 ```
 
-There's a lot to assimilate here and doing so requires the sort of study undertaken in following a modern calculus course (such as [*MOSAIC Calculus*](dtkaplan.github.io/MC2)). But even at this point you should be able to spot some of the important components of the commands, such as tilde expressions (e.g. `dS ~ -a*S*I), graphical bounds (e.g. `bounds(I=0:75, S=60:400)`) and assignment of numerical values to parameters (e.g. `a = 0.0026`).
+But even at this point you should be able to spot some of the important components of the commands, such as tilde expressions (e.g. `dS ~ -a*S*I`), graphical bounds (e.g. `bounds(I=0:75, S=60:400)`) and assignment of numerical values to parameters (e.g. 'a = 0.0026`).
 

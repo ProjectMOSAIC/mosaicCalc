@@ -16,5 +16,5 @@
 #'     \item{\code{oxygen}} {Effective oxygen as a proportion of air (percent)}
 #'     }
 #'
-#' @source <https://wildsafe.org/resources/ask/altitude-safety/oxygen-levels/>
+#' @source <https://wildsafe.org/resources/ask-the-experts/altitude-safety-101/oxygen-levels/>
 "Effective_oxygen"
