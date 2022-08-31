@@ -23,7 +23,7 @@ This guide is intended for instructors who plan to use the `{mosaicCalc}` packag
 
 ## Functions and tilde expressions
 
-There are many ways to define calculus, the perspective taken in `{mosaicCalc}` and the associated [*MOSAIC Calculus* textbook](https://mosaic-web.org/MOSAIC-Calculus/) puts *continuous functions* at the core. Consequently, the representation of mathematical functions is a central design choice for `{mosaicCalc}`.
+There are many ways to define calculus, the perspective taken in `{mosaicCalc}` and the associated [*MOSAIC Calculus* textbook](https://www.mosaic-web.org/MOSAIC-Calculus/) puts *continuous functions* at the core. Consequently, the representation of mathematical functions is a central design choice for `{mosaicCalc}`.
 
 Consider the case of defining R versions of two mathematical functions $$f(x) \equiv a x + b\ \ \ \ \text{and}\ \ \ \ g(t) \equiv a e^{-k t}\ .$$
 

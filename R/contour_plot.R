@@ -65,12 +65,12 @@ contour_plot <- function(..., # canonical first three arguments
     # get domain from ggplot object, unless domain is already specified
     if (is.null(domain)) {
       look_for <- all.vars(tilde[[3]]) # the input variable name
-      if (look_for %in% names(object$data)) {
+      if (all(look_for %in% names(object$data))) {
         domain <- list()
         domain[[look_for[1]]] <- range(object$data[[look_for[1]]])
         domain[[look_for[2]]] <- range(object$data[[look_for[2]]])
       } else {
-        stop("Must specify domain or use same two variables as previous layer.")
+        stop("Must specify bounds or use same two input names as previous layer.")
       }
     }
   } 

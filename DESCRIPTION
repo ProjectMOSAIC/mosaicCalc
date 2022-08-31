@@ -2,7 +2,7 @@ Package: mosaicCalc
 Type: Package
 Title: R-Language Based Calculus Operations for Teaching
 Description: Software to support the introductory *MOSAIC Calculus* 
-    textbook <https://mosaic-web.org/MOSAIC-Calculus/>),
+    textbook <https://www.mosaic-web.org/MOSAIC-Calculus/>),
     one of many data- and modeling-oriented educational resources developed by 
     Project MOSAIC (<https://www.mosaic-web.org/>). Provides symbolic and
     numerical differentiation and integration, as well as support for 

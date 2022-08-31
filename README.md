@@ -48,5 +48,5 @@ Our goal: Provide a broader approach to quantitative studies that provides bette
 
 The name MOSAIC reflects the first letters --- M, S, C, C --- of these important components of a quantitative education. Project MOSAIC is motivated by a vision of quantitative education as a mosaic where the basic materials come together to form a complete and compelling picture.
 
-Find out more about Project MOSAIC at [http://mosaic-web.org].
+Find out more about Project MOSAIC at [http://www.mosaic-web.org].
 
