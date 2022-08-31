@@ -17,7 +17,7 @@ library(ggformula)
 ```
 
 
-This guide is for calculus students or instructors who are beginners with R. It describes an "R package" called `{mosaicCalc}` which provides software with a unified and consistent user interface for calculus operations. `{mosaicCalc}` is the engine behind the [*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) textbook, available free online. However, instructors can and do use `{mosaicCalc}` independently of [*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/).
+This guide is for calculus students or instructors who are beginners with R. It describes an "R package" called `{mosaicCalc}` which provides software with a unified and consistent user interface for calculus operations. `{mosaicCalc}` is the engine behind the [*MOSAIC Calculus*](https://mosaic-web.org/MOSAIC-Calculus/) textbook, available free online. However, instructors can and do use `{mosaicCalc}` independently of [*MOSAIC Calculus*](https://mosaic-web.org/MOSAIC-Calculus/).
 
 Many R packages provide narrative documentation in the form of "vignettes," the word used in the R community for guides such as this one. This guide is one of three vignettes for `{mosaicCalc}`. There is also a quick-reference vignette which may be helpful for those who need to jog their memory when writing `{mosaicCalc}` commands. Finally, a third vignette explains some features and syntax of `{mosaicCalc}` that an experienced R user may not have previously encountered. 
 
@@ -25,7 +25,7 @@ As you may know, R is an environment and language for technical computing. Think
 
 As you can see from the previous two paragraphs, we use a `monospaced font` when referring to names that are part of the computer system. Many of the names you will encounter, like `D()`, `antiD()`, and `Integrate()`, will be names of "functions" that allow you to perform computations such as differentiation and integration. `{mosaicCalc}` is not a function. Rather it is a *collection* of functions that inter-operate and follow similar conventions. The curly braces in `{mosaicCalc}` remind readers that it is a collection of functions. 
 
-`{mosaicCalc}`, like all R packages, needs to be installed before it can be used. Often, instructors arrange to have packages installed automatically. You can check by giving the R command `library(mosaicCalc)`. If the command works, the installation has already been done. Otherwise, the command will produce an error message (check your spelling carefully!) if you need to install `{mosaicCalc}` and some related packages. In this case, check with your instructor if there is a specific process for your educational institution. (An example: "Use rstudio.cloud.")  Otherwise, you can carry out the installation using the setup instructions in the *MOSAIC Calculus* textbook via [this link](https://dtkaplan.github.io/MC2/R-mosaic-setup.html). 
+`{mosaicCalc}`, like all R packages, needs to be installed before it can be used. Often, instructors arrange to have packages installed automatically. You can check by giving the R command `library(mosaicCalc)`. If the command works, the installation has already been done. Otherwise, the command will produce an error message (check your spelling carefully!) if you need to install `{mosaicCalc}` and some related packages. In this case, check with your instructor if there is a specific process for your educational institution. (An example: "Use rstudio.cloud.")  Otherwise, you can carry out the installation using the setup instructions in the *MOSAIC Calculus* textbook via [this link](https://mosaic-web.org/MOSAIC-Calculus/R-mosaic-setup.html). 
 
 ## Loading the package
 
@@ -86,19 +86,19 @@ Many newcomers misinterpret ![](www/tilde-small.png) as meaning "equals." But in
 
 ## Functions
 
-"Functions" are a fundamental structure both in mathematics and computer programming. Indeed, calculus is about the study and use of "continuous functions." ([*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) and every other calculus text explain what "continuous" means mathematically.) 
+"Functions" are a fundamental structure both in mathematics and computer programming. Indeed, calculus is about the study and use of "continuous functions." ([*MOSAIC Calculus*](https://mosaic-web.org/MOSAIC-Calculus/) and every other calculus text explain what "continuous" means mathematically.) 
 
 The purpose of mathematical functions is to represent relationships between one quantity, called the "output," and other quantities called the "input" or "inputs." (Calculus is fundamentally about describing and using relationships between quantities, for example the relationship between position and velocity.). With functions being so important in computer programming, learning about them in calculus boosts students who later study programming. 
 
 Likely, you have already learned about some important mathematical functions, such as the sine function and logarithm function. Regrettably, the notation usually encountered in high-school mathematics is ambiguous about what is a function and what is not. Since calculus is the study of functions, the high-school ambiguity about functions leads to difficulty and frustration in many students who go on to study calculus. 
 
-[*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) and `{mosaicCalc}` aim to avoid the ambiguity introduced in high school. A first step in doing this is to point out key distinctions that high-school notation confuses: a "formula" versus an "equation" versus a "function."
+[*MOSAIC Calculus*](https://mosaic-web.org/MOSAIC-Calculus/) and `{mosaicCalc}` aim to avoid the ambiguity introduced in high school. A first step in doing this is to point out key distinctions that high-school notation confuses: a "formula" versus an "equation" versus a "function."
 
 - **Formulas** are instructions for carrying out a calculation. For example, $a x^2 + b x + c$ is a formula. If someone gave you a piece of paper with numerical values for $a, b, c$ and $x$, you could use the formula to carry out the calculation. Calculators are familiar tools to use for this purpose.
 - **Equations** are statements that center on an equal sign: $=$. Like a tilde expression, equations *always* involve a left side and a right side. A typical high-school equation is $$y = m x + b\ .$$ The left and right sides are each formulas, although you might not recognize $y$ as a formula since it is so simple. Equations are properly used as a basis for re-organizing formulas. For instance, the equation $y - b = m x$ is a valid re-organization of $y=mx + b$.
 - **Functions** describe a relationship between one or more *inputs* an an output. For example, the sine function takes any number as input and produces as output a number between $-1$ and $1$. Likewise, the logarithm function takes any positive number as input and returns as output a number that can be anywhere from $-\infty$ to $\infty$. (Making sense of $\infty$ is part of what calculus is about.) 
 
-[*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) is careful to describe functions by specifying three things:
+[*MOSAIC Calculus*](https://mosaic-web.org/MOSAIC-Calculus/) is careful to describe functions by specifying three things:
 
 - The name of the function. For example, the name of the sine function in R is `sin`.
 - The name(s) of the function's input(s).
@@ -177,7 +177,7 @@ Mathematically, both differentiation and anti-differentiation take as input a fu
 
 Many calculus courses and textbooks cover "integration" before coming to "anti-differentiation." Usually, integration is presented as a way to compute the "area under a curve." This is true enough, so far as it goes, but it is a bit like presenting a race car as "a vehicle that can be parked in a garage." 
 
-[*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) presents anti-differentiation before integration. This is for a very good reason. If differentiation is like turning a coin from the "heads" side to the "tails" side, anti-differentiation is turning from the "tails" side back to the "heads" side. It's a very simple operation conceptually and might as well be encountered at the same time as differentiation.
+[*MOSAIC Calculus*](https://mosaic-web.org/MOSAIC-Calculus/) presents anti-differentiation before integration. This is for a very good reason. If differentiation is like turning a coin from the "heads" side to the "tails" side, anti-differentiation is turning from the "tails" side back to the "heads" side. It's a very simple operation conceptually and might as well be encountered at the same time as differentiation.
 
 The `Integrate()` operation in `{mosaicCalc}` carries out "definite integration." Definite integration involves a function, a with-respect-to variable, and an interval. In `{mosaicCalc}` these are represented as a tilde expression (left side formula, right side the name of the with-respect-to input) and a "bounds" (represented, of course, as a `bounds()` expression). 
 
@@ -223,7 +223,7 @@ To go directly to the documentation of a specific function, use the `?` syntax, 
 
 ## Going forward
 
-Purely for the sake of demonstrating how`{mosaicCalc}` tasks can be combined, consider again the figure at the very start of this guide and reproduced below. The calculus involved is covered in [*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) at the end of the course, so beginners likely won't understand the mathematics. Still, the graph can be interpreted. The blue line shows the number of "susceptible" and "infective" people in a population over the course of an epidemic. At the outbreak, there are very few infectives and lots of susceptibles. That situation changes over time, as will be familiar from the COVID-19 pandemic. A mathematical model of the "mechanics" of infection is represented by the field of arrows. Each arrow indicates how, starting at a given number of susceptibles and infectives, the situation will develop over a short period of time. Finding the pattern over a long period of time is a matter of following the arrows as each is encountered.
+Purely for the sake of demonstrating how`{mosaicCalc}` tasks can be combined, consider again the figure at the very start of this guide and reproduced below. The calculus involved is covered in [*MOSAIC Calculus*](https://mosaic-web.org/MOSAIC-Calculus/) at the end of the course, so beginners likely won't understand the mathematics. Still, the graph can be interpreted. The blue line shows the number of "susceptible" and "infective" people in a population over the course of an epidemic. At the outbreak, there are very few infectives and lots of susceptibles. That situation changes over time, as will be familiar from the COVID-19 pandemic. A mathematical model of the "mechanics" of infection is represented by the field of arrows. Each arrow indicates how, starting at a given number of susceptibles and infectives, the situation will develop over a short period of time. Finding the pattern over a long period of time is a matter of following the arrows as each is encountered.
 
 As a motivating example, here is a graph that summarizes a widely used mathematical description of the spread of epidemics, called the "SIR model." The model and the graphic are topics near the end of the *MOSAIC Calculus* text, so beginners can hardly be expected to make sense of the mathematics involved.
 
