@@ -15,6 +15,8 @@
 #' @param alpha Transparency of contours in `[0-1]`
 #' @param fill_alpha Transparency of fill
 #' @param label_alpha Likewise, for contour labels
+#' @param label_placement A number, between 0 and 1, suggesting where to place
+#' the contour labels. Default: 0.5. This can be useful when there are two contour layers in one plaot.
 #' @param contour_color Set to a string, e.g. `"blue"` for contours
 #' to be drawn in a fixed color
 #' @param label_color Defaults to `contour_color`. Can be set to a
@@ -44,6 +46,7 @@ contour_plot <- function(..., # canonical first three arguments
                          alpha = 1,
                          fill_alpha = 0.1,
                          label_alpha  = 1,
+                         label_placement = 0.5,
                          contour_color = "blue",
                          label_color = contour_color,
                          skip = 1,
@@ -156,7 +159,7 @@ contour_plot <- function(..., # canonical first three arguments
     P <- P + metR::geom_label_contour(aes(z = .output.),
                                      data = Eval_grid,
                                      color=label_color,
-                                     label.placer = metR::label_placer_fraction(),
+                                     label.placer = metR::label_placer_fraction(frac=label_placement),
                                      label.padding = grid::unit(0.25, "lines"),
                                      breaks = coarse_breaks, skip=skip,
                                      alpha=label_alpha)

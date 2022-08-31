@@ -11,7 +11,7 @@ Description: Software to support the introductory *MOSAIC Calculus*
     The software is suitable for general use, but intended mainly for teaching calculus.
 Version: 0.6.0
 Depends:
-    R (>= 3.4.0),
+    R (>= 3.5.0),
 Imports:
     cubature,
     Deriv,

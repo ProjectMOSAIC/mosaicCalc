@@ -15,6 +15,7 @@ contour_plot(
   alpha = 1,
   fill_alpha = 0.1,
   label_alpha = 1,
+  label_placement = 0.5,
   contour_color = "blue",
   label_color = contour_color,
   skip = 1,
@@ -45,6 +46,9 @@ at these levels of the output.}
 \item{fill_alpha}{Transparency of fill}
 
 \item{label_alpha}{Likewise, for contour labels}
+
+\item{label_placement}{A number, between 0 and 1, suggesting where to place
+the contour labels. Default: 0.5. This can be useful when there are two contour layers in one plaot.}
 
 \item{contour_color}{Set to a string, e.g. \code{"blue"} for contours
 to be drawn in a fixed color}

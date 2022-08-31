@@ -1,7 +1,7 @@
 ---
 title: "Beginners' Guide to Calculus with R"
 author: "Daniel Kaplan"
-date: "July 2022"
+date: "August 2022"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Beginners' Guide to Calculus with R}
@@ -16,19 +16,28 @@ library(mosaicCalc)
 library(ggformula)
 ```
 
-This document guides students or instructors who are beginners with R and who want to learn calculus. It describes the use of the "R package" called `{mosaicCalc}`. The package provides software with a unified and consistent user interface for calculus operations. `{mosaicCalc}` is the engine behind the [*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) textbook, available free online. However, instructors can and do use `{mosaicCalc}` independently of [*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/).
 
-R, as you may know, is an environment and language for technical computing. Think of technical computing as serving the specialized needs of scientists and engineers. 
+This guide is for calculus students or instructors who are beginners with R. It describes an "R package" called `{mosaicCalc}` which provides software with a unified and consistent user interface for calculus operations. `{mosaicCalc}` is the engine behind the [*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) textbook, available free online. However, instructors can and do use `{mosaicCalc}` independently of [*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/).
 
-R is most widely associated with data science and statistics, but it is also well suited to calculus and many other diverse fields. This results, in part, from the "open source" nature of the R environment. An aspect of "open source" is that anyone can contribute new capabilities to the environment using an officially standardized format called an "R package." There are thousands of such packages available through the official distribution network called CRAN. `{mosaicCalc}` is one of those packages and works in conjunction with other CRAN packages.
+Many R packages provide narrative documentation in the form of "vignettes," the word used in the R community for guides such as this one. This guide is one of three vignettes for `{mosaicCalc}`. There is also a quick-reference vignette which may be helpful for those who need to jog their memory when writing `{mosaicCalc}` commands. Finally, a third vignette explains some features and syntax of `{mosaicCalc}` that an experienced R user may not have previously encountered. 
+
+As you may know, R is an environment and language for technical computing. Think of technical computing as serving the specialized needs of scientists and engineers. R is most widely associated with data science and statistics, but it is also well suited to calculus and many other diverse fields. This results, in part, from the "open source" nature of the R environment. An aspect of "open source" is that anyone can contribute new capabilities to the environment using an officially standardized format called an "R package." There are thousands of such packages available through the official distribution network called CRAN. `{mosaicCalc}` is one of those packages and works in conjunction with other CRAN packages.
 
 As you can see from the previous two paragraphs, we use a `monospaced font` when referring to names that are part of the computer system. Many of the names you will encounter, like `D()`, `antiD()`, and `Integrate()`, will be names of "functions" that allow you to perform computations such as differentiation and integration. `{mosaicCalc}` is not a function. Rather it is a *collection* of functions that inter-operate and follow similar conventions. The curly braces in `{mosaicCalc}` remind readers that it is a collection of functions. 
 
-`{mosaicCalc}`, like all R packages, needs to be installed before it can be used. Often, instructors arrange to have packages installed automatically. You can check by giving the R command `library(mosaicCalc)`. If the command works, the installation has already been done. Otherwise, the command will produce an error message (check your spelling carefully!) if you need to install `{mosaicCalc}` and some related packages. In this case, check with your instructor if there is a specific process for your educational institution. (An example would be "Use rstudio.cloud.")  Otherwise, you can carry out the installation using the setup instructions in the *MOSAIC Calculus* textbook via [this link](https://dtkaplan.github.io/MC2/R-mosaic-setup.html). 
+`{mosaicCalc}`, like all R packages, needs to be installed before it can be used. Often, instructors arrange to have packages installed automatically. You can check by giving the R command `library(mosaicCalc)`. If the command works, the installation has already been done. Otherwise, the command will produce an error message (check your spelling carefully!) if you need to install `{mosaicCalc}` and some related packages. In this case, check with your instructor if there is a specific process for your educational institution. (An example: "Use rstudio.cloud.")  Otherwise, you can carry out the installation using the setup instructions in the *MOSAIC Calculus* textbook via [this link](https://dtkaplan.github.io/MC2/R-mosaic-setup.html). 
+
+## Loading the package
+
+Once you have started a session in the R system, you need to direct R to provide the `{mosaicCalc}` software. Do this with the following directive:
+
+```r
+library(mosaicCalc)
+```
 
 ## The `{mosaicCalc}` command pattern 
 
-A "command" is a complete instruction to the computer to perform a specified task. There are only about a dozen commonplace tasks used in calculus. To begin, consider the familiar task of "graphing a mathematical function." A function-graphing command needs to include at least three pieces of information. 
+A "command" is a complete instruction to the computer to perform a specified task. There are only about a dozen commonplace tasks used in calculus. To begin, consider the familiar task of drawing a graph of a mathematical function. A function-graphing command needs to include at least three pieces of information. 
 
 1. Which type of graph to make.
 2. What mathematical function to graph.
@@ -40,57 +49,48 @@ Constructing a command means laying out this information in a manner the compute
 slice_plot(x*sin(x) ~ x, bounds(x = 0:10))
 ```
 
-The pattern becomes clearer if we divide it into parts, one for each piece of information.
+The underlying pattern becomes more evident if we divide the command into parts, one for each piece of information.
 
 $$\underbrace{\mathtt{slice\_plot}}_\text{task name}{\color{magenta}{\left(\strut\right.}}\ \underbrace{\mathtt{x*sin(x)\  {\verb+~+}\ x}}_\text{function description}\ \color{magenta}{\LARGE,}\ \  \underbrace{\mathtt{bounds(x = 0\!:\!5)}}_\text{bounds on input to function}\color{magenta}{\left.\strut\right)}$$
 
 The command includes punctuation which, like punctuation in English, marks boundaries between elements. There are three elements in this command:
 
-
 The task name is the first element of every `{mosaicCalc}` command, and it is **always** followed by an *opening* parenthesis. The corresponding *closing* parenthesis goes at the very end of the command.
 
-Almost always, the function description is the second element of a command, following the opening parenthesis. The description is always written in a particular format called a "tilde expression" which is described in the next section of this document.
+Almost always, the function description is the second element of a `{mosaicCalc}` command, following the opening parenthesis. The function description is written in an R format called a "tilde expression," which is described in the next section of this document.
 
-Graphics tasks always have a third element specifying the bounds to be used in the graphic. Note that a comma separates the second and third elements of the command.
+Graphics commands always have a third element---the "bounds"--- specifying the region over which to draw the graph. Note that a comma separates the second and third elements of the command.
 
-Commands occasionally include additional elements to give more details such as the color of the graph. These are always separated from the previous elements by a punctuating comma.
+Commands occasionally include additional elements to give more details, such as the color of the graph. These are always separated from the previous elements by a punctuating comma.
 
-As you progress through a calculus course, you will encounter new calculus tasks. Each such task has a distinctive `{mosaicCalc}` task name. But the commands you construct to perform these tasks will always have a format similar to the example above. For instance, there is a calculus task called "anti-differentiation" which can be carried out with a command starting with `antiD()`, for instance
+You will encounter new calculus tasks as you progress through a calculus course. Each such task has a specific `{mosaicCalc}` task name. But the commands you construct to perform these tasks will always have a format similar to the example above. For instance, there is a calculus task called "anti-differentiation," which can be carried out with a command starting with `antiD()`, for instance:
 
 ```{r}
 antiD(x*sin(x) ~ x)
 ```
 
-Even if you don't know what "anti-differentiation" is, you should be able to make sense of the structure of the command: a task name followed by a function description, with the appropriate punctuation. The computer produces a result in response to the command. In the `slice_plot()` example the response is a graph. In the `antiD()` example, the response is a new mathematical function.
-
-
-**Reminder**: Whenever you open anew the R or RStudio apps, give the command needed to direct your R session to the `{mosaicCalc}` software:
-
-```r
-library(mosaicCalc)
-```
-
+Even if you don't know what "anti-differentiation" is, you should be able to make sense of the structure of the command: a task name followed by a function description with the appropriate punctuation. The computer produces an output in response to the command. In the `slice_plot()` example, the output is a graph. In the `antiD()` example, the output is a new mathematical function.
 
 ## Tilde expressions
 
-An **expression** in computing is more or less like a sentence, phrase, or word in English: a meaningful unit of communication. A **tilde expression** is a particular type of statement in the R language that involves the character called "tilde," written as ![](www/tilde-small.png). Here are some examples of tilde expressions, which are used in `{mosaicCalc}` mainly to encode mathematical expressions. Some examples:
+An **expression** in computing is more or less like a sentence, phrase, or word in English: a meaningful unit of communication. A **tilde expression** is a type of statement in the R language that involves the character called "tilde," written as ![](www/tilde-small.png). Here are some examples of tilde expressions, which are used in `{mosaicCalc}` mainly to specify mathematical functions. Some examples:
 
 - `a*x^2 + b*x + c ~ x`
 - `f(2*t) ~ g(t)`
 - `dz ~ c*z - b*x*y`
 - `exp(-k*t) ~ .`
 
-Note that each of these expressions is centered on the tilde character. (Sometimes you have to look very closely to distinguish tilde `~` from the minus sign `-`.) There is always a right-hand side, which might be long or very short as in the `.` in the tilde expression `exp(-k*t) ~ .`
+Note that each of these expressions is centered on the tilde character. (Sometimes, you have to look very closely to distinguish tilde `~` from the minus sign `-`.) There is always a right-hand side, which might be long or very short as in the `.` in the tilde expression `exp(-k*t) ~ .`
 
-Many newcomers mis-interpret ![](www/tilde-small.png) as meaning "equals." But in reality ![](www/tilde-small.png) is simply an arbitrary symbol and has no intrinsic meaning except to mark an expression as special. Special in what way? You'll come to understand that as you gain experience with tilde expressions. As a preview, which you may not understand at this point, consider `exp(-k*t) ~ .`   Without the `~ .` that expression would be simply `exp(-k*t)` which the computer takes as a command to do some arithmetic with numbers in the place of `k` and `t`. In contrast, as part of a tilde expression `exp(-k*t) ~ .` it means, "Remember the mathematical formula $e^{-kt}$ for use later on. 
+Many newcomers misinterpret ![](www/tilde-small.png) as meaning "equals." But in reality ![](www/tilde-small.png) simply marks an expression as special. Special in what way? You'll come to understand that as you gain experience with tilde expressions. As a preview, which you may not understand at this point, consider `exp(-k*t) ~ .` which has a period to the right of the tilde. Without the `~ .` that expression would be simply `exp(-k*t)` which the computer takes as a command to do some arithmetic with numbers in the place of `k` and `t`. In contrast, as part of a tilde expression `exp(-k*t) ~ .` it means, "Remember the mathematical formula $e^{-kt}$ for use later on. 
 
 ## Functions
 
-"Functions" are a fundamental structure both in mathematics and in computer programming. Indeed, calculus is about the study and use of "continuous functions." ([*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) and every other calculus text explain what "continuous" means mathematically.) 
+"Functions" are a fundamental structure both in mathematics and computer programming. Indeed, calculus is about the study and use of "continuous functions." ([*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) and every other calculus text explain what "continuous" means mathematically.) 
 
-The purpose of mathematical functions is to represent relationships between one quantity, called the "output," and other quantities called the "input" or "inputs." (Seen this way, calculus is about describing and using relationships, for example the relationship between position and velocity.). With functions being so important in computer programming, learning about them in calculus gives an impressive boost to students who later study programming. 
+The purpose of mathematical functions is to represent relationships between one quantity, called the "output," and other quantities called the "input" or "inputs." (Calculus is fundamentally about describing and using relationships between quantities, for example the relationship between position and velocity.). With functions being so important in computer programming, learning about them in calculus boosts students who later study programming. 
 
-It's likely that you have already learned about some important mathematical functions, such as the sine function and the logarithm function. Regrettably, the notation usually encountered in high-school mathematics is ambiguous about what is a function and what is not. Since calculus is the study of functions, the high-school ambiguity about functions leads to difficulty and frustration in many students who go on to study calculus. 
+Likely, you have already learned about some important mathematical functions, such as the sine function and logarithm function. Regrettably, the notation usually encountered in high-school mathematics is ambiguous about what is a function and what is not. Since calculus is the study of functions, the high-school ambiguity about functions leads to difficulty and frustration in many students who go on to study calculus. 
 
 [*MOSAIC Calculus*](https://dtkaplan.github.io/MC2/) and `{mosaicCalc}` aim to avoid the ambiguity introduced in high school. A first step in doing this is to point out key distinctions that high-school notation confuses: a "formula" versus an "equation" versus a "function."
 
@@ -237,4 +237,5 @@ traj_plot(S(t) ~ I(t), soln, color="blue") %>%
 ```
 
 But even at this point you should be able to spot some of the important components of the commands, such as tilde expressions (e.g. `dS ~ -a*S*I`), graphical bounds (e.g. `bounds(I=0:75, S=60:400)`) and assignment of numerical values to parameters (e.g. 'a = 0.0026`).
+
 
