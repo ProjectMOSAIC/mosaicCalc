@@ -199,7 +199,7 @@ g <- makeFun(2 + 3*x - 7*x^2 ~ .)
 <summary>Drawing contour plots</summary>
 In *MOSAIC Calculus*, we generally use a contour-plot format to display graphically a function with two inputs. This is done in much the same way as `slice_plot()`.
 
-* `contour_plot(3 + 2*x - 4*y + 0.5*x*y ~ x & y, bounds(x=-5 : 5), y=0 : 10))`
+* `contour_plot(3 + 2*x - 4*y + 0.5*x*y ~ x & y, bounds(x=-5:5, y=0:10))`
     - *What it does* Draws a contour plot in a graphics frame with two dimensions.
     - *Vocabulary* Nothing here that you haven't seen in `slice_plot()`: tilde expression, bounds, ...
     - *Notes*
@@ -544,7 +544,7 @@ constant_fun  <- makeFun(1 ~ x)
 straight_line <- makeFun(m*x + b ~ x, b=0, m=1)
 exponential   <- makeFun(exp(k * x) ~ x, k=1)
 power_law     <- makeFun(x^p ~ x, p = 1/2)
-sinusoid      <- makeFun(2*pi*(t-t0)/P ~ t, P=2, t0=0)
+sinusoid      <- makeFun(sin(2*pi*(t-t0)/P) ~ t, P=2, t0=0)
 logarithm     <- makeFun(log(x, base=exp(1)) ~ x)
 gaussian      <- makeFun(dnorm(x, mean, sd) ~ x, mean=0, sd=1)
 sigmoid       <- makeFun(pnorm(x, mean, sd) ~ x, mean=0, sd=1)
