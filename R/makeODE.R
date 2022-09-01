@@ -31,8 +31,8 @@ makeODE <- function(...) {
   }
   
   
-  Dyn_object <- list(names = character(0), functions = NULL, 
-                     values=NULL, domain=NULL, dt=0.01, Pprev=NULL)
+  Dyn_object <- list(Pprev=NULL, names = character(0), functions = NULL, 
+                     values=NULL, domain=NULL, dt=0.01)
   if (inherits(args[[1]], "gg")) {
     Dyn_object$Pprev <- args[[1]]
     args[1] <- NULL
@@ -87,7 +87,7 @@ makeODE <- function(...) {
   if (length(args) > 0) {
     spaceInds <- which( sapply(args, function(x) inherits(x, 'xydomain') ) )
     if (length(spaceInds) > 0) {
-      Dyn_object$xydomain <- args[[spaceInds[length(spaceInds)]]] # last one
+      Dyn_object$domain <- args[[spaceInds[length(spaceInds)]]] # last one
       args[spaceInds] <- NULL
     }
   }

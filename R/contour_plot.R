@@ -128,8 +128,11 @@ contour_plot <- function(..., # canonical first three arguments
   input_names <- input_names[input_names != ".output."]
   the_mapping <- aes(x = !!as.name(input_names[1]),
                      y = !!as.name(input_names[2]))
-  if (is.null(object))
+  if (is.null(object)) {
     object <- ggplot(Eval_grid, the_mapping)
+  } else { # get rid of previous aesthetic
+    object$mapping <- the_mapping 
+  }
 
   P <- object
 

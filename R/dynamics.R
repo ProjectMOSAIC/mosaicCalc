@@ -39,7 +39,7 @@
 #' @export
 streamlines <- function(..., npts=8, dt=0.01, nsteps=10, color="black", alpha=1) {
   Dyn <- makeODE(...)
-  dom <- Dyn$xydomain  # Graphical domain
+  dom <- Dyn$domain  # Graphical domain
   # check if the domain is in the ... arguments. 
   if (length(dom) < 2) stop("domain must have two variables")
   xpts <- seq(min(dom[[1]]), max(dom[[1]]), length = npts)
@@ -89,7 +89,7 @@ streamlines <- function(..., npts=8, dt=0.01, nsteps=10, color="black", alpha=1)
 #' @export
 flow_field <- function(..., npts=8, scale=0.8, color="black", alpha=1) {
   Dyn <- makeODE(...)
-  dom <- Dyn$xydomain  # Graphical domain
+  dom <- Dyn$domain  # Graphical domain
   # check if the domain is in the ... arguments. 
   if (length(dom) < 2) stop("domain must have two variables")
   #dyn <- parse_dynamics(first,..., req_initials=FALSE)

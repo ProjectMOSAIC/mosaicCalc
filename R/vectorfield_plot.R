@@ -115,28 +115,12 @@ vectorfield_plot <- function(..., # canonical first four arguments
   #args <- first_three_args(..., two_tildes = TRUE)
   # gives $tilde and $tilde2
   Pprev <- args$Pprev # previous graphic layers
-  domain <- args$xydomain
-  # construct tilde expressions for the dynamics. 
-  # formula_x will be for the first variable in the domain
-  # formula_y will be for the second variable in the domain
-  formula_x <- formula_y <- left ~ right  # a framework for the tilde expr. 
-  formula_x[[2]] <- args$functions[[which(names(args$xydomain)[1] == args$names)]]
-  formula_y[[2]] <- args$functions[[which(names(args$xydomain)[2] == args$names)]]
-  formula_x[[3]] <- parse(text=paste(args$names, collapse="&"))[[1]]
-  formula_y[[3]] <- formula_x[[3]]
-  
-  if (is.environment(env)) {
-    environment(formula_x) <- env
-    environment(formula_y) <- env
-  }
- 
-  
-
+  domain <- args$domain
   
   # check whether to inherit domain from previous layer
   if (inherits(Pprev, "gg")) {
     if (is.null(domain)) {
-      look_for <- all.vars(formula_x[[3]]) # the input variable names
+      look_for <- args$names # the input variable names
       if (all(look_for %in% names(Pprev$data))) {
         domain <- list()
         domain[[look_for[1]]] <- range(Pprev$data[[look_for[1]]])
@@ -146,6 +130,26 @@ vectorfield_plot <- function(..., # canonical first four arguments
       }
     }
   }
+  
+  # construct tilde expressions for the dynamics. 
+  # formula_x will be for the first variable in the domain
+  # formula_y will be for the second variable in the domain
+  formula_x <- formula_y <- left ~ right  # a framework for the tilde expr. 
+  formula_x[[2]] <- args$functions[[which(names(domain)[1] == args$names)]]
+  formula_y[[2]] <- args$functions[[which(names(domain)[2] == args$names)]]
+  formula_x[[3]] <- parse(text=paste(args$names, collapse="&"))[[1]]
+  formula_y[[3]] <- formula_x[[3]]
+  
+  if (is.environment(env)) {
+    environment(formula_x) <- env
+    environment(formula_y) <- env
+  }
+  
+  
+  
+
+  
+  
 
   # Bring in the dx() and dy() function definitions from the formulas
   # These will have been defined by gradient_plot() or will be null if 
@@ -208,6 +212,7 @@ vectorfield_plot <- function(..., # canonical first four arguments
                        xend = x_end, yend = y_end),
                    arrow = arrow(length=unit(0.05, "inches")),
                    color = color, alpha = alpha) +
-    labs(y = input_names[2], x = input_names[1])
+    labs(y = input_names[2], x = input_names[1])  
+  # Still need to get rid of x_start, y_start aesthetics
 
 }
