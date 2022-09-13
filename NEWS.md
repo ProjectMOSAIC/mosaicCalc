@@ -41,12 +41,13 @@
   
 ## mosaicCalc 0.5.6
 
-  * added transform feature to vectorfield_plot() and centered arrows on the gridpoint
+  * vectorfield_plot() gets transform feature to (optionally) avoid too-small arrows. 
+  * vectorfield_plot() arrows now centered on the gridpoint.
   
 ## mosaicCalc 0.5.7
 
-  * added traj_plot_3D()
-  * better error messages in integrateODE()
+  * traj_plot_3D() added
+  * integrateODE() has improved error messages.
   
 ## mosaicCalc 0.5.8
 
@@ -55,7 +56,7 @@
   
 ## mosaicCalc 0.5.9
 
-  * Improved checking for unbound parameters in graphics functions slice_plot(), contour_plot(), vectorfield_plot(), and gradient_plot().
+  * slice_plot(), contour_plot(), vectorfield_plot(), and gradient_plot() have improved checking for unbound parameters.
   * Added ability to bind or re-bind parameters in those graphics functions calls.
   * Exported bind_params(), perhaps useful for demonstrations of difference between arguments and parameters in mathematical functions.
 
