@@ -7,7 +7,7 @@ Description: Software to support the introductory *MOSAIC Calculus*
     Project MOSAIC (<https://www.mosaic-web.org/>). Provides symbolic and
     numerical differentiation and integration, as well as support for 
     applied linear algebra (for data science), and differential equations/dynamics.
-    Includes `{ggformula}`-based graphics for functions, vector fields, trajectories, etc.
+    Includes ggplot-based graphics for functions, vector fields, trajectories, etc.
     The software is suitable for general use, but intended mainly for teaching calculus.
 Version: 0.6.0
 Depends:
