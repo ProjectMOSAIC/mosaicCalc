@@ -1,3 +1,7 @@
+# mosaicCalc 0.6.0
+
+# mosaicCalc 0.7.0
+
 # mosaicCalc package NEWS
 
 ## mosaicCalc 0.5.0
