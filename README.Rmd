@@ -1,4 +1,5 @@
 ---
+title: "mosaicCalc: Calculus in R"
 ---
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mosaicCalc)](https://cran.r-project.org/package=mosaicCalc)

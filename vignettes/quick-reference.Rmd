@@ -507,8 +507,10 @@ f2 <- makeFun(x*sin(sqrt(3+x))*(1+cos(y))-y ~ .)
 solns <- argM(f2(x, y) ~ x & y, bounds(x=c(-3,3), y=c(-3,3)))
 solns
 ```
+<!-- the following command fails on Windows. I've commented it out
+     until I get a Windows machine to debug things on. -->
 
-```{r echo=TRUE}
+```{r echo=TRUE, eval=FALSE}
 contour_plot(f2(x,y) ~ x & y, bounds(x=c(-3,3), y=c(-3,3))) %>%
   gf_point(y ~ x, data = solns, color="red")
 ```
@@ -573,7 +575,10 @@ h <- makeFun(exp(sin(2*pi*t/P) ~ x) ~ ., P = 3)
 <details>
 <summary>Graphing functions</summary>
 
-```{r graphing-functions, exercise=TRUE,  exercise.cap="Graphing functions", exercise.lines=10}
+<!-- the following command fails on Windows. I've commented it out
+     until I get a Windows machine to debug things on. -->
+
+```{r graphing-functions, exercise=TRUE,  exercise.cap="Graphing functions", exercise.lines=10, eval=FALSE}
 slice_plot(dnorm(x, mean=1, sd=2) ~ x, 
            bounds(x=-5:5))
 contour_plot(dnorm(x, mean=1, sd=2) * pnorm(y, mean=-3, sd=1) ~ x + y,
