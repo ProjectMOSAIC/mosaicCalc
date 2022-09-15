@@ -13,7 +13,7 @@
 
 OS X test environment: No ERRORs, WARNINGs, or NOTEs.
 
-win-builder via devtools: No ERRORs or WARNINGs. One NOTE relating to a possible misspelling of "ggformula" in the DESCRIPTION field of the DESCRIPTION file. This is a false-positive: "ggformula" is a genuine package available on CRAN.
+win-builder via devtools: No ERRORs, WARNINGs, or NOTEs.
 
 ## Downstream dependencies
 
