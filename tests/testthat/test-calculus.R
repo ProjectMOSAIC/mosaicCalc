@@ -224,4 +224,13 @@ test_that("integration bug with -Inf as lower bound is worked around",{
   expect_that(G(-Inf), equals(0, tol=0.00001))
 })
 
-
+test_that("symbolic integration preserves pre-specified parameter values (Issue 18)", {
+  k <- makeFun( 1 - x^2 ~ x )
+  K <- antiD( k(x) ~ x )
+  area <- K(1) - K(-1); area 
+  #> [1] 1.333333
+  f <- makeFun( (1 - x^2)/A ~ x, A = area )
+  F <- antiD(f(x) ~ x)
+  A_argument <- formals(F)$A
+  expect_equal(A_argument, area)
+})

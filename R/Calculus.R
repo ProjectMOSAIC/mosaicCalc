@@ -105,9 +105,9 @@ D.formula <- function(tilde, ...){
     res = try(symbolicD(newformula, ...), silent=TRUE)
     if( inherits(res, "try-error") ) # second symbolic attempt unsuccessful
       res = numD( tilde, ...)
+    res <- conventional_argument_order(res) %>% bind_params(args)
   }
-  
-  res <- conventional_argument_order(res) %>% bind_params(args)
+  res <- conventional_argument_order(res)
   return(simplify_fun(res))
 }
 
@@ -150,7 +150,10 @@ antiD <- function(tilde, ..., lower.bound=0, force.numeric=FALSE, .tol=0.0001){
   if (!force.numeric){ # Try symbolic integral
     # First try Ryacas 
     Fun <- try(simpleYacasIntegrate(tilde, ...), silent=TRUE)
-    if (is.function(Fun) && ! "AntiDeriv" %in% all.names(body(Fun))) return(Fun)
+    if (is.function(Fun) && ! "AntiDeriv" %in% all.names(body(Fun))) {
+      Fun <- conventional_argument_order(Fun) %>% bind_params(args)
+      return(Fun)
+    }
   }
   # Do integral numerically
   res <- makeNumericalAntiD(tilde, wrt, lower.bound=lower.bound, .tol=.tol, ...) 
