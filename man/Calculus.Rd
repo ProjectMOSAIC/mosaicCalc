@@ -16,7 +16,7 @@ carry out the integration or differentiation.  On the left side should be
 an expression or a function that returns a numerical vector
 of the same length as its argument.
 The expression can contain unbound variables.  Functions
-will be differentiated as if the formula {f(x) ~ x} were specified
+will be differentiated as if the formula \code{f(x) ~ x} were specified
 but with \code{x} replaced by the first argument of \code{f}.}
 
 \item{\dots}{Default values to be given to unbound variables in the expression \code{expr}.
@@ -48,19 +48,19 @@ Operators for computing derivatives and anti-derivatives as
 functions.
 }
 \details{
-\code{D} attempts to find a symbolic derivative for simple expressions, but
+\code{D()} attempts to find a symbolic derivative for simple expressions, but
 will provide a function that is a numerical derivative if the attempt at
 symbolic differentiation is unsuccessful.  The symbolic derivative can be of
 any order (although the expression may become unmanageably complex).  The
 numerical derivative is limited to first or second-order partial derivatives
 (including mixed partials).
-\code{antiD} will attempt simple symbolic integration but if it fails
+\code{antiD()} will attempt simple symbolic integration but if it fails
 it will return a numerically-based anti-derivative.
 
-\code{antiD} returns a function with the same arguments as the
+\code{antiD()} returns a function with the same arguments as the
 expression passed to it.  The returned function is the anti-derivative
-of the expression, e.g., antiD(f(x)~x) -> F(x).
-To calculate the integral of f(x), use F(to) - F(from).
+of the expression, e.g., \code{antiD(f(x)~x) -> F(x)}.
+To calculate the integral of \code{f(x)}, use \code{F(to) - F(from)}.
 }
 \examples{
 D(sin(t) ~ t)

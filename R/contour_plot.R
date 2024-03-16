@@ -3,7 +3,6 @@
 #' Creates a ggplot2-compatible contour plot of a function
 #' of two variables.
 #'
-#'
 #' @param \dots Canonical first "three" arguments: `[Previous layer]`, tilde expression, [domain]
 #' @param npts Integer number of points on each axis at which to evaluate the function
 #' @param labels Logical flag: label the contours
@@ -32,6 +31,8 @@
 #' contour_plot(x + y ~ x & y)
 #' contour_plot(sin(0.2*x*y)) # but better to use tilde expression
 #' }
+#' 
+#' @returns ggplot2 graphics layers
 #'
 #' @importFrom  ggplot2 aes  ggplot geom_line geom_text scale_color_viridis_c scale_fill_viridis_c guides
 #' @importFrom  metR geom_contour_fill geom_contour2 geom_text_contour

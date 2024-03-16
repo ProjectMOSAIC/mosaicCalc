@@ -12,11 +12,8 @@
 #'
 #' @keywords datasets
 #'
-#' @format
-#'   A data frame with 747 rows
-#'   \itemize{
-#'     \item{\code{year}} {Which year the estimate is for.}
-#'     \item{\code{GDP}} {*per capita* Gross domestic product in GBP (pounds)}
-#'     }
+#' @format A data frame with 747 rows
+#' - `year` Which year the estimate is for.
+#' - `GDP` *per capita* Gross domestic product in GBP (pounds)
 #'
 "UK_GDP"

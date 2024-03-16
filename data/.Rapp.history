@@ -1,0 +1,4 @@
+load("/Users/kaplan/Packages/mosaicCalc/data/Boyle_data.rda")
+Boyle_data
+ls()
+Boyle

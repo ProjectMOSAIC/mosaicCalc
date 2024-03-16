@@ -4,8 +4,9 @@
 #' The left-hand argument is a vector.
 #'
 #' Convenience functions for basic operations relating to vector projection. These use
-#' the Zcalc conventions that require vectors to be one column matrices.
+#' the *MOSAIC Calc* conventions that require vectors to be one column matrices.
 #'
+#' @returns either a number (for `%dot%`) or a vector
 #'
 #' @param A a matrix
 #' @param b a column vector

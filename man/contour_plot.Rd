@@ -65,6 +65,9 @@ to be drawn in a fixed color}
 
 \item{fill_scale}{See ggplot2 fill scales}
 }
+\value{
+ggplot2 graphics layers
+}
 \description{
 Creates a ggplot2-compatible contour plot of a function
 of two variables.

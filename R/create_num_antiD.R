@@ -11,6 +11,9 @@
 #' problems with the function being integrated, but not generally needed.
 #' @param .tol Numerical tolerance for the integration
 #' 
+#' @returns a function with the w.r.t. variable as the first argument. The function
+#' is a wrapper around numerical integration routines.
+#' 
 create_num_antiD <- function(tilde, ..., lower = NULL, .tol=0.0001) {
   wrt <- all.vars(tilde[[3]])[1] # right hand side of formula
   little_f <- makeFun(tilde) %>% bind_params(...)

@@ -15,6 +15,9 @@ knots for the spline.}
 
 \item{free}{A number specifying the slope of the output function at the last knot. Default is 0: that is, flat.}
 }
+\value{
+a function suitable for, for instance, graphing or optimizing
+}
 \description{
 A handmade function to construct quadratic splines.
 }

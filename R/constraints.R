@@ -16,6 +16,8 @@
 #' is more appropriate for publication-quality graphics.
 #' @param fill the color to use for shading
 #' @param alpha the opacity of the shading
+#' 
+#' @returns ggplot2 graphics layers
 #'
 #' @examples
 #' inequality_constraint(x + y > 2 ~ y + x, domain(y=0:3, x=0:2))

@@ -12,6 +12,9 @@ that are to be collected into the model matrix.}
 
 \item{data}{The data frame from which to which the variable names will be bound.}
 }
+\value{
+a matrix
+}
 \description{
 The \emph{MOSAIC Calculus} course includes a block on linear algebra.
 As part of this block, we want to cover creating model matrices and evaluating

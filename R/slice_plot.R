@@ -30,6 +30,8 @@
 #' # see domain
 #' }
 #'
+#' @returns ggplot2 layers
+#'
 #' @export
 slice_plot <- function(..., # canonical first three arguments
                        npts=101,

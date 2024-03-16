@@ -10,7 +10,10 @@ bounds(...)
 domain(...)
 }
 \arguments{
-\item{\dots}{One or more expression of the form x=-5:5}
+\item{\dots}{One or more expression of the form \code{x = -5:5}}
+}
+\value{
+a list with one component for each element in \dots
 }
 \description{
 domain() is used with slice_plot(), contour_plot(), or interactive_plot()
@@ -19,6 +22,11 @@ domain() (see the first example) but there are also shortcuts.
 In the shorthand syntaxes, you can but don't have to specify the name of
 the input. If it's not specified, the plotting programs will try
 to do something sensible. But better to specify the names explicitly.
+}
+\details{
+The colon operator is masked so that, for instance,
+\code{x = 0.5:1.3} literally means "0.5 to 1.3", and not just 0.5 as the
+base colon operator would give.
 }
 \examples{
 \dontrun{

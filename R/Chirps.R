@@ -9,13 +9,10 @@
 #'
 #' @keywords datasets
 #'
-#' @format
-#'   A data frame with 55 rows
-#'   \itemize{
-#'     \item{\code{date}} {Which year the estimate is for.}
-#'     \item{\code{time}} {in 24-hour format}
-#'     \item{\code{chirps}} {the number of chirps per 15 seconds}
-#'     \item{\code{temperature}} {in degrees F}
-#'     }
+#' @format A data frame with 55 rows
+#' - `date` Which year the estimate is for.
+#' - `time` in 24-hour format
+#' - `chirps` the number of chirps per 15 seconds
+#' - `temperature` in degrees F
 #'
 "Chirps"

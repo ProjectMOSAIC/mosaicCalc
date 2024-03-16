@@ -18,6 +18,10 @@ problems with the function being integrated, but not generally needed.}
 
 \item{.tol}{Numerical tolerance for the integration}
 }
+\value{
+a function with the w.r.t. variable as the first argument. The function
+is a wrapper around numerical integration routines.
+}
 \description{
 This will typically be called directly from \code{antiD()} when an
 integral can't be handled symbolically.

@@ -13,16 +13,15 @@
 #' @keywords datasets
 #'
 #' @format
-#'   A data frame with 128 cases, each a computer CPU.
-#'   \itemize{
-#'     \item{\code{processor}} {Model name/number of the processor}
-#'     \item{\code{transistors}} {Number of transistors}
-#'     \item{\code{year}} {Year of market introduction of the CPU}
-#'     \item{\code{designer}} {The company that introduced the CPU}
-#'     \item{\code{process}} {The width of circuit elements, in nm.}
-#'     \item{\code{area}} {Area of the chip in mm-squared.}
-#'     \item{\code{density}} {The number of transistors per unit area, simply `transistors/area`.}
-#'     }
+#' A data frame with 128 cases, each a computer CPU.
+#' - `processor` Model name/number of the processor
+#' - `transistors` Number of transistors
+#' - `year` Year of market introduction of the CPU
+#' - `designer` The company that introduced the CPU
+#' - `process` The width of circuit elements, in nm.
+#' - `area` Area of the chip in mm-squared.
+#' - `density` The number of transistors per unit area, simply `transistors/area`.
+#'     
 #'
 #' @source Dr. Joe Eichholz
 "CPUs"

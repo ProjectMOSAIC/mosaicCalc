@@ -36,6 +36,7 @@
 #' vectorfield_plot(x ~ -y, y ~ x, bounds(x=-1:1, y=-1:1), transform=function(x) x^0.2 )
 #' vectorfield_plot(u ~ sin(u-v), v ~ v*u^2, bounds(u=0:1, v=-1:1))
 #'  
+#' @returns ggplot2 graphics layers
 #' @export
 gradient_plot <- function(..., # canonical first three arguments
                           #object=NULL, formula, domain,

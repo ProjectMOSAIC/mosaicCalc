@@ -8,16 +8,16 @@
 A data frame with 10 rows and these variables:
 \itemize{
 \item \code{planet} name of the planet
-\item \code{mass}  in  $10^{24}$ kg
+\item \code{mass}  in 10^24 kg
 \item \code{diameter} in  km
 \item \code{density} in kg/m^3
 \item \code{gravity}  in m/s^2
-\item Escape velocity in km/s
-\item Rotational  period in hours
+\item \code{escape_velocity} in km/s
+\item \code{rotational_period} in hours
 \item \code{day_length} in  hours
-\item \code{distance_from_sun} in $10^6$ km
-\item \code{perihelion} in  $10^6$ km
-\item \code{aphelion} in  $10^6$  km
+\item \code{distance_from_sun} in 10^6 km
+\item \code{perihelion} in  10^6 km
+\item \code{aphelion} in  10^6  km
 \item \code{orbital_period} in days
 \item \code{orbital_velocity}  in km/s
 \item \code{orbital_inclination} in degrees

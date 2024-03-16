@@ -27,6 +27,8 @@
 #' that are to be collected into the model matrix.
 #' @param data The data frame from which to which the variable names will be bound.
 #'
+#' @returns a matrix
+#'
 #' @details `1` is a good form in which to write the intercept term.
 #'
 #' @examples

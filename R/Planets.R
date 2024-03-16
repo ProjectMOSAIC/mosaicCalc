@@ -6,16 +6,16 @@
 #' @format A data frame with 10 rows and these variables:
 #'
 #' - `planet` name of the planet
-#' - `mass`  in  $10^{24}$ kg
+#' - `mass`  in 10^24 kg
 #' - `diameter` in  km
 #' - `density` in kg/m^3
 #' - `gravity`  in m/s^2
-#' - Escape velocity in km/s
-#' - Rotational  period in hours
+#' - `escape_velocity` in km/s
+#' - `rotational_period` in hours
 #' - `day_length` in  hours
-#' - `distance_from_sun` in $10^6$ km
-#' - `perihelion` in  $10^6$ km
-#' - `aphelion` in  $10^6$  km
+#' - `distance_from_sun` in 10^6 km
+#' - `perihelion` in  10^6 km
+#' - `aphelion` in  10^6  km
 #' - `orbital_period` in days
 #' - `orbital_velocity`  in km/s
 #' - `orbital_inclination` in degrees

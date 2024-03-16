@@ -1,3 +1,7 @@
+# mosaicCalc 0.6.1
+
+* No new user features. Just maintenance on internal package tests to keep up with changes to other packages.
+
 # mosaicCalc 0.6.0
 
 * Updated vignette and added two new vignettes: an instructor-facing guide and a quick reference.

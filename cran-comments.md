@@ -1,24 +1,13 @@
-## Test environments
-
-  * local OS X install: 
-    * R version 4.2.1 (2022-06-23)
-    * Platform: x86_64-apple-darwin17.0 (64-bit)
-    * Running under: macOS Monterey 12.3
-  
-  * win-builder via devtools
-    * R version R Under development (unstable) (2022-07-06 r82554 ucrt)
-    * Platform: x86_64-w64-mingw32 (64-bit)
-    
 ## R CMD check results
 
-OS X test environment: No ERRORs, WARNINGs, or NOTEs.
+0 errors | 0 warnings | 1 note
 
-win-builder via devtools: No ERRORs, WARNINGs, or NOTEs.
+* The note is for a "new submission." But really this is an update. CRAN notified me of a failed check in late December, 2023, but I wasn't able to make the fix before the deadline. The earlier CRAN version was archived on 2024-01-24.
+
+* The previous version of mosaicCalc (0.6.0) failed a test check on some architectures due to an update in another package, Ryacas. With version 0.6.1, the test check passes and some small documentation problems have been fixed. 
 
 ## Downstream dependencies
 
 fastR2, MMAC, and RISCA are the reverse dependencies on CRAN. They have been checked.
 
-## Other notes
 
-This is a substantial update and extension of a package currently on CRAN. 

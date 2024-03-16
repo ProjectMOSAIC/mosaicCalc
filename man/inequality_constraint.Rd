@@ -42,6 +42,9 @@ is more appropriate for publication-quality graphics.}
 
 \item{alpha}{the opacity of the shading}
 }
+\value{
+ggplot2 graphics layers
+}
 \description{
 These functions are intended to annotate contour plots with constraint regions. Inequality
 constraints are shaded where the constraint is NOT satisfied. Equality constraints

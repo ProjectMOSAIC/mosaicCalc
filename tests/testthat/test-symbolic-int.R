@@ -45,8 +45,9 @@ test_that('Numerical anti-derivative returned when appropriate', {
  expect_true("evalFun" %in% all.names(body(F)))
  F <- antiD(x^(x) ~ x)
  expect_true("evalFun" %in% all.names(body(F)))
- F <- antiD(1/x^2+1/x^3 ~ x) # I don't know why Ryacas doesn't handle this
- expect_true("evalFun" %in% all.names(body(F)))
+# This is only true on OS-X
+# F <- antiD(1/x^2+1/x^3 ~ x) # I don't know why Ryacas doesn't handle this
+# expect_true("evalFun" %in% all.names(body(F)))
 })
 
 test_that('Everything works',{

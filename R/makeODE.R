@@ -9,6 +9,9 @@
 #' SIR <- makeODE(dS~ -a*S*I, dI ~ a*S*I - b*I, a=0.0026, b=.5, S=762, I=1)
 #' soln <- integrateODE(SIR, domain(t=0:20))
 #' 
+#' @returns a list containing various functions and values specifying the
+#' ODE.
+#' 
 #' @export
 makeODE <- function(...) {
   # process the arguments

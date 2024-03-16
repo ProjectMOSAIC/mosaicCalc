@@ -31,6 +31,9 @@ should be in the same style as for \code{makeODE()}. See details.}
 
 \item{env}{Not for end-users. Handles details of where things are defined.}
 }
+\value{
+ggplot2 graphics layers
+}
 \description{
 Plot a vector field
 }

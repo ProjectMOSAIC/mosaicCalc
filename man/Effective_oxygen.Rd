@@ -7,8 +7,8 @@
 \format{
 A data frame with 30 rows
 \itemize{
-\item{\code{altitude}} {In feet above sea level}
-\item{\code{oxygen}} {Effective oxygen as a proportion of air (percent)}
+\item altitude` In feet above sea level
+\item oxygen` Effective oxygen as a proportion of ai-
 }
 }
 \source{

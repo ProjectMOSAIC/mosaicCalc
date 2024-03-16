@@ -21,17 +21,17 @@
 #'
 #'
 #' @param tilde A tilde expression. The right side of a formula specifies
-#'   the variable(s) with which to
-#'   carry out the integration or differentiation.  On the left side should be
-#'   an expression or a function that returns a numerical vector
-#'   of the same length as its argument.
-#'   The expression can contain unbound variables.  Functions
-#'   will be differentiated as if the formula {f(x) ~ x} were specified
-#'   but with \code{x} replaced by the first argument of \code{f}.
+#' the variable(s) with which to
+#' carry out the integration or differentiation.  On the left side should be
+#' an expression or a function that returns a numerical vector
+#' of the same length as its argument.
+#' The expression can contain unbound variables.  Functions
+#' will be differentiated as if the formula `f(x) ~ x` were specified
+#' but with `x` replaced by the first argument of `f`.
 #' @param \dots Default values to be given to unbound variables in the expression \code{expr}.
 #' See examples.#'  Note that in creating anti-derivative functions,
 #' default values of "from" and "to" can be assigned.  They are to be written with
-#' the name of the variable as a prefix, e.g. \code{y.from}.
+#' the name of the variable as a prefix, e.g. `y.from`.
 #' @param .tol Tolerance for numerical integration. Unless you know what this means, don't
 #' use this argument.
 #'
@@ -43,19 +43,19 @@
 #' named form of arguments, to ensure the order is correct.
 #'
 #' @details
-#' \code{D} attempts to find a symbolic derivative for simple expressions, but
+#' `D()` attempts to find a symbolic derivative for simple expressions, but
 #' will provide a function that is a numerical derivative if the attempt at
 #' symbolic differentiation is unsuccessful.  The symbolic derivative can be of
 #' any order (although the expression may become unmanageably complex).  The
 #' numerical derivative is limited to first or second-order partial derivatives
 #' (including mixed partials).
-#' \code{antiD} will attempt simple symbolic integration but if it fails
+#' `antiD()` will attempt simple symbolic integration but if it fails
 #' it will return a numerically-based anti-derivative.
 #'
-#' \code{antiD} returns a function with the same arguments as the
+#' `antiD()` returns a function with the same arguments as the
 #' expression passed to it.  The returned function is the anti-derivative
-#' of the expression, e.g., antiD(f(x)~x) -> F(x).
-#' To calculate the integral of f(x), use F(to) - F(from).
+#' of the expression, e.g., `antiD(f(x)~x) -> F(x)`.
+#' To calculate the integral of `f(x)`, use `F(to) - F(from)`.
 #'
 #' @examples
 #' D(sin(t) ~ t)

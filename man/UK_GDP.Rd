@@ -7,8 +7,8 @@
 \format{
 A data frame with 747 rows
 \itemize{
-\item{\code{year}} {Which year the estimate is for.}
-\item{\code{GDP}} {\emph{per capita} Gross domestic product in GBP (pounds)}
+\item \code{year} Which year the estimate is for.
+\item \code{GDP} \emph{per capita} Gross domestic product in GBP (pounds)
 }
 }
 \usage{

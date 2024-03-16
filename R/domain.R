@@ -7,7 +7,13 @@
 #' the input. If it's not specified, the plotting programs will try
 #' to do something sensible. But better to specify the names explicitly.
 #'
-#' @param \dots One or more expression of the form x=-5:5
+#' @returns a list with one component for each element in \dots
+#' 
+#' @details The colon operator is masked so that, for instance,
+#' `x = 0.5:1.3` literally means "0.5 to 1.3", and not just 0.5 as the
+#' base colon operator would give.
+#'
+#' @param \dots One or more expression of the form `x = -5:5`
 #'
 #' @examples
 #' \dontrun{

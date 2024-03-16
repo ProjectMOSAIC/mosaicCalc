@@ -9,6 +9,10 @@ makeODE(...)
 \arguments{
 \item{\dots}{The components of an ODE and/or a set of other ODE objects}
 }
+\value{
+a list containing various functions and values specifying the
+ODE.
+}
 \description{
 An ODE object consists of some dynamics, initial conditions, parameter values,
 time domain, etc.

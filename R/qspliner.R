@@ -12,6 +12,7 @@
 #' @param data A data frame containing the variables in `tilde`.
 #' @param free A number specifying the slope of the output function at the last knot. Default is 0: that is, flat.
 #'
+#' @returns a function suitable for, for instance, graphing or optimizing
 #' @examples
 #' Pts <- tibble(x = seq(-4,4, by=.7), y = dnorm(x))
 #' f <- qspliner(y ~ x, data = Pts)

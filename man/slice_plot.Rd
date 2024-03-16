@@ -42,6 +42,9 @@ the graph.
 
 Additional arguments will be passed to \code{geom_line()}. Use, e.g. \code{color="red"}}
 }
+\value{
+ggplot2 layers
+}
 \description{
 In a slice plot, there  is one independent variable. The graph
 shows the output of the function versus the independent variable. It's

@@ -28,11 +28,14 @@ as_magnitude(A, metric = c("2", "O", "I", "F", "M"))
 
 \item{metric}{metric to use for matrix norm}
 }
+\value{
+either a number (for \verb{\%dot\%}) or a vector
+}
 \description{
 \verb{\%dot\%}, \verb{\%onto\%}, and \verb{\%perp\%} are infix operators.
 The left-hand argument is a vector.
 }
 \details{
 Convenience functions for basic operations relating to vector projection. These use
-the Zcalc conventions that require vectors to be one column matrices.
+the \emph{MOSAIC Calc} conventions that require vectors to be one column matrices.
 }
