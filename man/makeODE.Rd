@@ -7,7 +7,9 @@
 makeODE(...)
 }
 \arguments{
-\item{\dots}{The components of an ODE and/or a set of other ODE objects}
+\item{\dots}{The components of an ODE and/or a set of other ODE objects.
+
+By default, the time step is set to \code{dt = 0.01}. Change it with \verb{dt = } value.}
 }
 \value{
 a list containing various functions and values specifying the

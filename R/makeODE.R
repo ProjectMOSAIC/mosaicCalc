@@ -3,7 +3,9 @@
 #' An ODE object consists of some dynamics, initial conditions, parameter values, 
 #' time domain, etc. 
 #' 
-#' @param \dots The components of an ODE and/or a set of other ODE objects
+#' @param \dots The components of an ODE and/or a set of other ODE objects. 
+#' 
+#' By default, the time step is set to `dt = 0.01`. Change it with `dt = ` value.
 #' 
 #' @examples 
 #' SIR <- makeODE(dS~ -a*S*I, dI ~ a*S*I - b*I, a=0.0026, b=.5, S=762, I=1)
@@ -19,7 +21,9 @@ makeODE <- function(...) {
   
   if ("dt" %in% names(args)) {
     time_step <- args[["dt"]]
-    args["dt"] <- NULL
+    args[["dt"]] <- NULL
+  } else if ("dt" %in% names(args[[1]])) {
+    time_step <- args[[1]][["dt"]]
   } else {
     time_step <- 0.01
   }
@@ -35,7 +39,7 @@ makeODE <- function(...) {
   
   
   Dyn_object <- list(Pprev=NULL, names = character(0), functions = NULL, 
-                     values=NULL, domain=NULL, dt=0.01)
+                     values=NULL, domain=NULL, dt=time_step)
   if (inherits(args[[1]], "gg")) {
     Dyn_object$Pprev <- args[[1]]
     args[1] <- NULL

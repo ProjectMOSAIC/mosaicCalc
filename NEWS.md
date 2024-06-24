@@ -1,3 +1,7 @@
+# mosaicCalc 0.6.2
+
+* Fixed bug that caused the dt argument in makeODE() and integrateODE() to be ignored in favor of the default value.
+
 # mosaicCalc 0.6.1
 
 * No new user features. Just maintenance on internal package tests to keep up with changes to other packages.
