@@ -1,3 +1,8 @@
+# mosaicCalc 0.6.3
+
+* Set up to work with WebR.
+* Integrate() no longer uses hcubature() from cubature package.
+
 # mosaicCalc 0.6.2
 
 * Fixed bug that caused the dt argument in makeODE() and integrateODE() to be ignored in favor of the default value.

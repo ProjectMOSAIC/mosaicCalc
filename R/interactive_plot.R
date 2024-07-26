@@ -23,10 +23,10 @@
 #'     type = "both")
 #' }
 #'
-#' @importFrom plotly plot_ly
 #' @export
 surface_plot <- function(formula, domain=c(-5,5),  npts=50,
                          type = c("both", "surface", "contour", "heatmap")) {
+  if (!requireNamespace("plotly")) stop("needs <plotly> package. Not available for webr.")
   type <- match.arg(type) # make sure it's one of the available choices
   Eval_list <- eval_as_vector_and_matrix(formula, domain, n = npts)
 
@@ -55,6 +55,8 @@ interactive_plot <- surface_plot
 #' @rdname surface_plot
 #' @export
 surface_with_contours <- function(formula, domain=c(-5,5), npts=50) {
+  if (!requireNamespace("plotly")) stop("needs <plotly> package. Not available for webr.")
+  
   Eval_list <- eval_as_vector_and_matrix(formula, domain, n = npts)
   plotly::plot_ly(x = Eval_list$x,
                   y = Eval_list$y,

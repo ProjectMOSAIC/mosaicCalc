@@ -19,6 +19,7 @@
 #' Integrate(dnorm(x, sd=sigma) ~ x, domain(x=-2:2), sigma=2)
 #' Integrate(sqrt(1- x^2) ~ x, domain(x=-1:1)) # area of semi-circle
 #' 
+#' @importFrom calculus integral
 #' @export
 
 # CHANGE THIS SO THAT IT HANDLES SYMBOLIC INTEGRALS symbolically if they exist
@@ -34,7 +35,7 @@ Integrate <- function(tilde, domain, ...,  tol=0.00001) {
                strict.declaration = FALSE, 
                use.environment = TRUE) %>% 
     bind_params(list(...))
-  ivars <- all.vars(rhs(tilde))
+  ivars <- all.vars(rlang::f_rhs(tilde))
 
   # Check the domain
   if (length(domain) != length(ivars))
@@ -76,9 +77,15 @@ Integrate <- function(tilde, domain, ...,  tol=0.00001) {
     stop("Integrate() handles only functions with 3 or fewer arguments.")
   }
 
-
-  res <- cubature::hcubature(vf, lowerLimit, upperLimit, tol = tol,
+  # Avoid dependence on cubature, which isn't available for webr.
+  res <- if (requireNamespace("cubature")) {
+    cubature::hcubature(vf, lowerLimit, upperLimit, tol = tol,
                       maxEval = 100000)
+  } else {
+    calculus::integral(vf, 
+                       bounds = list(x = c(-lowerLimit, upperLimit)), 
+                       method = "mc")
+  }
 
   multiplier * res$integral
 }

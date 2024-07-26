@@ -35,7 +35,11 @@ traj_plot_3D <- function(x, y, z, soln, domain=NULL, npts=1000) {
   f1 <- as.formula(paste("~", x))
   f2 <- as.formula(paste("~", y))
   f3 <- as.formula(paste("~", z))
+  if (requireNamespace("plotly")) {
   plotly::plot_ly(Pts, x = f1, y = f2, z = f3, type = 'scatter3d', mode = 'lines',
                   opacity = 1, line = list(width = 6, reverscale = FALSE))
+  } else {
+    stop("<plotly> package must be installed. Not available under WebR.")
+  }
 }
 

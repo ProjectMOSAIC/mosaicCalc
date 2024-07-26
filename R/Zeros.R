@@ -47,7 +47,7 @@ Zeros <- function(tilde, domain=NULL, ..., nsegs=131) {
     .output. = f(.data$x)
   ) %>% unique() %>%
     filter(abs(.data$.output.) <= 10*median(abs(.data$.output.), na.rm=TRUE)) # avoid singularities
-  names(result)[1] <- all.vars(rhs(tilde))[1]
+  names(result)[1] <- all.vars(rlang::f_rhs(tilde))[1]
 
   result
 }

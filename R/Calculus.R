@@ -5,7 +5,7 @@
 #'
 #' @rdname Calculus
 #' @importFrom stats runif uniroot optimize median as.formula na.omit integrate optim quantile
-#' @importFrom mosaicCore rhs lhs makeFun parse.formula
+#' @importFrom mosaicCore makeFun 
 #' @importFrom mosaic inferArgs expandFun fitModel spliner connector
 #' @importFrom MASS fractions
 #' @importFrom dplyr bind_rows
@@ -136,7 +136,7 @@ D.formula <- function(tilde, ...){
 #' 4 * by.xy(y = 1) # area of quarter circle
 #' @export
 antiD <- function(tilde, ..., lower.bound=0, force.numeric=FALSE, .tol=0.0001){
-  wrt <- all.vars(rhs(tilde), unique=FALSE) # "with respect to" variable name
+  wrt <- all.vars(rlang::f_rhs(tilde), unique=FALSE) # "with respect to" variable name
   if (length(wrt) != 1)  stop("Integration with respect to multiple variables not supported directly.")
 
   # if tilde is a call to a one-line function, substitute the body of the function

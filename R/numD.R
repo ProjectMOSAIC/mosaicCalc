@@ -57,7 +57,7 @@ numD <- function(tilde, ..., .h=NULL) {
   environment(f) <- tildeEnv  # was parent.frame()
   # find the variables with respect to which the derivative is to be taken
   # keeping repeated names so that 2nd derivatives can be spotted.
-  dvars <- all.vars(rhs(tilde), unique=FALSE)
+  dvars <- all.vars(rlang::f_rhs(tilde), unique=FALSE)
   # What sort of derivative?
   if (length(dvars)==1) { 
     #Simple first derivative

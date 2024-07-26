@@ -13,7 +13,7 @@
 #' @export
 argM <- function(tilde, domain) {
   # What are the variables?
-  vars <- all.vars(rhs(tilde))
+  vars <- all.vars(rlang::f_rhs(tilde))
   f <- makeFun(tilde, 
                suppress.warnings = TRUE,
                strict.declaration = FALSE, 
