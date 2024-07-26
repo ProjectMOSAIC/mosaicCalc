@@ -1,3 +1,5 @@
+# mosaicCalc 0.6.4
+
 # mosaicCalc 0.6.3
 
 * Set up to work with WebR.
