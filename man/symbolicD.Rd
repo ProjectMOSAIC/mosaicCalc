@@ -38,7 +38,7 @@ symbolicD( a*x^2*y+b*y ~ x, a=10, b=100 )
 symbolicD( dnorm(x, mn, sd) ~ x, mn=3, sd=2)
 }
 \seealso{
-\code{\link{D}}, \code{\link{numD}}, \code{\link{makeFun}}, \code{\link{antiD}}, \code{\link{plotFun}}
+\code{\link{D}}, \code{\link{numD}},  \code{\link{antiD}}, \code{\link{plotFun}}
 }
 \author{
 Daniel Kaplan (\email{kaplan@macalester.edu})

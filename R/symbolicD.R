@@ -24,7 +24,7 @@
 #' numerical derivative even when the analytic form is known. To avoid
 #' this (when possible) use `D(dnorm(x) ~ x, mean=3)`
 #'
-#' @seealso \code{\link{D}}, \code{\link{numD}}, \code{\link{makeFun}}, \code{\link{antiD}}, \code{\link{plotFun}}
+#' @seealso \code{\link{D}}, \code{\link{numD}},  \code{\link{antiD}}, \code{\link{plotFun}}
 #'
 #' @examples
 #' symbolicD( a*x^2 ~ x)
