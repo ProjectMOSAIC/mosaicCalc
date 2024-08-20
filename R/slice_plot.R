@@ -55,14 +55,14 @@ slice_plot <- function(..., # canonical first three arguments
         domain <- list()
         domain[[look_for]] <- range(object$data[[look_for]])
       } else {
-        stop("Must specify bounds or use same x variable as previous layer.")
+        stop("Must specify domain bounds or use same x variable as previous layer.")
       }
     }
   } 
   
   # make sure domain is specified
   if (is.null(domain)) {
-    msg <- glue::glue("Must specify bounds after tilde expr, e.g. \n          slice_plot({capture.output(tilde)}, domain({all.vars(tilde[[3]])[1]}=0:10))")
+    msg <- glue::glue("Must specify domain bounds after tilde expr, e.g. \n          slice_plot({capture.output(tilde)}, domain({all.vars(tilde[[3]])[1]}=0:10))")
     stop(msg)
   }
 

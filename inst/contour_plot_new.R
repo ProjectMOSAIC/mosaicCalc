@@ -1,4 +1,4 @@
-#' Contour plots of functions of two variables
+#' Draft of a new version for contour plots of functions of two variables
 #'
 #' Creates a ggplot2-compatible contour plot of a function
 #' of two variables.
@@ -37,15 +37,16 @@
 #' @importFrom  ggplot2 aes  ggplot geom_line geom_text scale_color_viridis_c scale_fill_viridis_c guides
 #' @importFrom  metR geom_contour_fill geom_contour2 geom_text_contour
 #' @export
-contour_plot <- function(..., # canonical first three arguments
+contour_plot_new <- function(..., # canonical first three arguments
                          npts = 100,
                          labels = TRUE,
                          filled = TRUE,
+                         style = c("new", "orig"),
                          contours_at = NULL,
                          n_contours = 10,
-                         n_fill = 50,
+                         n_fill = 10,
                          alpha = 1,
-                         fill_alpha = 0.1,
+                         fill_alpha = 0.5,
                          label_alpha  = 1,
                          label_placement = 0.5,
                          contour_color = "blue",
@@ -55,6 +56,7 @@ contour_plot <- function(..., # canonical first three arguments
                          guide_title = "output",
                          color_scale = scale_color_viridis_c(),
                          fill_scale = scale_fill_viridis_d()) {
+  style = match.arg(style)
   args <- first_three_args(...)
   object <- args$gg
   tilde <- args$tilde
@@ -137,18 +139,31 @@ contour_plot <- function(..., # canonical first three arguments
 
   P <- object
 
+  name_x <- names(Eval_grid)[1]
+  name_y <- names(Eval_grid)[2]
   if (filled) {
-    P <- P + metR::geom_contour_fill(aes(z = .output., fill = after_stat(level)), # fill = filled was original
-                                     data = Eval_grid,
-                                     alpha = fill_alpha,
-                                     breaks = fine_breaks)
-  } 
-  P <- P + metR::geom_contour2(aes(z = .output.),
-                               color = contour_color,
-                               data = Eval_grid,
-                               alpha = alpha,
-                               breaks = coarse_breaks)
+    # P <- P + metR::geom_contour_fill(aes(z = .output., fill = filled),
+    #                                  data = Eval_grid,
+    #                                  alpha = fill_alpha,
+    #                                  breaks = fine_breaks)
+    P <- P + geom_contour_filled(data=Eval_grid, 
+                                 aes(.data[[name_x]], .data[[name_y]], z = .output., fill = after_stat(level)),
+                                 breaks = coarse_breaks,
+                                 alpha = fill_alpha,
+                                 inherit.aes = FALSE) 
+  } else {
   
+  # P <- P + metR::geom_contour2(aes(z = .output.),
+  #                              colour = contour_color,
+  #                              data = Eval_grid,
+  #                              alpha = alpha,
+  #                              breaks = coarse_breaks)
+    P <- P + geom_contour(data=Eval_grid, 
+                                 aes(.data[[name_x]], .data[[name_y]], z = .output., color=after_stat(level)),
+                          breaks = coarse_breaks,
+                          alpha = alpha
+                          )
+  }
   
   if (labels) {
     if (skip > length(coarse_breaks) -1 )
@@ -169,12 +184,14 @@ contour_plot <- function(..., # canonical first three arguments
                                      alpha=label_alpha)
   }
 
-  g_contours <- g_fill <- ggplot2::guide_legend(guide_title)
-  if (filled) g_contours <- "none"
-  if (!guide) g_fill <- g_contours <- "none"
+  # g_contours <- g_fill <- ggplot2::guide_legend(guide_title)
+  # if (filled) g_contours <- "none"
+  # if (!guide) g_fill <- g_contours <- "none"
 
-  P +
-    #color_scale  +
-    #fill_scale  +
-    guides(fill=g_fill, color=g_contours)
+  return(P)
+  
+  # P +
+  #   color_scale  +
+  #   fill_scale  +
+  #   guides(fill=g_fill, color=g_contours)
 }

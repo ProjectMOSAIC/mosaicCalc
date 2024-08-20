@@ -1,8 +1,10 @@
-# mosaicCalc (development version)
+# mosaicCalc 
+
+# mosaicCalc 0.6.5
+
+* Updated contour_plot() to work with new ggplot2 syntax.
 
 # mosaicCalc 0.6.4
-
-# mosaicCalc 0.6.3
 
 * Set up to work with WebR.
 * Integrate() no longer uses hcubature() from cubature package.
