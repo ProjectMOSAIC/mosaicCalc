@@ -3,6 +3,7 @@
 # mosaicCalc 0.6.5
 
 * Updated contour_plot() to work with new ggplot2 syntax.
+* Added doodle_fun() to provide the functionality previously provided by mosaic::rfun().
 
 # mosaicCalc 0.6.4
 
