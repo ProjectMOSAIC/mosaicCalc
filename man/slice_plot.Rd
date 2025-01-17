@@ -14,7 +14,8 @@ slice_plot(
   label_vjust = "top",
   label_color = color,
   label_alpha = alpha,
-  singularities = numeric(0)
+  singularities = numeric(0),
+  linewidth = 1
 )
 }
 \arguments{
@@ -38,9 +39,9 @@ as any parameters to be assigned or re-assigned.}
 \item{label_alpha}{alpha of label}
 
 \item{singularities}{numeric vector of x positions at which to break
-the graph.
+the graph.}
 
-Additional arguments will be passed to \code{geom_line()}. Use, e.g. \code{color="red"}}
+\item{line_width}{Thickness of stroke}
 }
 \value{
 ggplot2 layers

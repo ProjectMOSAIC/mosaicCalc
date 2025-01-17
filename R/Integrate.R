@@ -78,12 +78,12 @@ Integrate <- function(tilde, domain, ...,  tol=0.00001) {
   }
 
   # Avoid dependence on cubature, which isn't available for webr.
-  res <- if (requireNamespace("cubature")) {
+  res <- if (require("cubature")) {
     cubature::hcubature(vf, lowerLimit, upperLimit, tol = tol,
                       maxEval = 100000)
   } else {
     calculus::integral(vf, 
-                       bounds = list(x = c(-lowerLimit, upperLimit)), 
+                       bounds = list(x = c(lowerLimit, upperLimit)), 
                        method = "mc")
   }
 

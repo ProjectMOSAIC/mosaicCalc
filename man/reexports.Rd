@@ -5,6 +5,7 @@
 \alias{reexports}
 \alias{spliner}
 \alias{connector}
+\alias{fitModel}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -12,6 +13,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{mosaic}{\code{\link[mosaic:FunctionsFromData]{connector}}, \code{\link[mosaic:FunctionsFromData]{spliner}}}
+  \item{mosaic}{\code{\link[mosaic:FunctionsFromData]{connector}}, \code{\link[mosaic]{fitModel}}, \code{\link[mosaic:FunctionsFromData]{spliner}}}
 }}
 

@@ -16,10 +16,10 @@
 #' @param label_vjust vertical justification of label. One of "left", "middle", "right", "bottom", "center", "top", "inward", or "outward"
 #' @param label_color color of label
 #' @param label_alpha alpha of label
+#' @param line_width Thickness of stroke
 #' @param singularities numeric vector of x positions at which to break
 #' the graph.
 #'
-#' Additional arguments will be passed to `geom_line()`. Use, e.g. `color="red"`
 #' @examples
 #' \dontrun{
 #' slice_plot(sin(x) ~ x, domain(x = range(-5, 15)))
@@ -39,7 +39,8 @@ slice_plot <- function(..., # canonical first three arguments
                        label_text =  "", label_x = 1,
                        label_vjust="top",
                        label_color=color, label_alpha = alpha,
-                       singularities = numeric(0)) {
+                       singularities = numeric(0),
+                       linewidth=1) {
   
   args <- first_three_args(...)
   object <- args$gg
@@ -110,7 +111,8 @@ slice_plot <- function(..., # canonical first three arguments
   P <- object + geom_line(data = Eval_grid, 
                           aes(x = !!as.name(names(Eval_grid)[1]),
                               y = .output.),
-                          color=color, alpha=alpha)
+                          color=color, alpha=alpha,
+                          linewidth = linewidth)
 
   # put the label in  place
   if (label_text != "") {

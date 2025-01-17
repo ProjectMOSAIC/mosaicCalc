@@ -4,6 +4,9 @@
 
 * Updated contour_plot() to work with new ggplot2 syntax.
 * Added doodle_fun() to provide the functionality previously provided by mosaic::rfun().
+* Added "linewidth" argument to slice_plot(). Same meaning as in ggplot2.
+* Added World_oil dataframe
+* Exporting model_fit() from mosaic
 
 # mosaicCalc 0.6.4
 
