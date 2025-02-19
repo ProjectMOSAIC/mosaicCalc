@@ -7,6 +7,8 @@
 * Added "linewidth" argument to slice_plot(). Same meaning as in ggplot2.
 * Added World_oil dataframe
 * Exporting model_fit() from mosaic
+* Fixed bug in numD() that prevented function from being returned visably.
+
 
 # mosaicCalc 0.6.4
 

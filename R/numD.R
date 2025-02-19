@@ -74,13 +74,11 @@ numD <- function(tilde, ..., .h=NULL) {
     the_h <- ifelse(is.null(.h), 0.001, .h)
     res = make_d2fdfdy(f, dvars[1], dvars[2], .h = the_h) %>% 
       bind_params(formals(f))
-
-  if (length(dvars)>2){
+  } else if (length(dvars)>2){
     stop("Derivative order greater than 2 not yet implemented.")
   }
   
   res
-  }
 }
 # =================
 # Formal arguments are named to avoid conflicts with the contents of the mathematical function
