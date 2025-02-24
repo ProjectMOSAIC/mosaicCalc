@@ -11,7 +11,8 @@
 #' 
 #' @return a function implementing the derivative as a finite-difference approximation.
 #' This has a second argument, `.h`, that allow the finite-difference to be set when evaluating
-#' the function. The default values are set for reasonable numerical precision.
+#' the function. The default values are set for reasonable numerical precision 
+#' with the pattern-book functions.
 #'
 #' @details
 #' Uses a simple finite-difference scheme to evaluate the derivative.  The function created
@@ -64,10 +65,14 @@ numD <- function(tilde, ..., .h=NULL) {
     the_h <- ifelse(is.null(.h), 0.000001, .h)
     res = make_dfdx( f, dvars[1], .h = the_h) %>% 
       bind_params(formals(f))
-  }else if (length(dvars==2) && dvars[1]==dvars[2]) {
+  } else if (length(dvars)==2 && dvars[1]==dvars[2]) {
     # Second unmixed partial
     the_h <- ifelse(is.null(.h), 0.0001, .h)
     res = make_d2fd2x( f, dvars[1], .h = the_h) %>% 
+      bind_params(formals(f))
+  } else if (length(dvars)==3 && length(unique(dvars)) == 1) { 
+    the_h = ifelse(is.null(.h), 0.01, .h)
+    res = make_d3fd3x( f, dvars[1], .h = the_h) %>% 
       bind_params(formals(f))
   } else if (length(dvars)==2) {
     # mixed partial
@@ -143,3 +148,27 @@ make_d2fd2x <- function(f, .wrt, .h = 0.000001) {
   
   conventional_argument_order(dfun, ".h")
 }
+
+# ==========
+#
+# @note Helper function for third-order deriv in one variable.
+
+make_d3fd3x <- function(f, .wrt, .h = 0.0001) {
+  far_right_args <- far_left_args <- right_args <- left_args <- args <- names(formals(f))
+  args <- paste0(args, collapse=", ")
+  right_args[right_args==.wrt] <- glue::glue("{.wrt} + .h")
+  right_args <- paste0(right_args, collapse=", ")
+  left_args[left_args==.wrt] <- glue::glue("{.wrt} - .h")
+  left_args <- paste0(left_args, collapse=", ")
+  far_right_args[far_right_args==.wrt] <- glue::glue("{.wrt} + 2*.h")
+  far_right_args <- paste0(far_right_args, collapse=", ")
+  far_left_args[far_left_args==.wrt] <- glue::glue("{.wrt} - 2*.h")
+  far_left_args <- paste0(far_left_args, collapse=", ")
+  command <- glue::glue(
+    "function({.wrt}){{(f({far_right_args}) - 2*(f({right_args}) - f({left_args})) - f({far_left_args}))/(2*.h^3)}}") 
+  dfun <- eval(parse(text=command))
+  formals(dfun) <- c(formals(f), list(.h=.h))
+  
+  conventional_argument_order(dfun, ".h")
+}
+

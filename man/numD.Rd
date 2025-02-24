@@ -16,7 +16,8 @@ numD(tilde, ..., .h = NULL)
 \value{
 a function implementing the derivative as a finite-difference approximation.
 This has a second argument, \code{.h}, that allow the finite-difference to be set when evaluating
-the function. The default values are set for reasonable numerical precision.
+the function. The default values are set for reasonable numerical precision
+with the pattern-book functions.
 }
 \description{
 Constructs the numerical derivatives of mathematical expressions
