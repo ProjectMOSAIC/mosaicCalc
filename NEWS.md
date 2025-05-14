@@ -8,6 +8,7 @@
 * Added World_oil dataframe
 * Exporting model_fit() from mosaic
 * Fixed bug in numD() that prevented function from being returned visably.
+* Ditched calculus::integral() in favor of stats::integrate() to work faster under webr
 
 
 # mosaicCalc 0.6.4

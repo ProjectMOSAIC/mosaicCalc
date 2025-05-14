@@ -9,7 +9,7 @@ Description: Software to support the introductory *MOSAIC Calculus*
     applied linear algebra (for data science), and differential equations/dynamics.
     Includes grammar-of-graphics-based functions for drawing vector fields, trajectories, etc.
     The software is suitable for general use, but intended mainly for teaching calculus.
-Version: 0.6.5.9001
+Version: 0.6.5.9002
 Depends:
     R (>= 3.5.0)
 Imports:
@@ -48,6 +48,6 @@ LazyLoad: true
 LazyData: true
 URL: https://github.com/ProjectMOSAIC/mosaicCalc 
 BugReports: https://github.com/ProjectMOSAIC/mosaicCalc/issues
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
