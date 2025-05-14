@@ -2,8 +2,9 @@
 #'
 #' Calculates the definite integral of a function. That is, the result of the
 #' integration will be a number. There can be no free parameters in the function
-#' being integrated. (If you want free parameters, use `antiD()`.) `Integrate()` can
-#' handle integration over up to 3 variables.
+#' being integrated. (If you want free parameters, use `antiD()`.) In regular R, 
+#' `Integrate()` can
+#' handle integration over up to 3 variables, but only 1 variable in webr..
 #'
 #' @details For functions constructed as a spline interpolant, `Integrate()` can handle
 #' more segments than `antiD()`. It's reasonable to do up to 2000 segments with `Integrate()`,
