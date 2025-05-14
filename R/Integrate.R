@@ -86,9 +86,9 @@ Integrate <- function(tilde, domain, ...,  tol=0.00001) {
     # calculus::integral(vf, 
     #                    bounds = list(x = c(lowerLimit, upperLimit)), 
     #                    method = "mc")$integral
-    stats::integrate(vf, lowerLimit, upperLimit)
+    stats::integrate(vf, lowerLimit, upperLimit)$value
   }
 
-  multiplier * res$integral
+  multiplier * res
 }
   
