@@ -18,8 +18,9 @@ Integrate(tilde, domain, ..., tol = 1e-05)
 \description{
 Calculates the definite integral of a function. That is, the result of the
 integration will be a number. There can be no free parameters in the function
-being integrated. (If you want free parameters, use \code{antiD()}.) \code{Integrate()} can
-handle integration over up to 3 variables.
+being integrated. (If you want free parameters, use \code{antiD()}.) In regular R,
+\code{Integrate()} can
+handle integration over up to 3 variables, but only 1 variable in webr..
 }
 \details{
 For functions constructed as a spline interpolant, \code{Integrate()} can handle

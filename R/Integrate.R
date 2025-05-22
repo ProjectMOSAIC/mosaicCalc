@@ -79,7 +79,7 @@ Integrate <- function(tilde, domain, ...,  tol=0.00001) {
   }
 
   # Avoid dependence on cubature, which isn't available for webr.
-  res <- if (require("cubature")) {
+  res <- if (!exists("webr_hook_system")) {
     cubature::hcubature(vf, lowerLimit, upperLimit, tol = tol,
                       maxEval = 100000)$integral
   } else {
