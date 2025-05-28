@@ -27,7 +27,8 @@
 #' traj_plot(y(t)~t, soln2)
 #' SIR <- makeODE(dS~ -a*S*I, dI ~ a*S*I - b*I, a=0.0026, b=.5, S=762, I=1)
 #' epi = integrateODE(SIR, domain(t=0:20)) 
-#' traj_plot(I(t) ~ t, epi)
+#' traj_plot(S(t) ~ t, epi)
+#' traj_plot(t ~ t, epi)
 #' @export
 
 integrateODE = function(...) {

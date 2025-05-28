@@ -6,9 +6,9 @@
 #' 2. The solution to an ordinary differential equation as produce by `integrateODE()`
 #'
 #' @param \dots Handles the first several objects which are, in this order
-#'     - tilde: a two sided tilde expression
-#'     - soln: optionally, a solution object such as from `integrateODE()`, or instead
-#'     - domain: a domain object, e.g. `domain(t=0:10)`
+#' - tilde: a two sided tilde expression
+#' - soln: optionally, a solution object such as from `integrateODE()`, or instead
+#' - domain: a domain object, e.g. `domain(t=0:10)`
 #'     
 #'     
 #' @param npts number of plotted points (default: 500)

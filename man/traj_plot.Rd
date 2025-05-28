@@ -8,9 +8,11 @@ traj_plot(..., npts = 500, nt = 5)
 }
 \arguments{
 \item{\dots}{Handles the first several objects which are, in this order
-- tilde: a two sided tilde expression
-- soln: optionally, a solution object such as from \code{integrateODE()}, or instead
-- domain: a domain object, e.g. \code{domain(t=0:10)}}
+\itemize{
+\item tilde: a two sided tilde expression
+\item soln: optionally, a solution object such as from \code{integrateODE()}, or instead
+\item domain: a domain object, e.g. \code{domain(t=0:10)}
+}}
 
 \item{npts}{number of plotted points (default: 500)}
 

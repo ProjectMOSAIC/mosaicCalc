@@ -230,10 +230,12 @@ As a motivating example, here is a graph that summarizes a widely used mathemati
 ```{r warning=FALSE, message=FALSE, fig.align="center"}
 SIR <- makeODE(dS ~ -a*S*I, dI ~ a*S*I - b*I, 
                a=0.0026, b=.5, S=400, I=1)
-soln <- integrateODE(SIR, bounds(t=0:20))
-traj_plot(S(t) ~ I(t), soln, color="blue") %>% 
-  vectorfield_plot(SIR, bounds(I=0:75, S=60:400), transform=I, 
-                   npts=20, alpha = 0.6)
+soln <- integrateODE(SIR, domain(t=0:20))
+
+traj_plot(S(t) ~ I(t), soln, color="blue", domain(I=0:75, S=60:400)) |>
+vectorfield_plot(SIR, domain(I=0:75, S=60:400), transform={\(x) x}, 
+                 npts=20, alpha = 0.6) |>
+  gf_refine(coord_fixed(ratio = 0.3))
 ```
 
 But even at this point you should be able to spot some of the important components of the commands, such as tilde expressions (e.g. `dS ~ -a*S*I`), graphical bounds (e.g. `bounds(I=0:75, S=60:400)`) and assignment of numerical values to parameters (e.g. 'a = 0.0026`).
