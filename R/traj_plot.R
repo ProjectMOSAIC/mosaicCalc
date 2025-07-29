@@ -6,9 +6,11 @@
 #' 2. The solution to an ordinary differential equation as produce by `integrateODE()`
 #'
 #' @param \dots Handles the first several objects which are, in this order
+#' - optionally, a ggplot2 object to which this function will add a layer.
 #' - tilde: a two sided tilde expression
 #' - soln: optionally, a solution object such as from `integrateODE()`, or instead
 #' - domain: a domain object, e.g. `domain(t=0:10)`
+#' - Optionally: Graphics parameters to be handed to gf_path(), e.g. color="red", alpha = 0.5, line_width = 2
 #'     
 #'     
 #' @param npts number of plotted points (default: 500)

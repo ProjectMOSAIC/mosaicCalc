@@ -28,30 +28,20 @@ makeODE <- function(...) {
     time_step <- 0.01
   }
   
-  # for backward compatibility, pull out any argument named <tdur>.
+  # No longer accepting the old <tdur> argument
   if ("tdur" %in% names(args)) {
-    tdur <- args[["tdur"]]
-    args["tdur"] <- NULL
-    if (length(tdur) > 1) 
-      args[length(args)+1] <- domain(t=c(tdur[1], tdur[2]))
-    if (length(tdur) == 3) time_step <- tdur[3]                                
+    stop("tdur =  is an obsolete argument. Use domain() to set start and finish, and dt = to set time step.")
   }
   
   
-  Dyn_object <- list(Pprev=NULL, names = character(0), functions = NULL, 
-                     values=NULL, domain=NULL, dt=time_step)
-  if (inherits(args[[1]], "gg")) {
-    Dyn_object$Pprev <- args[[1]]
-    args[1] <- NULL
-  }
+  Dyn_object <- list(names = character(0), functions = NULL, 
+                     values=NULL, dt=time_step)
   dynInds <- which(sapply(args, function(x) inherits(x, "dynamics")))
   if (length(dynInds) > 0) {
     for (ind in dynInds) {
       Dyn_object$names <- c(Dyn_object$names, args[[ind]]$names)
       Dyn_object$functions <- c(Dyn_object$functions, args[[ind]]$functions)
       Dyn_object$values <- join_values(Dyn_object$values, args[[ind]]$values)
-      if (length(args[[ind]]$domain) > 0) # use the last one specified
-        Dyn_object$domain <- args[[ind]]$domain
     }
   } 
   args[dynInds] <- NULL # strip them out

@@ -6,7 +6,17 @@
 \alias{trajectory_euler}
 \title{Dynamical systems calculations and graphics}
 \usage{
-streamlines(..., npts = 8, dt = 0.01, nsteps = 10, color = "black", alpha = 1)
+streamlines(
+  ...,
+  dom = NULL,
+  npts = 8,
+  dt = 0.01,
+  nsteps = 10,
+  color = "black",
+  alpha = 1,
+  linewidth = 1,
+  endpoint = 1
+)
 
 flow_field(..., npts = 8, scale = 0.8, color = "black", alpha = 1)
 
@@ -23,7 +33,11 @@ trajectory_euler(..., dt = 0.01, nsteps = 4, full = TRUE, every = 1)
 
 \item{color}{What color to use}
 
-\item{alpha}{What alpha to use}
+\item{alpha}{What alpha to use (relative to default)}
+
+\item{linewidth}{control for the with width of the segments relative to the default.}
+
+\item{endpoint}{relative size of endpoint compared to default.}
 
 \item{scale}{Number indicating how long to draw arrows. By default,
 the longest arrows take up a full box in the grid}
