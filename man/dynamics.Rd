@@ -37,8 +37,6 @@ trajectory_euler(..., dt = 0.01, nsteps = 4, full = TRUE, every = 1)
 
 \item{linewidth}{control for the with width of the segments relative to the default.}
 
-\item{endpoint}{relative size of endpoint compared to default.}
-
 \item{scale}{Number indicating how long to draw arrows. By default,
 the longest arrows take up a full box in the grid}
 

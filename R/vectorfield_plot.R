@@ -8,6 +8,7 @@
 #' @param alpha transparency of the arrots
 #' @param transform controls the relative length of the arrows. See details.
 #' @param env Not for end-users. Handles details of where things are defined.
+#' @param stretch Stretch the arrows by this factor (default: 1). 
 #'
 #' @details There will be one tilde expression for the horizontal component of the vector and another tilde 
 #' expression for the vertical component. Suppose the horizontal axis is called u and the vertical axis is called
@@ -29,6 +30,10 @@
 #' be drawn somewhat longer. If you want the natural scaling instead, use `transform=I`. Or you might
 #' want to make the arrows even more similar in length. Then use, for instance `transform=function(L) L^0.1`
 #'
+#' Occasionally, you may wish to display the arrows only within a *valid* region
+#' of the rectangular state space. To indicate invalidity, the functions in the 
+#' tilde expressions should return `NA` for invalid state values.
+#'  
 #' @examples
 #' gradient_plot(x * sin(y) ~ x & y, bounds(x=-1:1, y=-1:1), transform=I)
 #' vectorfield_plot(x ~ -y, y ~ x, bounds(x=-1:1, y=-1:1))
@@ -105,13 +110,14 @@ gradient_plot <- function(..., # canonical first three arguments
                    npts = npts,
                    color=color, alpha=alpha,
                    transform=transform, 
-                   env=environment(horiz_formula))
+                   env=environment(horiz_formula),
+                   stretch=1)
 }
 #' @rdname gradient_plot
 #' @export
 vectorfield_plot <- function(..., # canonical first four arguments
                              npts=20, color="black", alpha = 0.5,
-                             transform = sqrt, env=NULL) {
+                             transform = sqrt, stretch = 1, env=NULL) {
   args <- suppressMessages(makeODE(...)) # using makeODE() to handle the two tilde expressions
   #args <- first_three_args(..., two_tildes = TRUE)
   # gives $tilde and $tilde2
@@ -178,12 +184,15 @@ vectorfield_plot <- function(..., # canonical first four arguments
   grid$dx <- grid$.output.
   grid$dy <- eval_on_domain(formula_y, domain, n=npts, args$params)$.output.
   # Now everything is in grid
+  # Kill items in grid flagged as invalie
+  get_rid_of <- is.na(grid$dx) | is.na(grid$dy)
+  grid <- grid[!get_rid_of, ]
 
   # Scale length according to <transform> argument
   length <- transform(sqrt(grid$dx^2 + grid$dx^2))
   angle <- atan2(grid$dy, grid$dx)
   longest <- max(length)
-  length <- length / longest # scale to 1 for longest vector
+  length <- stretch * length / longest # scale to 1 for longest vector
 
   x_spacing <- diff(domain[[1]]) / npts
   y_spacing <- diff(domain[[2]]) / npts

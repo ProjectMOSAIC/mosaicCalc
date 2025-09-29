@@ -9,7 +9,7 @@
 * Exporting model_fit() from mosaic
 * Fixed bug in numD() that prevented function from being returned visably.
 * Ditched calculus::integral() in favor of stats::integrate() to work faster under webr
-
+* vectorfield_plot() will interpret NA from tilde expressions as "do not plot"
 
 # mosaicCalc 0.6.4
 

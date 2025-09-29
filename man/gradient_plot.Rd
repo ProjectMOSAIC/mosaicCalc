@@ -13,6 +13,7 @@ vectorfield_plot(
   color = "black",
   alpha = 0.5,
   transform = sqrt,
+  stretch = 1,
   env = NULL
 )
 }
@@ -28,6 +29,8 @@ should be in the same style as for \code{makeODE()}. See details.}
 \item{alpha}{transparency of the arrots}
 
 \item{transform}{controls the relative length of the arrows. See details.}
+
+\item{stretch}{Stretch the arrows by this factor (default: 1).}
 
 \item{env}{Not for end-users. Handles details of where things are defined.}
 }
@@ -56,6 +59,10 @@ a fixed point of a differential equation flow field). By default, the relative l
 are transformed by sqrt, to make the long arrows shorter and therefore enable the sort arrows to
 be drawn somewhat longer. If you want the natural scaling instead, use \code{transform=I}. Or you might
 want to make the arrows even more similar in length. Then use, for instance \code{transform=function(L) L^0.1}
+
+Occasionally, you may wish to display the arrows only within a \emph{valid} region
+of the rectangular state space. To indicate invalidity, the functions in the
+tilde expressions should return \code{NA} for invalid state values.
 }
 \examples{
 gradient_plot(x * sin(y) ~ x & y, bounds(x=-1:1, y=-1:1), transform=I)
