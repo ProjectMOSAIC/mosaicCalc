@@ -9,9 +9,11 @@ traj_plot(..., npts = 500, nt = 5)
 \arguments{
 \item{\dots}{Handles the first several objects which are, in this order
 \itemize{
+\item optionally, a ggplot2 object to which this function will add a layer.
 \item tilde: a two sided tilde expression
 \item soln: optionally, a solution object such as from \code{integrateODE()}, or instead
 \item domain: a domain object, e.g. \code{domain(t=0:10)}
+\item Optionally: Graphics parameters to be handed to gf_path(), e.g. color="red", alpha = 0.5, line_width = 2
 }}
 
 \item{npts}{number of plotted points (default: 500)}

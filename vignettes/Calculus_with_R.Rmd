@@ -46,12 +46,12 @@ A "command" is a complete instruction to the computer to perform a specified tas
 Constructing a command means laying out this information in a manner the computer can make sense of. Most `{mosaicCalc}` commands follow a consistent pattern. For instance, 
 
 ```{r}
-slice_plot(x*sin(x) ~ x, bounds(x = 0:10))
+slice_plot(x*sin(x) ~ x, domain(x = 0:10))
 ```
 
 The underlying pattern becomes more evident if we divide the command into parts, one for each piece of information.
 
-$$\underbrace{\mathtt{slice\_plot}}_\text{task name}{\color{magenta}{\left(\strut\right.}}\ \underbrace{\mathtt{x*sin(x)\  {\verb+~+}\ x}}_\text{function description}\ \color{magenta}{\LARGE,}\ \  \underbrace{\mathtt{bounds(x = 0\!:\!5)}}_\text{bounds on input to function}\color{magenta}{\left.\strut\right)}$$
+$$\underbrace{\mathtt{slice\_plot}}_\text{task name}{\color{magenta}{\left(\strut\right.}}\ \underbrace{\mathtt{x*sin(x)\  {\verb+~+}\ x}}_\text{function description}\ \color{magenta}{\LARGE,}\ \  \underbrace{\mathtt{domain(x = 0\!:\!5)}}_\text{bounds on input to function}\color{magenta}{\left.\strut\right)}$$
 
 The command includes punctuation which, like punctuation in English, marks boundaries between elements. There are three elements in this command:
 
@@ -148,10 +148,10 @@ The finite size of paper or the computer screen means that, whenever you graph a
 Graphs of functions with a single input are made by `slice_plot()`, like this:
 
 ```{r fig.align="center"}
-slice_plot(g(x, t=pi/2) ~ x, bounds(x=-2:4))
+slice_plot(g(x, t=pi/2) ~ x, domain(x=-2:4))
 ```
 
-Here the bounds for the plot correspond to setting an interval for the x-axis. This is done by using the `{mosaicCalc}` function `bounds()`. Read `bounds(x=-2:4)` as meaning, "with `x` going from `-2` to `4`." (The small colon mark, `:`, corresponds to the "to.")
+Here the bounds for the plot correspond to setting an interval for the x-axis. This is done by using the `{mosaicCalc}` function `domain()`. Read `domain(x=-2:4)` as meaning, "with `x` going from `-2` to `4`." (The small colon mark, `:`, corresponds to the "to.")
 
 ## Calculus 
 
@@ -179,9 +179,9 @@ Many calculus courses and textbooks cover "integration" before coming to "anti-d
 
 [*MOSAIC Calculus*](https://www.mosaic-web.org/MOSAIC-Calculus/) presents anti-differentiation before integration. This is for a very good reason. If differentiation is like turning a coin from the "heads" side to the "tails" side, anti-differentiation is turning from the "tails" side back to the "heads" side. It's a very simple operation conceptually and might as well be encountered at the same time as differentiation.
 
-The `Integrate()` operation in `{mosaicCalc}` carries out "definite integration." Definite integration involves a function, a with-respect-to variable, and an interval. In `{mosaicCalc}` these are represented as a tilde expression (left side formula, right side the name of the with-respect-to input) and a "bounds" (represented, of course, as a `bounds()` expression). 
+The `Integrate()` operation in `{mosaicCalc}` carries out "definite integration." Definite integration involves a function, a with-respect-to variable, and an interval. In `{mosaicCalc}` these are represented as a tilde expression (left side formula, right side the name of the with-respect-to input) and a "bounds" (represented, of course, as a `domain()` expression). 
 
-The result of definite integration is a numeric quantity, not a function. To carry it out, all the inputs to the function (except the with-respect-to input) must be set to numerical values. The `bounds()` specifies the interval to use of the with-respect-to input.
+The result of definite integration is a numeric quantity, not a function. To carry it out, all the inputs to the function (except the with-respect-to input) must be set to numerical values. The `domain()` specifies the interval to use of the with-respect-to input.
 
 ### Numerical anti-differentiation
 
@@ -238,6 +238,6 @@ vectorfield_plot(SIR, domain(I=0:75, S=60:400), transform={\(x) x},
   gf_refine(coord_fixed(ratio = 0.3))
 ```
 
-But even at this point you should be able to spot some of the important components of the commands, such as tilde expressions (e.g. `dS ~ -a*S*I`), graphical bounds (e.g. `bounds(I=0:75, S=60:400)`) and assignment of numerical values to parameters (e.g. 'a = 0.0026`).
+But even at this point you should be able to spot some of the important components of the commands, such as tilde expressions (e.g. `dS ~ -a*S*I`), graphical bounds (e.g. `domain(I=0:75, S=60:400)`) and assignment of numerical values to parameters (e.g. 'a = 0.0026`).
 
 

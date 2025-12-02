@@ -8,10 +8,11 @@
 #' @param alpha transparency of the arrots
 #' @param transform controls the relative length of the arrows. See details.
 #' @param env Not for end-users. Handles details of where things are defined.
+#' @param stretch Stretch the arrows by this factor (default: 1). 
 #'
 #' @details There will be one tilde expression for the horizontal component of the vector and another tilde 
 #' expression for the vertical component. Suppose the horizontal axis is called u and the vertical axis is called
-#' v, as would be established by a bounds specification like `bounds(u=-1:1, v=-1:1)`. Then the horizontal
+#' v, as would be established by a bounds specification like `domain(u=-1:1, v=-1:1)`. Then the horizontal
 #' tilde expression **must** have a left side called `u ~`. Similarly, the vertical 
 #' tilde expression will have a left side called `v ~`. On the right side of the tilde expressions
 #' will go the formulas for the respective components of the vectors, e.g. `u ~ sin(u-v)` and `v ~ v*u^2`. 
@@ -29,12 +30,16 @@
 #' be drawn somewhat longer. If you want the natural scaling instead, use `transform=I`. Or you might
 #' want to make the arrows even more similar in length. Then use, for instance `transform=function(L) L^0.1`
 #'
+#' Occasionally, you may wish to display the arrows only within a *valid* region
+#' of the rectangular state space. To indicate invalidity, the functions in the 
+#' tilde expressions should return `NA` for invalid state values.
+#'  
 #' @examples
-#' gradient_plot(x * sin(y) ~ x & y, bounds(x=-1:1, y=-1:1), transform=I)
-#' vectorfield_plot(x ~ -y, y ~ x, bounds(x=-1:1, y=-1:1))
+#' gradient_plot(x * sin(y) ~ x & y, domain(x=-1:1, y=-1:1), transform=I)
+#' vectorfield_plot(x ~ -y, y ~ x, domain(x=-1:1, y=-1:1))
 #' gf_label(0 ~ 0, label="center", color="red") %>%
-#' vectorfield_plot(x ~ -y, y ~ x, bounds(x=-1:1, y=-1:1), transform=function(x) x^0.2 )
-#' vectorfield_plot(u ~ sin(u-v), v ~ v*u^2, bounds(u=0:1, v=-1:1))
+#' vectorfield_plot(x ~ -y, y ~ x, domain(x=-1:1, y=-1:1), transform=function(x) x^0.2 )
+#' vectorfield_plot(u ~ sin(u-v), v ~ v*u^2, domain(u=0:1, v=-1:1))
 #'  
 #' @returns ggplot2 graphics layers
 #' @export
@@ -105,17 +110,21 @@ gradient_plot <- function(..., # canonical first three arguments
                    npts = npts,
                    color=color, alpha=alpha,
                    transform=transform, 
-                   env=environment(horiz_formula))
+                   env=environment(horiz_formula),
+                   stretch=1)
 }
 #' @rdname gradient_plot
 #' @export
 vectorfield_plot <- function(..., # canonical first four arguments
                              npts=20, color="black", alpha = 0.5,
-                             transform = sqrt, env=NULL) {
+                             transform = sqrt, stretch = 1, env=NULL) {
+  dots <- list(...)
   args <- suppressMessages(makeODE(...)) # using makeODE() to handle the two tilde expressions
   #args <- first_three_args(..., two_tildes = TRUE)
   # gives $tilde and $tilde2
-  Pprev <- args$Pprev # previous graphic layers
+  if (inherits(dots[[1]], "gg")) Pprev <- dots[[1]]
+  else Pprev <- NULL
+  
   domain <- args$domain
   
   # check whether to inherit domain from previous layer
@@ -178,12 +187,15 @@ vectorfield_plot <- function(..., # canonical first four arguments
   grid$dx <- grid$.output.
   grid$dy <- eval_on_domain(formula_y, domain, n=npts, args$params)$.output.
   # Now everything is in grid
+  # Kill items in grid flagged as invalie
+  get_rid_of <- is.na(grid$dx) | is.na(grid$dy)
+  grid <- grid[!get_rid_of, ]
 
   # Scale length according to <transform> argument
   length <- transform(sqrt(grid$dx^2 + grid$dx^2))
   angle <- atan2(grid$dy, grid$dx)
   longest <- max(length)
-  length <- length / longest # scale to 1 for longest vector
+  length <- stretch * length / longest # scale to 1 for longest vector
 
   x_spacing <- diff(domain[[1]]) / npts
   y_spacing <- diff(domain[[2]]) / npts
