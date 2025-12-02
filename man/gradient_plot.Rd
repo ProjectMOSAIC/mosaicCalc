@@ -43,7 +43,7 @@ Plot a vector field
 \details{
 There will be one tilde expression for the horizontal component of the vector and another tilde
 expression for the vertical component. Suppose the horizontal axis is called u and the vertical axis is called
-v, as would be established by a bounds specification like \code{bounds(u=-1:1, v=-1:1)}. Then the horizontal
+v, as would be established by a bounds specification like \code{domain(u=-1:1, v=-1:1)}. Then the horizontal
 tilde expression \strong{must} have a left side called \verb{u ~}. Similarly, the vertical
 tilde expression will have a left side called \verb{v ~}. On the right side of the tilde expressions
 will go the formulas for the respective components of the vectors, e.g. \code{u ~ sin(u-v)} and \code{v ~ v*u^2}.
@@ -65,10 +65,10 @@ of the rectangular state space. To indicate invalidity, the functions in the
 tilde expressions should return \code{NA} for invalid state values.
 }
 \examples{
-gradient_plot(x * sin(y) ~ x & y, bounds(x=-1:1, y=-1:1), transform=I)
-vectorfield_plot(x ~ -y, y ~ x, bounds(x=-1:1, y=-1:1))
+gradient_plot(x * sin(y) ~ x & y, domain(x=-1:1, y=-1:1), transform=I)
+vectorfield_plot(x ~ -y, y ~ x, domain(x=-1:1, y=-1:1))
 gf_label(0 ~ 0, label="center", color="red") \%>\%
-vectorfield_plot(x ~ -y, y ~ x, bounds(x=-1:1, y=-1:1), transform=function(x) x^0.2 )
-vectorfield_plot(u ~ sin(u-v), v ~ v*u^2, bounds(u=0:1, v=-1:1))
+vectorfield_plot(x ~ -y, y ~ x, domain(x=-1:1, y=-1:1), transform=function(x) x^0.2 )
+vectorfield_plot(u ~ sin(u-v), v ~ v*u^2, domain(u=0:1, v=-1:1))
  
 }

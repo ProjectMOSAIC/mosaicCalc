@@ -17,14 +17,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' contour_plot(x / y ~ x + y, bounds(x=-5:5, y=1:4))
-#' slice_plot(x^2 ~ x, bounds(x = 2.5:4.2)) # overrides colon operator
-#' slice_plot(x^2 ~ x, bounds(x = c(2.5, 4.2)))
-#' slice_plot(x^2 ~ x, bounds(x = 1 %pm% 0.5))
+#' contour_plot(x / y ~ x + y, domain(x=-5:5, y=1:4))
+#' slice_plot(x^2 ~ x, domain(x = 2.5:4.2)) # overrides colon operator
+#' slice_plot(x^2 ~ x, domain(x = c(2.5, 4.2)))
+#' slice_plot(x^2 ~ x, domain(x = 1 %pm% 0.5))
 #' }
 #'
+#' @rdname domain
 #' @export
-bounds <- function(...) {
+domain <- function(...) {
   {
     args <- quos(...) #enexprs(...)
     if (length(args) == 0) domain(-5:5)
@@ -72,9 +73,7 @@ bounds <- function(...) {
   # else stop("Must specify a frame for one or two variables, e.g. `domain(x=c(0,1), y =  c(-1,1))`.")
 }
 
-#' @rdname bounds
-#' @export
-domain <- bounds
+
 
 validate_domain <- function(dom, free_args) {
   if (!is.list(dom)) dom <- list(dom)
@@ -143,7 +142,7 @@ eval_on_domain <- function(formula, domain, n=100, params) {
   test_result <- try(do.call(fun, grid[1, , drop=FALSE]), silent=TRUE)
   if (inherits(test_result, "try-error")) {
     
-    stop(glue::glue("Function specified by {capture.output(formula)[1]} 
+    stop(glue::glue("Function specified by {deparse(formula)[1]} 
                     cannot be evaluated using input names 
                     {paste0(names(grid), collapse=', ')}"))
   }

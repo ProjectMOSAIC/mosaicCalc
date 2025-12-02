@@ -81,7 +81,7 @@ traj_plot <- function(..., npts=500, nt=5) {
   Ticks$label <- tick_times[[1]]
 
   P <- Pprev %>% gf_path(.y ~ .x, data = DF, ...) %>%
-    gf_labs(x = capture.output(tilde[[3]]), y=capture.output(tilde[[2]]))
+    gf_labs(x = deparse(tilde[[3]]), y=deparse(tilde[[2]]))
   if (nt > 0) { # add tick marks
     P <- P %>%
       gf_label(.y ~ .x, data = Ticks, label=~label, vjust=1, hjust=1,...) %>%

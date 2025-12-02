@@ -16,7 +16,7 @@
 #' @importFrom tibble tibble tribble
 #' @importFrom Matrix norm
 #' @importFrom grDevices extendrange
-#' @importFrom utils capture.output
+# importFrom utils capture.output # replaced 12/2/25 with deparse()
 #' @importFrom sp point.in.polygon
 #'
 #'
@@ -183,7 +183,7 @@ makeNumericalAntiD <- function(tilde, wrt, lower.bound, .tol, ...) {
   names(intC_list) <- intC
 
   # Note: No comma after {assign} in the next line
-  command <- glue::glue("{{F <- makeF({capture.output(tilde[[2]])}); evalFun(F, {assign}.const={intC})}}")
+  command <- glue::glue("{{F <- makeF({deparse(tilde[[2]])}); evalFun(F, {assign}.const={intC})}}")
   
   .F <- create_num_antiD(tilde, ..., lower = lower.bound, .tol=0.0001)
   makeF <- function(tilde) .F # very, very simple. Just hides .F

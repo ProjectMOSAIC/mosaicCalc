@@ -1,5 +1,9 @@
 # mosaicCalc 
 
+# mosaicCalc 0.6.6
+
+* Removed unintended indirect dependency on s2 package (which isn't available for shinylive)
+
 # mosaicCalc 0.6.5
 
 * Updated contour_plot() to work with new ggplot2 syntax.
@@ -27,7 +31,7 @@
 # mosaicCalc 0.6.0
 
 * Updated vignette and added two new vignettes: an instructor-facing guide and a quick reference.
-* Unified argument handling system across most functions, handling optional graphics input from piped-in graphical functions, bounds(), parameter values, etc.
+* Unified argument handling system across most functions, handling optional graphics input from piped-in graphical functions, domain(), parameter values, etc.
   
 # mosaicCalc 0.5.9
 
