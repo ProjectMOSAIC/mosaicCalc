@@ -180,7 +180,7 @@ vectorfield_plot <- function(..., # canonical first four arguments
   # Now everything is in grid
 
   # Scale length according to <transform> argument
-  length <- transform(sqrt(grid$dx^2 + grid$dx^2))
+  length <- transform(sqrt(grid$dx^2 + grid$dy^2))
   angle <- atan2(grid$dy, grid$dx)
   longest <- max(length)
   length <- length / longest # scale to 1 for longest vector
