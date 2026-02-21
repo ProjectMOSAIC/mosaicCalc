@@ -63,7 +63,7 @@ slice_plot <- function(..., # canonical first three arguments
   
   # make sure domain is specified
   if (is.null(domain)) {
-    msg <- glue::glue("Must specify domain bounds after tilde expr, e.g. \n          slice_plot({capture.output(tilde)}, domain({all.vars(tilde[[3]])[1]}=0:10))")
+    msg <- glue::glue("Must specify domain bounds after tilde expr, e.g. \n          slice_plot({deparse(tilde)}, domain({all.vars(tilde[[3]])[1]}=0:10))")
     stop(msg)
   }
 

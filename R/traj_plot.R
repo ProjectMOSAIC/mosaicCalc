@@ -6,9 +6,11 @@
 #' 2. The solution to an ordinary differential equation as produce by `integrateODE()`
 #'
 #' @param \dots Handles the first several objects which are, in this order
+#' - optionally, a ggplot2 object to which this function will add a layer.
 #' - tilde: a two sided tilde expression
 #' - soln: optionally, a solution object such as from `integrateODE()`, or instead
 #' - domain: a domain object, e.g. `domain(t=0:10)`
+#' - Optionally: Graphics parameters to be handed to gf_path(), e.g. color="red", alpha = 0.5, line_width = 2
 #'     
 #'     
 #' @param npts number of plotted points (default: 500)
@@ -79,7 +81,7 @@ traj_plot <- function(..., npts=500, nt=5) {
   Ticks$label <- tick_times[[1]]
 
   P <- Pprev %>% gf_path(.y ~ .x, data = DF, ...) %>%
-    gf_labs(x = capture.output(tilde[[3]]), y=capture.output(tilde[[2]]))
+    gf_labs(x = deparse(tilde[[3]]), y=deparse(tilde[[2]]))
   if (nt > 0) { # add tick marks
     P <- P %>%
       gf_label(.y ~ .x, data = Ticks, label=~label, vjust=1, hjust=1,...) %>%

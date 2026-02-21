@@ -12,8 +12,8 @@
 #' @param nsteps How many steps to take for each streamline. Together with `dt`
 #' this determines the length of the streamline.
 #' @param color What color to use
-#' @param alpha What alpha to use
-#'
+#' @param alpha What alpha to use (relative to default)
+#' @param linewidth control for the with width of the segments relative to the default.
 #'
 #' @details The dynamical functions themselves will be formulas like `dx ~ a*x*y` and `dy ~ y/x`.
 #' Initial conditions will be arguments of the form `x=3` and `y=4`.
@@ -37,10 +37,33 @@
 #' flow_field(Dyn, domain(x=-6:6, y=-10:10))
 #' @rdname dynamics
 #' @export
-streamlines <- function(..., npts=8, dt=0.01, nsteps=10, color="black", alpha=1) {
-  Dyn <- makeODE(...)
-  dom <- Dyn$domain  # Graphical domain
-  # check if the domain is in the ... arguments. 
+streamlines <- function(..., dom = NULL, npts=8, dt=0.01, nsteps=10, 
+                        color="black", alpha=1, linewidth = 1, 
+                        endpoint = 1) {
+  dots <- list(...)
+  scale_alpha <- alpha
+  scale_size <- linewidth
+  # strip off any incoming ggplot layers to use later.
+  if (inherits(dots[[1]], "gg")) {
+    Pprev <- dots[[1]]
+    dots[1] <- NULL
+  } else Pprev <- NULL
+  
+  if (inherits(dots[[1]], "dynamics")) {
+    Dyn = dots[[1]]
+    dots[1] <- NULL
+  } else {
+    stop("First argument (after any piped in ggplot2 layer) must be a dynamics object such as made by makeODE().")
+  }
+  
+  if (inherits(dots[[1]], "domain")) {
+    dom <- dots[[1]]
+    dots[1] <- NULL
+  } else {
+    stop("Second argument must be a domain, as made by domain().")
+  }
+  
+  # check if the domain is in the arguments. 
   if (length(dom) < 2) stop("domain must have two variables")
   xpts <- seq(min(dom[[1]]), max(dom[[1]]), length = npts)
   ypts <- seq(min(dom[[2]]), max(dom[[2]]), length = npts)
@@ -66,22 +89,26 @@ streamlines <- function(..., npts=8, dt=0.01, nsteps=10, color="black", alpha=1)
     Flows[[point]] <- tibble::tibble(x=x, y=y,
                                      group=point,
                                      alpha = 0.2+(1:nsteps)/(1.2*nsteps),
-                                     size = alpha + 0.6
-    )
+                                     size = scale_size*(alpha + 0.6)
+    ) |>
+      dplyr::mutate(alpha = scale_alpha * alpha)
   }
   Paths <- dplyr::bind_rows(Flows)
   # get the last point in the path
   Last <- Paths %>% group_by(.data$group) %>%
     filter(row_number() == n())
 
-  P <- Dyn$gg
-  if (length(P) < 2) P <- NULL # no gg object was piped in
-  P %>% ggformula::gf_path(y ~ x, data = Paths,
+  Pprev %>% ggformula::gf_path(y ~ x, data = Paths,
                      lineend = "round",
-                     group = ~ group, color=color, alpha=alpha, size= ~size, inherit=FALSE) %>%
-    #ggformula::gf_point(y ~ x, data = Last, shape=23, fill="black", inherit=FALSE) %>%
+                     group = ~ group, 
+                     color=color, alpha=~alpha, 
+                     linewidth= ~size, 
+                     inherit=FALSE) %>%
+    ggformula::gf_point(y ~ x, data = Last, shape=19, fill=color, 
+                        size = ~ size, inherit=FALSE) %>%
     ggformula::gf_labs(x = names(dom)[1], y = names(dom)[2]) %>%
-    gf_refine(scale_alpha_identity(),
+    ggformula::gf_refine(scale_alpha_identity(),
+              scale_linewidth_identity(),
               scale_size_identity())
 }
 

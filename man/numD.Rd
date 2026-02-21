@@ -47,7 +47,7 @@ ggg(x=2,y=10)
 h = numD( g(x=x,y=y,a=a) ~ y, a=1)
 h(x=2,y=10)
 f = numD( sin(x)~x)
-# slice_plot( f(3,.h=hlim)~h, bounds(h=.00000001 :000001)) \%>\% gf_hline(yintercept = cos(3))
+# slice_plot( f(3,.h=hlim)~h, domain(h=.00000001 :000001)) \%>\% gf_hline(yintercept = cos(3))
 
 }
 \author{
